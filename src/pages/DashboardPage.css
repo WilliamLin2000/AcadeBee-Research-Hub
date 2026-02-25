@@ -1,0 +1,152 @@
+.dashboard-page h1 {
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-section {
+  margin-bottom: 2rem;
+}
+
+.dashboard-section h2 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--color-text-muted);
+}
+
+.dashboard-task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.empty-state {
+  color: var(--color-text-muted);
+  padding: 1.5rem;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.quick-action-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-text);
+  text-decoration: none !important;
+  transition: box-shadow 0.2s;
+}
+
+.quick-action-card:hover {
+  box-shadow: var(--shadow-md);
+  text-decoration: none !important;
+  color: var(--color-text);
+}
+
+.quick-action-icon {
+  font-size: 1.25rem;
+}
+
+.dashboard-header {
+  margin-bottom: 1.5rem;
+}
+
+.dashboard-header p {
+  color: var(--color-text-muted);
+  margin-top: 0.25rem;
+}
+
+.profile-card p {
+  margin: 0.5rem 0;
+}
+
+.profile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge-institutional {
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--color-primary);
+}
+
+.badge-verified {
+  background: rgba(34, 197, 94, 0.15);
+  color: #15803d;
+}
+
+.badge-degree {
+  background: rgba(168, 85, 247, 0.15);
+  color: #6d28d9;
+}
+
+.profile-skills {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-left: 0.25rem;
+}
+
+.profile-skills .skill-tag {
+  font-size: 0.85rem;
+}
+
+.profile-verify-block {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.profile-verify-block h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-text);
+}
+
+.profile-verify-block .auth-success,
+.profile-verify-block .auth-error {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.verify-phone-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.verify-code-input {
+  width: 8rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(100, 116, 139, 0.35);
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+}
+
+.btn-sm {
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+}

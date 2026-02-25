@@ -1,0 +1,93 @@
+.hero {
+  text-align: center;
+  padding: 3rem 1rem;
+  margin-bottom: 3rem;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  max-width: 500px;
+  margin: 0 auto 1.5rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* 分類區塊 */
+.categories {
+  margin-bottom: 3rem;
+}
+
+.categories h2,
+.featured-tasks h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  background: var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-text);
+  text-decoration: none !important;
+  transition: box-shadow 0.2s;
+}
+
+.category-card:hover {
+  box-shadow: var(--shadow-md);
+  text-decoration: none !important;
+  color: var(--color-text);
+}
+
+.category-icon {
+  font-size: 2rem;
+}
+
+/* 熱門任務 */
+.featured-tasks {
+  margin-bottom: 2rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.link-more {
+  font-size: 0.9rem;
+}
+
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+}

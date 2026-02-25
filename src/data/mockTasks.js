@@ -1,0 +1,58 @@
+// Mock 資料 - 之後可替換為 API 回傳的資料
+export const mockTasks = [
+  {
+    id: '1',
+    title: 'Python 數據分析 - 問卷調查統計',
+    category: 'data_analysis',
+    categoryLabel: '數據分析',
+    budget: 5000,
+    deadline: '2025-03-15',
+    description: '需要協助分析約 500 份問卷數據，使用 Python 進行統計分析並產出圖表報告。',
+    skills: ['Python', 'Pandas', '統計分析'],
+    status: 'open',
+    createdAt: '2025-02-20',
+  },
+  {
+    id: '2',
+    title: 'Excel 數據清理與格式標準化',
+    category: 'data_cleaning',
+    categoryLabel: '數據清理',
+    budget: 3000,
+    deadline: '2025-03-01',
+    description: '將多個 Excel 檔案進行合併、去重、格式統一，約 2000 筆資料。',
+    skills: ['Excel', 'VBA', '數據清理'],
+    status: 'open',
+    createdAt: '2025-02-19',
+  },
+  {
+    id: '3',
+    title: 'R 語言迴歸分析程式撰寫',
+    category: 'programming',
+    categoryLabel: '程式設計',
+    budget: 8000,
+    deadline: '2025-03-20',
+    description: '撰寫 R 腳本進行多元迴歸分析，需包含診斷圖與結果輸出。',
+    skills: ['R', '統計學', '迴歸分析'],
+    status: 'open',
+    createdAt: '2025-02-18',
+  },
+  {
+    id: '4',
+    title: '影像標註 - 醫學影像分割',
+    category: 'data_labeling',
+    categoryLabel: '數據標註',
+    budget: 15000,
+    deadline: '2025-04-01',
+    description: '協助標註約 500 張 CT 影像的器官邊界，使用 LabelMe 或類似工具。',
+    skills: ['影像標註', '醫學影像', 'LabelMe'],
+    status: 'open',
+    createdAt: '2025-02-17',
+  },
+]
+
+export const categories = [
+  { value: 'data_analysis', label: '數據分析' },
+  { value: 'data_cleaning', label: '數據清理' },
+  { value: 'programming', label: '程式設計' },
+  { value: 'data_labeling', label: '數據標註' },
+]

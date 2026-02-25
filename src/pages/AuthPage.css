@@ -1,0 +1,144 @@
+.auth-page {
+  display: grid;
+  place-items: center;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: 1.5rem;
+}
+
+.auth-card h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.auth-form {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.auth-form label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(100, 116, 139, 0.35);
+  background: white;
+  outline: none;
+}
+
+.auth-form input:focus {
+  border-color: rgba(37, 99, 235, 0.7);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.auth-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.auth-hint {
+  margin-top: 0.75rem;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.auth-hint-top {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.auth-error {
+  color: #b91c1c;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.auth-success {
+  color: #047857;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.form-group-skills {
+  margin: 0.25rem 0;
+}
+
+.form-group-skills label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.skill-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-chip {
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(100, 116, 139, 0.4);
+  background: white;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.skill-chip:hover {
+  border-color: rgba(37, 99, 235, 0.5);
+  background: rgba(37, 99, 235, 0.06);
+}
+
+.skill-chip.active {
+  border-color: var(--color-primary);
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--color-primary);
+}
+
+.register-codes-row {
+  margin: 0.5rem 0;
+}
+
+.form-row-codes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-row-codes label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.form-row-codes .verify-code-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(100, 116, 139, 0.35);
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+}
+
+.form-divider {
+  margin: 1.25rem 0;
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
