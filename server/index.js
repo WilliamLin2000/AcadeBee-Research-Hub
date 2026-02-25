@@ -4,6 +4,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import bcrypt from 'bcrypt'
 import nodemailer from 'nodemailer'
+import { Resend } from 'resend'
 import pkg from 'pg'
 
 dotenv.config()
@@ -98,18 +99,13 @@ app.post('/api/send-registration-codes', async (req, res) => {
       [emailTrim, emailCode, expires],
     )
 
-    const transporter = getMailTransporter()
-    if (transporter) {
-      await transporter.sendMail({
-        from: process.env.MAIL_FROM || process.env.SMTP_USER,
-        to: emailTrim,
-        subject: '[AcadeBee] 註冊驗證碼',
-        text: `您的註冊驗證碼：${emailCode}，10 分鐘內有效。\n\n若您未申請註冊，請忽略此信。`,
-        html: `<p>您的註冊驗證碼：<strong>${emailCode}</strong></p><p>10 分鐘內有效。</p><p>若您未申請註冊，請忽略此信。</p>`,
-      })
-    } else {
-      console.log('[開發] 未設定 SMTP，信箱驗證碼：', emailCode)
-    }
+    const sent = await sendEmail({
+      to: emailTrim,
+      subject: '[AcadeBee] 註冊驗證碼',
+      text: `您的註冊驗證碼：${emailCode}，10 分鐘內有效。\n\n若您未申請註冊，請忽略此信。`,
+      html: `<p>您的註冊驗證碼：<strong>${emailCode}</strong></p><p>10 分鐘內有效。</p><p>若您未申請註冊，請忽略此信。</p>`,
+    })
+    if (!sent) console.log('[開發] 信箱驗證碼：', emailCode)
 
     res.json({
       message: '驗證碼已寄至您的信箱，請在 10 分鐘內於下方輸入 6 碼，並填寫其餘資料完成註冊。',
@@ -302,6 +298,9 @@ app.post('/api/login', async (req, res) => {
 // ---------- 信箱驗證 ----------
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173'
 
+const RESEND_API_KEY = process.env.RESEND_API_KEY
+const resendClient = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null
+
 function getMailTransporter() {
   const user = process.env.SMTP_USER
   const pass = process.env.SMTP_PASS
@@ -312,6 +311,28 @@ function getMailTransporter() {
     secure: process.env.SMTP_SECURE === 'true',
     auth: { user, pass },
   })
+}
+
+/** 寄信：優先 Resend（雲端穩定），其次 SMTP（本機），都沒有則只 log */
+async function sendEmail({ to, subject, text, html }) {
+  const from = process.env.MAIL_FROM || 'AcadeBee <onboarding@resend.dev>'
+  if (resendClient) {
+    const { error } = await resendClient.emails.send({
+      from: from.includes('<') ? from : `AcadeBee <${from}>`,
+      to: [to],
+      subject,
+      html: html || text?.replace(/\n/g, '<br>') || '',
+    })
+    if (error) throw new Error(error.message)
+    return true
+  }
+  const transporter = getMailTransporter()
+  if (transporter) {
+    await transporter.sendMail({ from: process.env.MAIL_FROM || process.env.SMTP_USER, to, subject, text, html })
+    return true
+  }
+  console.log('[開發] 未設定 Resend 或 SMTP，驗證信內容：', { to, subject, text: text?.slice(0, 80) })
+  return false
 }
 
 // 寄出驗證信（內含 6 碼驗證碼，與常見網站做法相同）
@@ -344,21 +365,16 @@ app.post('/api/send-verification-email', async (req, res) => {
       [code, expires, userId],
     )
 
-    const transporter = getMailTransporter()
-    if (transporter) {
-      await transporter.sendMail({
-        from: process.env.MAIL_FROM || process.env.SMTP_USER,
-        to: user.email,
-        subject: '[AcadeBee] 您的信箱驗證碼',
-        text: `您好${user.display_name ? ` ${user.display_name}` : ''}，您的驗證碼：${code}，10 分鐘內有效。請至網站個人資料頁輸入此驗證碼完成驗證。\n\n若您未申請驗證，請忽略此信。`,
-        html: `<p>您好${user.display_name ? ` ${user.display_name}` : ''}，</p><p>您的驗證碼：<strong>${code}</strong></p><p>10 分鐘內有效，請至網站個人資料頁輸入此驗證碼完成驗證。</p><p>若您未申請驗證，請忽略此信。</p>`,
-      })
-    } else {
-      console.log('[開發] 未設定 SMTP，信箱驗證碼：', code)
-    }
+    const sent = await sendEmail({
+      to: user.email,
+      subject: '[AcadeBee] 您的信箱驗證碼',
+      text: `您好${user.display_name ? ` ${user.display_name}` : ''}，您的驗證碼：${code}，10 分鐘內有效。請至網站個人資料頁輸入此驗證碼完成驗證。\n\n若您未申請驗證，請忽略此信。`,
+      html: `<p>您好${user.display_name ? ` ${user.display_name}` : ''}，</p><p>您的驗證碼：<strong>${code}</strong></p><p>10 分鐘內有效，請至網站個人資料頁輸入此驗證碼完成驗證。</p><p>若您未申請驗證，請忽略此信。</p>`,
+    })
+    if (!sent) console.log('[開發] 信箱驗證碼：', code)
 
     res.json({
-      message: transporter
+      message: sent
         ? '驗證碼已寄至您的信箱，請在 10 分鐘內於下方輸入 6 碼完成驗證。'
         : '驗證碼已產生（開發模式未寄信），請至主機 log 查看 6 碼。',
     })
