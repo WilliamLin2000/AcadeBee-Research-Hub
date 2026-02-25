@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import TaskCard from '../components/TaskCard'
 import { categories } from '../data/mockTasks'
+import { apiFetch } from '../apiClient'
 import './DashboardPage.css'
 
 export default function DashboardPage() {
@@ -24,7 +25,7 @@ export default function DashboardPage() {
       setLoading(true)
       setError('')
       try {
-        const res = await fetch(`/api/my-tasks?publisherId=${user.id}`)
+        const res = await apiFetch(`/api/my-tasks?publisherId=${user.id}`)
         const data = await res.json()
         if (!res.ok) {
           throw new Error(data.error || '取得我的任務失敗')

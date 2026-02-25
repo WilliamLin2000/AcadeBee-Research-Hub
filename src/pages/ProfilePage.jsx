@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { apiFetch } from '../apiClient'
 import './DashboardPage.css'
 
 export default function ProfilePage() {
@@ -32,7 +33,7 @@ export default function ProfilePage() {
     setEmailVerifyMessage('')
     setEmailSending(true)
     try {
-      const res = await fetch('/api/send-verification-email', {
+      const res = await apiFetch('/api/send-verification-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id }),
@@ -56,7 +57,7 @@ export default function ProfilePage() {
     setEmailVerifyMessage('')
     setEmailVerifying(true)
     try {
-      const res = await fetch('/api/verify-email', {
+      const res = await apiFetch('/api/verify-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id, code: emailCode.trim() }),

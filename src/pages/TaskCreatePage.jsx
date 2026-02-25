@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { categories } from '../data/mockTasks'
+import { apiFetch } from '../apiClient'
 import './TaskCreatePage.css'
 
 export default function TaskCreatePage() {
@@ -45,7 +46,7 @@ export default function TaskCreatePage() {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/tasks', {
+      const res = await apiFetch('/api/tasks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

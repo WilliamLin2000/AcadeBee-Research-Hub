@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import TaskCard from '../components/TaskCard'
 import { categories } from '../data/mockTasks'
+import { apiFetch } from '../apiClient'
 import './TaskListPage.css'
 
 export default function TaskListPage() {
@@ -18,7 +19,7 @@ export default function TaskListPage() {
       setLoading(true)
       setError('')
       try {
-        const res = await fetch('/api/tasks')
+        const res = await apiFetch('/api/tasks')
         const data = await res.json()
         if (!res.ok) {
           throw new Error(data.error || '取得任務列表失敗')

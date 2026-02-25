@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { categories } from '../data/mockTasks'
+import { apiFetch } from '../apiClient'
 import './TaskCreatePage.css'
 
 export default function TaskEditPage() {
@@ -32,7 +33,7 @@ export default function TaskEditPage() {
       setLoading(true)
       setError('')
       try {
-        const res = await fetch(`/api/tasks/${id}`)
+        const res = await apiFetch(`/api/tasks/${id}`)
         const data = await res.json()
 
         if (!res.ok) {
@@ -79,7 +80,7 @@ export default function TaskEditPage() {
     setLoading(true)
 
     try {
-      const res = await fetch(`/api/tasks/${id}`, {
+      const res = await apiFetch(`/api/tasks/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
+import { apiFetch } from '../apiClient'
 import './AuthPage.css'
 
 export default function VerifyEmailPage() {
@@ -17,7 +18,7 @@ export default function VerifyEmailPage() {
 
     const verify = async () => {
       try {
-        const res = await fetch(`/api/verify-email?token=${encodeURIComponent(token)}`)
+        const res = await apiFetch(`/api/verify-email?token=${encodeURIComponent(token)}`)
         const data = await res.json()
         if (res.ok) {
           setStatus('success')

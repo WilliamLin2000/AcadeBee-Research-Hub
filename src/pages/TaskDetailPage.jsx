@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { categories } from '../data/mockTasks'
+import { apiFetch } from '../apiClient'
 import './TaskDetailPage.css'
 
 export default function TaskDetailPage() {
@@ -21,7 +22,7 @@ export default function TaskDetailPage() {
       setLoading(true)
       setError('')
       try {
-        const res = await fetch(`/api/tasks/${id}`)
+        const res = await apiFetch(`/api/tasks/${id}`)
         const data = await res.json()
 
         if (!res.ok) {
@@ -53,7 +54,7 @@ export default function TaskDetailPage() {
 
     setDeleting(true)
     try {
-      const res = await fetch(`/api/tasks/${id}`, {
+      const res = await apiFetch(`/api/tasks/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

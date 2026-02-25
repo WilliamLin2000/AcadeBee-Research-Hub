@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { apiFetch } from '../apiClient'
 import './AuthPage.css'
 
 export default function RegisterPage() {
@@ -25,7 +26,7 @@ export default function RegisterPage() {
   useEffect(() => {
     const fetchSkills = async () => {
       try {
-        const res = await fetch('/api/skills')
+        const res = await apiFetch('/api/skills')
         const list = await res.json()
         setSkillOptions(Array.isArray(list) ? list : [])
       } catch {
@@ -61,7 +62,7 @@ export default function RegisterPage() {
     setCodeMessage('')
     setSendingCodes(true)
     try {
-      const res = await fetch('/api/send-registration-codes', {
+      const res = await apiFetch('/api/send-registration-codes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: emailTrim }),
@@ -87,7 +88,7 @@ export default function RegisterPage() {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/register', {
+      const res = await apiFetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

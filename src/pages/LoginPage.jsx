@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { apiFetch } from '../apiClient'
 import './AuthPage.css'
 
 export default function LoginPage() {
@@ -22,7 +23,7 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/login', {
+      const res = await apiFetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
