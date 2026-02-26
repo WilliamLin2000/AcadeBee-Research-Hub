@@ -136,16 +136,34 @@ app.post('/api/register', async (req, res) => {
     orcid_id,
     skills,
     emailCode,
+    job_title: jobTitle,
+    field: fieldName,
   } = req.body || {}
 
   const emailTrim = (email || '').trim()
   const phoneTrim = (phone || '').trim() || null
+  const institutionTrim = (institution || '').trim() || null
+  const orcidTrim = (orcid_id || '').trim() || null
+  const jobTitleTrim = (jobTitle || '').trim() || null
+  const fieldTrim = (fieldName || '').trim() || null
 
   if (!emailTrim || !password) {
     return res.status(400).json({ error: 'Email 和密碼為必填' })
   }
   if (!name || !(name.trim())) {
     return res.status(400).json({ error: '請填寫真實姓名或暱稱' })
+  }
+  if (!institutionTrim) {
+    return res.status(400).json({ error: '請填寫學校／機構名稱' })
+  }
+  if (!orcidTrim) {
+    return res.status(400).json({ error: '請填寫 ORCID ID' })
+  }
+  if (!jobTitleTrim) {
+    return res.status(400).json({ error: '請填寫職稱' })
+  }
+  if (!fieldTrim) {
+    return res.status(400).json({ error: '請填寫領域' })
   }
   if (!emailCode || !String(emailCode).trim()) {
     return res.status(400).json({ error: '請先取得並輸入信箱的 6 碼驗證碼' })
@@ -174,19 +192,21 @@ app.post('/api/register', async (req, res) => {
       `INSERT INTO users (
          email, password_hash, display_name, institution,
          phone, phone_verified, email_verified, institutional_email,
-         orcid_id, degree_verified
+         orcid_id, degree_verified, job_title, field
        )
-       VALUES ($1, $2, $3, $4, $5, FALSE, TRUE, $6, $7, FALSE)
+       VALUES ($1, $2, $3, $4, $5, FALSE, TRUE, $6, $7, FALSE, $8, $9)
        RETURNING id, email, display_name, institution, created_at,
-                 phone, institutional_email, email_verified, orcid_id, degree_verified`,
+                 phone, institutional_email, email_verified, orcid_id, degree_verified, job_title, field`,
       [
         emailTrim,
         passwordHash,
         (name || '').trim(),
-        (institution || '').trim() || null,
-        phoneTrim || null,
+        institutionTrim,
+        phoneTrim,
         institutional,
-        (orcid_id || '').trim() || null,
+        orcidTrim,
+        jobTitleTrim,
+        fieldTrim,
       ],
     )
 
@@ -217,6 +237,8 @@ app.post('/api/register', async (req, res) => {
       phoneVerified: false,
       orcidId: user.orcid_id,
       degreeVerified: user.degree_verified,
+      jobTitle: user.job_title,
+      field: user.field,
     })
   } catch (err) {
     if (err.code === '23505') {
@@ -226,7 +248,7 @@ app.post('/api/register', async (req, res) => {
     if (err.code === '42P01' || err.code === '42703') {
       return res.status(500).json({
         error:
-          '資料庫尚未更新。請在 pgAdmin 對 academic_task_db 執行 database/migrations/001_user_profiles_and_skills.sql',
+          '資料庫尚未更新。請依序執行 database/migrations/001_user_profiles_and_skills.sql 與 005_user_job_title_and_field.sql',
       })
     }
 
@@ -248,7 +270,7 @@ app.post('/api/login', async (req, res) => {
               COALESCE(institutional_email, FALSE) AS institutional_email,
               COALESCE(email_verified, FALSE) AS email_verified,
               COALESCE(degree_verified, FALSE) AS degree_verified,
-              orcid_id
+              orcid_id, job_title, field
        FROM users
        WHERE email = $1`,
       [email],
@@ -287,6 +309,8 @@ app.post('/api/login', async (req, res) => {
       emailVerified: user.email_verified,
       degreeVerified: user.degree_verified,
       orcidId: user.orcid_id,
+      jobTitle: user.job_title,
+      field: user.field,
       skills,
     })
   } catch (err) {
@@ -547,27 +571,60 @@ app.post('/api/tasks', async (req, res) => {
 })
 
 app.get('/api/tasks', async (req, res) => {
+  const { category, search, budgetMin, budgetMax } = req.query
   try {
-    const result = await pool.query(
-      `SELECT
-         t.id,
-         t.publisher_id,
-         t.title,
-         t.category,
-         t.description,
-         t.budget,
-         TO_CHAR(t.deadline, 'YYYY-MM-DD') AS deadline,
-         t.status,
-         t.created_at,
-         COALESCE(
-           ARRAY_AGG(ts.skill_name) FILTER (WHERE ts.skill_name IS NOT NULL),
-           '{}'
-         ) AS skills
-       FROM tasks t
-       LEFT JOIN task_skills ts ON ts.task_id = t.id
-       GROUP BY t.id
-       ORDER BY t.created_at DESC`,
-    )
+    let query = `
+      SELECT
+        t.id,
+        t.publisher_id,
+        t.title,
+        t.category,
+        t.description,
+        t.budget,
+        TO_CHAR(t.deadline, 'YYYY-MM-DD') AS deadline,
+        t.status,
+        t.worker_id,
+        t.created_at,
+        COALESCE(
+          ARRAY_AGG(ts.skill_name) FILTER (WHERE ts.skill_name IS NOT NULL),
+          '{}'
+        ) AS skills
+      FROM tasks t
+      LEFT JOIN task_skills ts ON ts.task_id = t.id
+      WHERE 1=1`
+    const params = []
+    let paramIndex = 1
+
+    if (category) {
+      query += ` AND t.category = $${paramIndex}`
+      params.push(category)
+      paramIndex += 1
+    }
+    if (search && search.trim()) {
+      query += ` AND (t.title ILIKE $${paramIndex} OR t.description ILIKE $${paramIndex})`
+      params.push(`%${search.trim()}%`)
+      paramIndex += 1
+    }
+    if (budgetMin !== undefined && budgetMin !== '') {
+      const min = parseInt(budgetMin, 10)
+      if (!Number.isNaN(min)) {
+        query += ` AND t.budget >= $${paramIndex}`
+        params.push(min)
+        paramIndex += 1
+      }
+    }
+    if (budgetMax !== undefined && budgetMax !== '') {
+      const max = parseInt(budgetMax, 10)
+      if (!Number.isNaN(max)) {
+        query += ` AND t.budget <= $${paramIndex}`
+        params.push(max)
+        paramIndex += 1
+      }
+    }
+
+    query += ` GROUP BY t.id ORDER BY t.created_at DESC`
+
+    const result = await pool.query(query, params)
 
     const tasks = result.rows.map((row) => ({
       id: row.id,
@@ -578,6 +635,7 @@ app.get('/api/tasks', async (req, res) => {
       budget: row.budget,
       deadline: row.deadline,
       status: row.status,
+      workerId: row.worker_id,
       createdAt: row.created_at,
       skills: row.skills,
     }))
@@ -654,15 +712,18 @@ app.get('/api/tasks/:id', async (req, res) => {
          t.budget,
          TO_CHAR(t.deadline, 'YYYY-MM-DD') AS deadline,
          t.status,
+         t.worker_id,
          t.created_at,
+         u.display_name AS worker_name,
          COALESCE(
            ARRAY_AGG(ts.skill_name) FILTER (WHERE ts.skill_name IS NOT NULL),
            '{}'
          ) AS skills
        FROM tasks t
        LEFT JOIN task_skills ts ON ts.task_id = t.id
+       LEFT JOIN users u ON u.id = t.worker_id
        WHERE t.id = $1
-       GROUP BY t.id`,
+       GROUP BY t.id, t.publisher_id, t.title, t.category, t.description, t.budget, t.deadline, t.status, t.worker_id, t.created_at, u.display_name`,
       [id],
     )
 
@@ -680,6 +741,8 @@ app.get('/api/tasks/:id', async (req, res) => {
       budget: row.budget,
       deadline: row.deadline,
       status: row.status,
+      workerId: row.worker_id,
+      workerName: row.worker_name,
       createdAt: row.created_at,
       skills: row.skills,
     }
@@ -688,6 +751,169 @@ app.get('/api/tasks/:id', async (req, res) => {
   } catch (err) {
     console.error('Error fetching task detail:', err)
     res.status(500).json({ error: '取得任務詳情時發生錯誤，請稍後再試' })
+  }
+})
+
+// 取得任務的報價列表（刊登者看全部，接案者看自己的）
+app.get('/api/tasks/:id/bids', async (req, res) => {
+  const { id: taskId } = req.params
+  const { userId } = req.query
+
+  try {
+    const taskResult = await pool.query(
+      'SELECT id, publisher_id, status FROM tasks WHERE id = $1',
+      [taskId],
+    )
+    if (taskResult.rows.length === 0) {
+      return res.status(404).json({ error: '找不到此任務' })
+    }
+    const task = taskResult.rows[0]
+    const isPublisher = userId && task.publisher_id === userId
+
+    const result = await pool.query(
+      `SELECT b.id, b.task_id, b.bidder_id, b.proposed_price, b.message, b.status, b.created_at,
+              u.display_name AS bidder_name, u.institution AS bidder_institution
+       FROM bids b
+       JOIN users u ON u.id = b.bidder_id
+       WHERE b.task_id = $1
+       ${!isPublisher && userId ? ' AND b.bidder_id = $2' : ''}
+       ORDER BY b.created_at DESC`,
+      isPublisher ? [taskId] : [taskId, userId],
+    )
+
+    const bids = result.rows.map((row) => ({
+      id: row.id,
+      taskId: row.task_id,
+      bidderId: row.bidder_id,
+      bidderName: row.bidder_name,
+      bidderInstitution: row.bidder_institution,
+      proposedPrice: row.proposed_price,
+      message: row.message,
+      status: row.status,
+      createdAt: row.created_at,
+    }))
+
+    res.json(bids)
+  } catch (err) {
+    console.error('Error fetching bids:', err)
+    res.status(500).json({ error: '取得報價列表時發生錯誤' })
+  }
+})
+
+// 對任務送出報價（承接）
+app.post('/api/tasks/:id/bids', async (req, res) => {
+  const { id: taskId } = req.params
+  const { bidderId, proposedPrice, message } = req.body || {}
+
+  if (!bidderId) {
+    return res.status(401).json({ error: '請先登入後再送出報價' })
+  }
+  if (proposedPrice === undefined || proposedPrice === null || proposedPrice === '') {
+    return res.status(400).json({ error: '請填寫報價金額' })
+  }
+  const price = parseInt(proposedPrice, 10)
+  if (Number.isNaN(price) || price < 0) {
+    return res.status(400).json({ error: '報價金額須為有效數字' })
+  }
+
+  try {
+    const taskResult = await pool.query(
+      'SELECT id, publisher_id, status FROM tasks WHERE id = $1',
+      [taskId],
+    )
+    if (taskResult.rows.length === 0) {
+      return res.status(404).json({ error: '找不到此任務' })
+    }
+    const task = taskResult.rows[0]
+    if (task.publisher_id === bidderId) {
+      return res.status(400).json({ error: '無法對自己刊登的任務報價' })
+    }
+    if (task.status !== 'open') {
+      return res.status(400).json({ error: '此任務已截止或已承接' })
+    }
+
+    await pool.query(
+      `INSERT INTO bids (task_id, bidder_id, proposed_price, message, status)
+       VALUES ($1, $2, $3, $4, 'pending')
+       ON CONFLICT (task_id, bidder_id) DO UPDATE SET
+         proposed_price = $3,
+         message = $4,
+         created_at = CURRENT_TIMESTAMP`,
+      [taskId, bidderId, price, (message || '').trim() || null],
+    )
+
+    res.status(201).json({ message: '報價已送出，請等待刊登者回覆' })
+  } catch (err) {
+    if (err.code === '23503') {
+      return res.status(404).json({ error: '任務或使用者不存在' })
+    }
+    console.error('Error creating bid:', err)
+    res.status(500).json({ error: '送出報價時發生錯誤，請稍後再試' })
+  }
+})
+
+// 刊登者接受某筆報價
+app.post('/api/tasks/:taskId/bids/:bidId/accept', async (req, res) => {
+  const { taskId, bidId } = req.params
+  const { publisherId } = req.body || {}
+
+  if (!publisherId) {
+    return res.status(401).json({ error: '請先登入' })
+  }
+
+  const client = await pool.connect()
+  try {
+    await client.query('BEGIN')
+
+    const taskRow = await client.query(
+      'SELECT id, publisher_id, status FROM tasks WHERE id = $1',
+      [taskId],
+    )
+    if (taskRow.rows.length === 0) {
+      await client.query('ROLLBACK')
+      return res.status(404).json({ error: '找不到此任務' })
+    }
+    const task = taskRow.rows[0]
+    if (task.publisher_id !== publisherId) {
+      await client.query('ROLLBACK')
+      return res.status(403).json({ error: '只有刊登者可以接受報價' })
+    }
+    if (task.status !== 'open') {
+      await client.query('ROLLBACK')
+      return res.status(400).json({ error: '此任務已承接或已截止' })
+    }
+
+    const bidRow = await client.query(
+      'SELECT id, bidder_id FROM bids WHERE id = $1 AND task_id = $2 AND status = $3',
+      [bidId, taskId, 'pending'],
+    )
+    if (bidRow.rows.length === 0) {
+      await client.query('ROLLBACK')
+      return res.status(404).json({ error: '找不到該報價或已被處理' })
+    }
+    const bid = bidRow.rows[0]
+
+    await client.query(
+      'UPDATE bids SET status = $1 WHERE task_id = $2 AND id = $3',
+      ['accepted', taskId, bidId],
+    )
+    await client.query(
+      'UPDATE bids SET status = $1 WHERE task_id = $2 AND id != $3',
+      ['rejected', taskId, bidId],
+    )
+    await client.query(
+      'UPDATE tasks SET worker_id = $1, status = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3',
+      [bid.bidder_id, 'in_progress', taskId],
+    )
+
+    await client.query('COMMIT')
+    res.json({ message: '已接受此報價，任務進行中' })
+  } catch (err) {
+    await client.query('ROLLBACK')
+    console.error('Error accepting bid:', err)
+    res.status(500).json({ error: '接受報價時發生錯誤，請稍後再試' })
+  } finally {
+    client.release()
   }
 })
 

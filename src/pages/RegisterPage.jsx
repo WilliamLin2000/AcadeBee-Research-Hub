@@ -11,6 +11,8 @@ export default function RegisterPage() {
     institution: '',
     phone: '',
     orcid_id: '',
+    job_title: '',
+    field: '',
     skills: [],
   })
   const [emailCode, setEmailCode] = useState('')
@@ -100,6 +102,8 @@ export default function RegisterPage() {
           institution: form.institution.trim() || undefined,
           phone: form.phone.trim() || undefined,
           orcid_id: form.orcid_id.trim() || undefined,
+          job_title: form.job_title.trim() || undefined,
+          field: form.field.trim() || undefined,
           skills: form.skills,
           emailCode: emailCode.trim(),
         }),
@@ -122,6 +126,8 @@ export default function RegisterPage() {
         institution: '',
         phone: '',
         orcid_id: '',
+        job_title: '',
+        field: '',
         skills: [],
       })
       setEmailCode('')
@@ -202,23 +208,12 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="phone">手機號碼（選填）</label>
-            <input
-              id="phone"
-              name="phone"
-              type="tel"
-              placeholder="選填，用於聯絡"
-              value={form.phone}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="institution">學校 / 機構名稱（選填）</label>
+            <label htmlFor="institution">學校 / 機構名稱 *</label>
             <input
               id="institution"
               name="institution"
               type="text"
+              required
               placeholder="例如：國立學術蜜蜂大學 資工系"
               value={form.institution}
               onChange={handleChange}
@@ -226,13 +221,52 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="orcid_id">ORCID ID（選填）</label>
+            <label htmlFor="field">領域 *</label>
+            <input
+              id="field"
+              name="field"
+              type="text"
+              required
+              placeholder="例如：資訊工程、統計、生醫"
+              value={form.field}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="orcid_id">ORCID ID *</label>
             <input
               id="orcid_id"
               name="orcid_id"
               type="text"
-              placeholder="未來可串接 ORCID 驗證"
+              required
+              placeholder="請填寫您的 ORCID 識別碼"
               value={form.orcid_id}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="job_title">職稱 *</label>
+            <input
+              id="job_title"
+              name="job_title"
+              type="text"
+              required
+              placeholder="例如：教授、博士生、研究員"
+              value={form.job_title}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="phone">手機號碼（選填）</label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              placeholder="選填，用於聯絡"
+              value={form.phone}
               onChange={handleChange}
             />
           </div>

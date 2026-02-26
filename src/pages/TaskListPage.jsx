@@ -10,6 +10,8 @@ export default function TaskListPage() {
   const categoryFromUrl = searchParams.get('category')
   const [selectedCategory, setSelectedCategory] = useState(categoryFromUrl || '')
   const [searchQuery, setSearchQuery] = useState('')
+  const [budgetMin, setBudgetMin] = useState('')
+  const [budgetMax, setBudgetMax] = useState('')
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -19,7 +21,14 @@ export default function TaskListPage() {
       setLoading(true)
       setError('')
       try {
-        const res = await apiFetch('/api/tasks')
+        const params = new URLSearchParams()
+        if (selectedCategory) params.set('category', selectedCategory)
+        if (searchQuery.trim()) params.set('search', searchQuery.trim())
+        if (budgetMin.trim()) params.set('budgetMin', budgetMin.trim())
+        if (budgetMax.trim()) params.set('budgetMax', budgetMax.trim())
+        const qs = params.toString()
+        const url = qs ? `/api/tasks?${qs}` : '/api/tasks'
+        const res = await apiFetch(url)
         const data = await res.json()
         if (!res.ok) {
           throw new Error(data.error || '取得任務列表失敗')
@@ -42,16 +51,7 @@ export default function TaskListPage() {
     }
 
     fetchTasks()
-  }, [])
-
-  const filteredTasks = tasks.filter((task) => {
-    const matchCategory = !selectedCategory || task.category === selectedCategory
-    const matchSearch =
-      !searchQuery ||
-      task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      task.description?.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchCategory && matchSearch
-  })
+  }, [selectedCategory, searchQuery, budgetMin, budgetMax])
 
   return (
     <div className="task-list-page">
@@ -65,6 +65,26 @@ export default function TaskListPage() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+        <div className="filter-row">
+          <label>預算範圍（NT$）：</label>
+          <input
+            type="number"
+            placeholder="最低"
+            min="0"
+            className="budget-input"
+            value={budgetMin}
+            onChange={(e) => setBudgetMin(e.target.value)}
+          />
+          <span>～</span>
+          <input
+            type="number"
+            placeholder="最高"
+            min="0"
+            className="budget-input"
+            value={budgetMax}
+            onChange={(e) => setBudgetMax(e.target.value)}
+          />
+        </div>
         <div className="category-filters">
           <button
             className={`filter-btn ${!selectedCategory ? 'active' : ''}`}
@@ -89,8 +109,8 @@ export default function TaskListPage() {
         {error && !loading && <p className="no-results">{error}</p>}
         {!loading && !error && (
           <>
-            {filteredTasks.length > 0 ? (
-              filteredTasks.map((task) => <TaskCard key={task.id} task={task} />)
+            {tasks.length > 0 ? (
+              tasks.map((task) => <TaskCard key={task.id} task={task} />)
             ) : (
               <p className="no-results">目前沒有符合條件的任務</p>
             )}
