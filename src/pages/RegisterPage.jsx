@@ -3,6 +3,19 @@ import { Link } from 'react-router-dom'
 import { apiFetch } from '../apiClient'
 import './AuthPage.css'
 
+const JOB_TITLE_OPTIONS = [
+  { value: "大學部學生 (Undergraduate)", label: "大學部學生 (Undergraduate)" },
+  { value: "碩士研究生 (Master's Student)", label: "碩士研究生 (Master's Student)" },
+  { value: "博士研究生 (PhD Student)", label: "博士研究生 (PhD Student)" },
+  { value: "博士候選人 (PhD Candidate)", label: "博士候選人 (PhD Candidate)" },
+  { value: "博士後研究員 (Postdoctoral Fellow)", label: "博士後研究員 (Postdoctoral Fellow)" },
+  { value: "教授 (Professor)", label: "教授 (Professor)" },
+  { value: "研究助理 (Research Assistant / RA)", label: "研究助理 (Research Assistant / RA)" },
+  { value: "資料科學家 (Data Scientist)", label: "資料科學家 (Data Scientist)" },
+  { value: "軟體工程師 (Software Engineer)", label: "軟體工程師 (Software Engineer)" },
+  { value: "其他 (Others)", label: "其他 (Others)" },
+]
+
 export default function RegisterPage() {
   const [form, setForm] = useState({
     name: '',
@@ -102,7 +115,7 @@ export default function RegisterPage() {
           institution: form.institution.trim() || undefined,
           phone: form.phone.trim() || undefined,
           orcid_id: form.orcid_id.trim() || undefined,
-          job_title: form.job_title.trim() || undefined,
+          job_title: form.job_title || undefined,
           field: form.field.trim() || undefined,
           skills: form.skills,
           emailCode: emailCode.trim(),
@@ -248,15 +261,20 @@ export default function RegisterPage() {
 
           <div>
             <label htmlFor="job_title">職稱 *</label>
-            <input
+            <select
               id="job_title"
               name="job_title"
-              type="text"
               required
-              placeholder="例如：教授、博士生、研究員"
               value={form.job_title}
               onChange={handleChange}
-            />
+            >
+              <option value="">請選擇</option>
+              {JOB_TITLE_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
