@@ -198,7 +198,7 @@ export default function RegisterPage() {
       <div className="auth-card">
         <h1>註冊</h1>
         <p className="auth-hint auth-hint-top">
-          請先填寫信箱並取得驗證碼，完成信箱驗證後再填寫其餘資料。若使用學術機構信箱（如 .edu），驗證成功後將獲得「學術機構信箱驗證」標章，提高其他研究人員對您的信賴度。
+          請先填寫信箱並取得驗證碼，完成信箱驗證後再填寫其餘資料。
         </p>
         <form className="auth-form" onSubmit={handleSubmit}>
           <div>
