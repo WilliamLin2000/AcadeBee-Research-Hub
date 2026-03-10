@@ -18,23 +18,13 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 })
 
-// 機構信箱辨識：以網域後綴判斷是否為學校/學術機構（.edu、.edu.tw、.ac.uk 等）
-// 無法 100% 區分「個人信箱」，但可對「已知學術網域」給予標章；建議再搭配「信箱驗證」確保本人持有
-const INSTITUTIONAL_DOMAIN_SUFFIXES = [
-  '.edu',
-  '.edu.tw',
-  '.edu.cn',
-  '.ac.uk',
-  '.ac.jp',
-  '.ac.cn',
-  '.edu.hk',
-  '.edu.sg',
-  '.ac.kr',
-]
-function isInstitutionalEmail(email) {
-  const domain = (email || '').split('@')[1] || ''
+// 學術信箱後綴：僅允許以下網域註冊，之後可擴充（如 .edu.tw、.ac.uk）
+const ALLOWED_ACADEMIC_SUFFIXES = ['.edu']
+
+function isAllowedAcademicEmail(email) {
+  const domain = (email || '').trim().split('@')[1] || ''
   const lower = domain.toLowerCase()
-  return INSTITUTIONAL_DOMAIN_SUFFIXES.some((suffix) => lower.endsWith(suffix))
+  return ALLOWED_ACADEMIC_SUFFIXES.some((suffix) => lower.endsWith(suffix))
 }
 
 app.use(cors())
@@ -185,7 +175,7 @@ app.post('/api/register', async (req, res) => {
       return res.status(400).json({ error: '信箱驗證碼已過期，請重新取得' })
     }
 
-    const institutional = isInstitutionalEmail(emailTrim)
+    const institutional = isAllowedAcademicEmail(emailTrim)
     const passwordHash = await bcrypt.hash(password, 10)
 
     const result = await pool.query(
@@ -389,12 +379,21 @@ app.post('/api/send-verification-email', async (req, res) => {
       [code, expires, userId],
     )
 
-    const sent = await sendEmail({
-      to: user.email,
-      subject: '[AcadeBee] 您的信箱驗證碼',
-      text: `您好${user.display_name ? ` ${user.display_name}` : ''}，您的驗證碼：${code}，10 分鐘內有效。請至網站個人資料頁輸入此驗證碼完成驗證。\n\n若您未申請驗證，請忽略此信。`,
-      html: `<p>您好${user.display_name ? ` ${user.display_name}` : ''}，</p><p>您的驗證碼：<strong>${code}</strong></p><p>10 分鐘內有效，請至網站個人資料頁輸入此驗證碼完成驗證。</p><p>若您未申請驗證，請忽略此信。</p>`,
-    })
+    let sent = false
+    try {
+      sent = await sendEmail({
+        to: user.email,
+        subject: '[AcadeBee] 您的信箱驗證碼',
+        text: `您好${user.display_name ? ` ${user.display_name}` : ''}，您的驗證碼：${code}，10 分鐘內有效。請至網站個人資料頁輸入此驗證碼完成驗證。\n\n若您未申請驗證，請忽略此信。`,
+        html: `<p>您好${user.display_name ? ` ${user.display_name}` : ''}，</p><p>您的驗證碼：<strong>${code}</strong></p><p>10 分鐘內有效，請至網站個人資料頁輸入此驗證碼完成驗證。</p><p>若您未申請驗證，請忽略此信。</p>`,
+      })
+    } catch (mailErr) {
+      console.error('Send email error:', mailErr)
+      return res.status(500).json({
+        error: '寄送驗證信失敗',
+        detail: mailErr.message || String(mailErr),
+      })
+    }
     if (!sent) console.log('[開發] 信箱驗證碼：', code)
 
     res.json({
@@ -404,7 +403,10 @@ app.post('/api/send-verification-email', async (req, res) => {
     })
   } catch (err) {
     console.error('Error sending verification email:', err)
-    res.status(500).json({ error: '寄送驗證信時發生錯誤，請稍後再試' })
+    res.status(500).json({
+      error: '寄送驗證信時發生錯誤，請稍後再試',
+      detail: err.message || String(err),
+    })
   }
 })
 
@@ -571,7 +573,7 @@ app.post('/api/tasks', async (req, res) => {
 })
 
 app.get('/api/tasks', async (req, res) => {
-  const { category, search, budgetMin, budgetMax } = req.query
+  const { category, search, budgetMin, budgetMax, userId } = req.query
   try {
     let query = `
       SELECT
@@ -585,6 +587,13 @@ app.get('/api/tasks', async (req, res) => {
         t.status,
         t.worker_id,
         t.created_at,
+        CASE
+          WHEN $1::uuid IS NOT NULL THEN EXISTS (
+            SELECT 1 FROM task_favorites f
+            WHERE f.task_id = t.id AND f.user_id = $1::uuid
+          )
+          ELSE FALSE
+        END AS is_favorite,
         COALESCE(
           ARRAY_AGG(ts.skill_name) FILTER (WHERE ts.skill_name IS NOT NULL),
           '{}'
@@ -592,8 +601,8 @@ app.get('/api/tasks', async (req, res) => {
       FROM tasks t
       LEFT JOIN task_skills ts ON ts.task_id = t.id
       WHERE 1=1`
-    const params = []
-    let paramIndex = 1
+    const params = [userId || null]
+    let paramIndex = 2
 
     if (category) {
       query += ` AND t.category = $${paramIndex}`
@@ -638,10 +647,17 @@ app.get('/api/tasks', async (req, res) => {
       workerId: row.worker_id,
       createdAt: row.created_at,
       skills: row.skills,
+      isFavorite: row.is_favorite,
     }))
 
     res.json(tasks)
   } catch (err) {
+    if (err.code === '42P01' && String(err.message || '').includes('task_favorites')) {
+      console.error('Error fetching tasks (missing task_favorites):', err)
+      return res.status(500).json({
+        error: '取得任務列表時發生錯誤，請先在資料庫執行 migrations/006_task_favorites.sql 建立 task_favorites 表。',
+      })
+    }
     console.error('Error fetching tasks:', err)
     res.status(500).json({ error: '取得任務列表時發生錯誤，請稍後再試' })
   }
@@ -698,8 +714,68 @@ app.get('/api/my-tasks', async (req, res) => {
   }
 })
 
+// 使用者收藏的任務清單
+app.get('/api/my-favorites', async (req, res) => {
+  const { userId } = req.query
+
+  if (!userId) {
+    return res.status(400).json({ error: '缺少 userId' })
+  }
+
+  try {
+    const result = await pool.query(
+      `SELECT
+         t.id,
+         t.publisher_id,
+         t.title,
+         t.category,
+         t.description,
+         t.budget,
+         TO_CHAR(t.deadline, 'YYYY-MM-DD') AS deadline,
+         t.status,
+         t.created_at,
+         COALESCE(
+           ARRAY_AGG(ts.skill_name) FILTER (WHERE ts.skill_name IS NOT NULL),
+           '{}'
+         ) AS skills
+       FROM task_favorites f
+       JOIN tasks t ON t.id = f.task_id
+       LEFT JOIN task_skills ts ON ts.task_id = t.id
+       WHERE f.user_id = $1
+       GROUP BY t.id
+       ORDER BY MAX(f.created_at) DESC`,
+      [userId],
+    )
+
+    const tasks = result.rows.map((row) => ({
+      id: row.id,
+      publisherId: row.publisher_id,
+      title: row.title,
+      category: row.category,
+      description: row.description,
+      budget: row.budget,
+      deadline: row.deadline,
+      status: row.status,
+      createdAt: row.created_at,
+      skills: row.skills,
+      isFavorite: true,
+    }))
+
+    res.json(tasks)
+  } catch (err) {
+    if (err.code === '42P01') {
+      return res.status(500).json({
+        error: '取得收藏任務時發生錯誤，請先在資料庫執行 migrations/006_task_favorites.sql 建立 task_favorites 表。',
+      })
+    }
+    console.error('Error fetching favorite tasks:', err)
+    res.status(500).json({ error: '取得收藏任務時發生錯誤，請稍後再試' })
+  }
+})
+
 app.get('/api/tasks/:id', async (req, res) => {
   const { id } = req.params
+  const { userId } = req.query
 
   try {
     const result = await pool.query(
@@ -714,16 +790,38 @@ app.get('/api/tasks/:id', async (req, res) => {
          t.status,
          t.worker_id,
          t.created_at,
-         u.display_name AS worker_name,
+         pub.display_name AS publisher_name,
+         pub.institution AS publisher_institution,
+         COALESCE(pub.institutional_email, FALSE) AS publisher_institutional_email,
+         COALESCE(pub.email_verified, FALSE) AS publisher_email_verified,
+         pub.orcid_id AS publisher_orcid_id,
+         worker.display_name AS worker_name,
          COALESCE(
            ARRAY_AGG(ts.skill_name) FILTER (WHERE ts.skill_name IS NOT NULL),
            '{}'
          ) AS skills
        FROM tasks t
        LEFT JOIN task_skills ts ON ts.task_id = t.id
-       LEFT JOIN users u ON u.id = t.worker_id
+       LEFT JOIN users pub ON pub.id = t.publisher_id
+       LEFT JOIN users worker ON worker.id = t.worker_id
        WHERE t.id = $1
-       GROUP BY t.id, t.publisher_id, t.title, t.category, t.description, t.budget, t.deadline, t.status, t.worker_id, t.created_at, u.display_name`,
+       GROUP BY
+         t.id,
+         t.publisher_id,
+         t.title,
+         t.category,
+         t.description,
+         t.budget,
+         t.deadline,
+         t.status,
+         t.worker_id,
+         t.created_at,
+         pub.display_name,
+         pub.institution,
+         pub.institutional_email,
+         pub.email_verified,
+         pub.orcid_id,
+         worker.display_name`,
       [id],
     )
 
@@ -732,9 +830,28 @@ app.get('/api/tasks/:id', async (req, res) => {
     }
 
     const row = result.rows[0]
+
+    let isFavorite = false
+    if (userId) {
+      try {
+        const fav = await pool.query(
+          'SELECT 1 FROM task_favorites WHERE task_id = $1 AND user_id = $2',
+          [id, userId],
+        )
+        isFavorite = fav.rows.length > 0
+      } catch (favErr) {
+        console.warn('Error checking favorites (non-critical):', favErr)
+      }
+    }
+
     const task = {
       id: row.id,
       publisherId: row.publisher_id,
+      publisherName: row.publisher_name,
+      publisherInstitution: row.publisher_institution,
+      publisherInstitutionalEmail: row.publisher_institutional_email,
+      publisherEmailVerified: row.publisher_email_verified,
+      publisherOrcidId: row.publisher_orcid_id,
       title: row.title,
       category: row.category,
       description: row.description,
@@ -745,12 +862,67 @@ app.get('/api/tasks/:id', async (req, res) => {
       workerName: row.worker_name,
       createdAt: row.created_at,
       skills: row.skills,
+      isFavorite,
     }
 
     res.json(task)
   } catch (err) {
     console.error('Error fetching task detail:', err)
     res.status(500).json({ error: '取得任務詳情時發生錯誤，請稍後再試' })
+  }
+})
+
+// 收藏任務
+app.post('/api/tasks/:id/favorite', async (req, res) => {
+  const { id } = req.params
+  const { userId } = req.body || {}
+
+  if (!userId) {
+    return res.status(401).json({ error: '請先登入後再收藏任務' })
+  }
+
+  try {
+    await pool.query(
+      `INSERT INTO task_favorites (user_id, task_id)
+       VALUES ($1, $2)
+       ON CONFLICT (user_id, task_id) DO NOTHING`,
+      [userId, id],
+    )
+    res.json({ favorite: true })
+  } catch (err) {
+    if (err.code === '42P01') {
+      return res.status(500).json({
+        error: '加入收藏時發生錯誤，請先在資料庫執行 migrations/006_task_favorites.sql 建立 task_favorites 表。',
+      })
+    }
+    console.error('Error adding favorite:', err)
+    res.status(500).json({ error: '加入收藏時發生錯誤，請稍後再試' })
+  }
+})
+
+// 取消收藏任務
+app.delete('/api/tasks/:id/favorite', async (req, res) => {
+  const { id } = req.params
+  const { userId } = req.body || {}
+
+  if (!userId) {
+    return res.status(401).json({ error: '請先登入後再取消收藏' })
+  }
+
+  try {
+    await pool.query(
+      'DELETE FROM task_favorites WHERE user_id = $1 AND task_id = $2',
+      [userId, id],
+    )
+    res.json({ favorite: false })
+  } catch (err) {
+    if (err.code === '42P01') {
+      return res.status(500).json({
+        error: '取消收藏時發生錯誤，請先在資料庫執行 migrations/006_task_favorites.sql 建立 task_favorites 表。',
+      })
+    }
+    console.error('Error removing favorite:', err)
+    res.status(500).json({ error: '取消收藏時發生錯誤，請稍後再試' })
   }
 })
 
@@ -772,7 +944,10 @@ app.get('/api/tasks/:id/bids', async (req, res) => {
 
     const result = await pool.query(
       `SELECT b.id, b.task_id, b.bidder_id, b.proposed_price, b.message, b.status, b.created_at,
-              u.display_name AS bidder_name, u.institution AS bidder_institution
+              u.display_name AS bidder_name, u.institution AS bidder_institution,
+              COALESCE(u.institutional_email, FALSE) AS bidder_institutional_email,
+              COALESCE(u.email_verified, FALSE) AS bidder_email_verified,
+              u.orcid_id AS bidder_orcid_id
        FROM bids b
        JOIN users u ON u.id = b.bidder_id
        WHERE b.task_id = $1
@@ -787,6 +962,9 @@ app.get('/api/tasks/:id/bids', async (req, res) => {
       bidderId: row.bidder_id,
       bidderName: row.bidder_name,
       bidderInstitution: row.bidder_institution,
+      bidderInstitutionalEmail: row.bidder_institutional_email,
+      bidderEmailVerified: row.bidder_email_verified,
+      bidderOrcidId: row.bidder_orcid_id || null,
       proposedPrice: row.proposed_price,
       message: row.message,
       status: row.status,

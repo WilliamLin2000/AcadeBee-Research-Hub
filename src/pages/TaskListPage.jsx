@@ -15,6 +15,13 @@ export default function TaskListPage() {
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [currentUser, setCurrentUser] = useState(null)
+
+  useEffect(() => {
+    const raw = window.localStorage.getItem('currentUser')
+    const user = raw ? JSON.parse(raw) : null
+    setCurrentUser(user)
+  }, [])
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -26,6 +33,7 @@ export default function TaskListPage() {
         if (searchQuery.trim()) params.set('search', searchQuery.trim())
         if (budgetMin.trim()) params.set('budgetMin', budgetMin.trim())
         if (budgetMax.trim()) params.set('budgetMax', budgetMax.trim())
+        if (currentUser?.id) params.set('userId', currentUser.id)
         const qs = params.toString()
         const url = qs ? `/api/tasks?${qs}` : '/api/tasks'
         const res = await apiFetch(url)
@@ -51,7 +59,30 @@ export default function TaskListPage() {
     }
 
     fetchTasks()
-  }, [selectedCategory, searchQuery, budgetMin, budgetMax])
+  }, [selectedCategory, searchQuery, budgetMin, budgetMax, currentUser])
+
+  const handleToggleFavorite = async (task) => {
+    if (!currentUser?.id) return
+    const method = task.isFavorite ? 'DELETE' : 'POST'
+    try {
+      const res = await apiFetch(`/api/tasks/${task.id}/favorite`, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUser.id }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.error || '更新收藏狀態失敗')
+      }
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === task.id ? { ...t, isFavorite: Boolean(data.favorite) } : t,
+        ),
+      )
+    } catch (err) {
+      setError(err.message || '更新收藏狀態失敗')
+    }
+  }
 
   return (
     <div className="task-list-page">
@@ -110,7 +141,14 @@ export default function TaskListPage() {
         {!loading && !error && (
           <>
             {tasks.length > 0 ? (
-              tasks.map((task) => <TaskCard key={task.id} task={task} />)
+              tasks.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  currentUser={currentUser}
+                  onToggleFavorite={handleToggleFavorite}
+                />
+              ))
             ) : (
               <p className="no-results">目前沒有符合條件的任務</p>
             )}

@@ -38,14 +38,23 @@ export default function ProfilePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id }),
       })
-      const data = await res.json()
+      const contentType = res.headers.get('content-type')
+      const data = contentType?.includes('application/json')
+        ? await res.json()
+        : { error: `伺服器回傳異常 (${res.status})` }
       if (res.ok) {
         setEmailMessage(data.message || '驗證碼已寄至信箱，請輸入下方 6 碼。')
       } else {
-        setEmailMessage(data.error || '發送失敗')
+        const msg = data.error || '發送失敗'
+        setEmailMessage(data.detail ? `${msg}：${data.detail}` : msg)
       }
     } catch (err) {
-      setEmailMessage('發送失敗，請稍後再試')
+      const msg = err.message || '發送失敗，請稍後再試'
+      setEmailMessage(
+        msg.includes('Failed to fetch') || msg.includes('NetworkError')
+          ? '無法連線至伺服器，請確認後端已啟動且 .env 中 VITE_API_BASE_URL 指到正確位址（例如 http://localhost:5000）。'
+          : msg
+      )
     } finally {
       setEmailSending(false)
     }
@@ -94,14 +103,14 @@ export default function ProfilePage() {
           <h2>{user.name || user.email}</h2>
 
           <div className="profile-badges">
-            {user.institutionalEmail && (
-              <span className="badge badge-institutional" title="機構／學校信箱">
-                機構信箱
+            {user.institutionalEmail && user.emailVerified && (
+              <span className="badge badge-institutional" title="學術機構信箱已驗證">
+                學術機構信箱驗證
               </span>
             )}
-            {user.emailVerified && (
-              <span className="badge badge-verified" title="信箱已驗證">
-                信箱已驗證
+            {user.orcidId && (
+              <span className="badge badge-orcid" title="已填寫 ORCID">
+                ORCID 已連結 <img src="/orcid-badge.png" alt="ORCID" className="badge-orcid-icon" />
               </span>
             )}
             {user.degreeVerified && (
@@ -119,7 +128,10 @@ export default function ProfilePage() {
             <p><strong>學校／機構：</strong>{user.institution}</p>
           )}
           {user.orcidId && (
-            <p><strong>ORCID ID：</strong>{user.orcidId}</p>
+            <p className="profile-orcid-row">
+              <strong>ORCID ID： <img src="/orcid-badge.png" alt="ORCID" className="orcid-icon-inline" /></strong>
+              {' '}{user.orcidId}
+            </p>
           )}
           {Array.isArray(user.skills) && user.skills.length > 0 && (
             <p>

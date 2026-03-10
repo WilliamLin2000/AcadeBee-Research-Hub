@@ -53,3 +53,31 @@ MAIL_FROM=AcadeBee <onboarding@resend.dev>
 
 - 在註冊頁輸入信箱、點「發送驗證碼」，或到個人資料頁點「發送驗證碼至信箱」。
 - 到該信箱收信（可先看垃圾信匣）。寄件者會顯示為 `AcadeBee <onboarding@resend.dev>` 或你設的 MAIL_FROM。
+
+---
+
+## 五、常見錯誤與排除
+
+### 畫面顯示「發送失敗」或「無法連線至伺服器」
+
+1. **本機開發時**  
+   - 確認後端已啟動：在專案目錄執行 `npm run server`（預設 port 5000）。  
+   - 確認前端有設 API 位址：在專案根目錄建立或編輯 `.env`，加入  
+     `VITE_API_BASE_URL=http://localhost:5000`  
+     （依你實際後端 port 修改）。重啟前端（`npm run dev`）後再試。
+
+2. **雲端部署時**  
+   - 確認 Render 後端的 **Environment** 已設 `RESEND_API_KEY` 且已 **Redeploy**。  
+   - 確認前端的 **Vercel 環境變數** 有設 `VITE_API_BASE_URL` 指到 Render 後端網址（例如 `https://你的後端.onrender.com`）。
+
+### 畫面顯示「寄送驗證信失敗：…」或後端回傳 detail
+
+- 多為 **Resend API** 問題，請看 `detail` 內容：  
+  - 若為 **domain / from** 相關：免費方案寄件者請用 `onboarding@resend.dev`；自訂網域需在 Resend 後台驗證後再設 `MAIL_FROM`。  
+  - 若為 **rate limit**：稍後再試或升級方案。  
+  - 若為 **invalid API key**：到 Resend 後台確認 API Key 正確並重新貼到 `RESEND_API_KEY`。
+
+### 沒有錯誤但收不到信
+
+- 先到信箱的**垃圾郵件**查看。  
+- 使用 `onboarding@resend.dev` 時，Resend 免費方案**僅能寄給你在 Resend 帳號中設定的信箱**；要寄給任意使用者需在 Resend 驗證自己的網域並設定 MAIL_FROM。

@@ -1,12 +1,47 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './TaskCard.css'
 
-export default function TaskCard({ task }) {
+export default function TaskCard({ task, currentUser, onToggleFavorite }) {
+  const navigate = useNavigate()
+
+  const handleCardClick = (e) => {
+    // 若點擊的是收藏按鈕，不導向詳情頁
+    if (e.target.closest('.task-card-fav-btn')) {
+      e.preventDefault()
+      return
+    }
+  }
+
+  const handleFavoriteClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!currentUser?.id) {
+      navigate('/login')
+      return
+    }
+    if (onToggleFavorite) {
+      onToggleFavorite(task)
+    }
+  }
+
   return (
-    <Link to={`/tasks/${task.id}`} className="task-card">
+    <Link to={`/tasks/${task.id}`} className="task-card" onClick={handleCardClick}>
       <div className="task-card-header">
         <span className="task-card-category">{task.categoryLabel}</span>
-        <span className="task-card-budget">NT$ {task.budget?.toLocaleString()}</span>
+        <div className="task-card-header-right">
+          {onToggleFavorite && (
+            <button
+              type="button"
+              className={`task-card-fav-btn ${task.isFavorite ? 'active' : ''}`}
+              aria-label={task.isFavorite ? '取消收藏此任務' : '收藏此任務'}
+              title={currentUser ? (task.isFavorite ? '取消收藏' : '加入收藏清單') : '請先登入後才能收藏任務'}
+              onClick={handleFavoriteClick}
+            >
+              {task.isFavorite ? '♥' : '♡'}
+            </button>
+          )}
+          <span className="task-card-budget">NT$ {task.budget?.toLocaleString()}</span>
+        </div>
       </div>
       <h3 className="task-card-title">{task.title}</h3>
       <p className="task-card-desc">{task.description}</p>

@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS task_favorites (
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  task_id UUID NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, task_id)
+);

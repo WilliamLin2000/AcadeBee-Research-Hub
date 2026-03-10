@@ -95,6 +95,40 @@
   color: #6d28d9;
 }
 
+.badge-orcid {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(166, 204, 89, 0.2);
+  color: #4a5f22;
+}
+.badge-orcid .badge-orcid-icon {
+  margin-left: 0;
+}
+
+.badge-orcid-icon {
+  height: 1em;
+  width: auto;
+  vertical-align: middle;
+}
+
+.orcid-icon-inline {
+  height: 1em;
+  width: auto;
+  vertical-align: middle;
+  margin-left: 0.25rem;
+}
+
+.profile-orcid-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.profile-orcid-row .orcid-icon-inline {
+  margin-left: 0.25rem;
+}
+
 .profile-skills {
   display: inline-flex;
   flex-wrap: wrap;

@@ -28,6 +28,13 @@
   margin-bottom: 0.35rem;
 }
 
+.auth-form .orcid-icon-inline {
+  height: 1em;
+  width: auto;
+  vertical-align: middle;
+  margin-left: 0.25rem;
+}
+
 .auth-form input {
   width: 100%;
   padding: 0.65rem 0.8rem;
@@ -84,6 +91,22 @@
   margin-bottom: 0.5rem;
 }
 
+.skill-selected-count {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.skill-group {
+  margin-bottom: 0.5rem;
+}
+
+.skill-group-title {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.25rem;
+}
+
 .skill-chips {
   display: flex;
   flex-wrap: wrap;
@@ -109,6 +132,24 @@
   border-color: var(--color-primary);
   background: rgba(37, 99, 235, 0.12);
   color: var(--color-primary);
+}
+
+.skill-custom-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.skill-custom-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.45rem 0.7rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(100, 116, 139, 0.35);
+}
+
+.skill-selected-tags {
+  margin-top: 0.75rem;
 }
 
 .register-codes-row {

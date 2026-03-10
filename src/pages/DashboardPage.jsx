@@ -9,6 +9,7 @@ export default function DashboardPage() {
   const navigate = useNavigate()
   const [currentUser, setCurrentUser] = useState(null)
   const [myPostedTasks, setMyPostedTasks] = useState([])
+  const [favoriteTasks, setFavoriteTasks] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -47,7 +48,28 @@ export default function DashboardPage() {
       }
     }
 
+    const fetchFavorites = async () => {
+      try {
+        const res = await apiFetch(`/api/my-favorites?userId=${user.id}`)
+        const data = await res.json()
+        if (!res.ok) {
+          throw new Error(data.error || '取得收藏任務失敗')
+        }
+        const enriched = data.map((task) => {
+          const cat = categories.find((c) => c.value === task.category)
+          return {
+            ...task,
+            categoryLabel: cat ? cat.label : task.category,
+          }
+        })
+        setFavoriteTasks(enriched)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
     fetchMyTasks()
+    fetchFavorites()
   }, [navigate])
 
   return (
@@ -69,6 +91,19 @@ export default function DashboardPage() {
                 </p>
               )}
             </>
+          )}
+        </div>
+      </section>
+
+      <section className="dashboard-section">
+        <h2>我的收藏任務</h2>
+        <div className="dashboard-task-grid">
+          {favoriteTasks.length > 0 ? (
+            favoriteTasks.map((task) => (
+              <TaskCard key={task.id} task={task} currentUser={currentUser} />
+            ))
+          ) : (
+            <p className="empty-state">尚未收藏任何任務。</p>
           )}
         </div>
       </section>

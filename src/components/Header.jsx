@@ -54,8 +54,8 @@ export default function Header() {
               <span className="header-user-name">
                 {displayName || '個人資料'}
               </span>
-              {user.institutionalEmail && (
-                <span className="header-badge" title="機構信箱">機構✓</span>
+              {user.institutionalEmail && user.emailVerified && (
+                <span className="header-badge" title="學術機構信箱已驗證">機構✓</span>
               )}
             </Link>
             <button type="button" className="btn btn-outline" onClick={handleLogout}>

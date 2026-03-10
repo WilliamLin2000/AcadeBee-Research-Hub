@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { apiFetch } from '../apiClient'
 import './AuthPage.css'
+
+const MAX_SKILLS = 5
 
 const JOB_TITLE_OPTIONS = [
   { value: "大學部學生 (Undergraduate)", label: "大學部學生 (Undergraduate)" },
@@ -15,6 +17,16 @@ const JOB_TITLE_OPTIONS = [
   { value: "軟體工程師 (Software Engineer)", label: "軟體工程師 (Software Engineer)" },
   { value: "其他 (Others)", label: "其他 (Others)" },
 ]
+
+// 技能分組標題與建議歸類名稱（前端分組＋建議標籤）
+const SKILL_GROUP_CONFIG = {
+  '程式語言': ['Python', 'R', 'Matlab', 'VBA', 'SQL', 'C++'],
+  '數據與統計': ['SPSS', 'Stata', '統合分析', '機器學習', '生物統計'],
+  '影像與標註': ['LabelMe', 'CVAT', '醫學影像分割', '影像增強'],
+  '文書與排版': ['LaTeX', 'EndNote/Zotero', 'Markdown', 'Excel'],
+  '論文輔助': ['英文校對', '醫學論文翻譯', '格式調整', '文獻檢索'],
+  '專業軟體': ['SolidWorks', 'LabVIEW', 'Origin', 'GraphPad Prism'],
+}
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
@@ -35,6 +47,7 @@ export default function RegisterPage() {
   const [skillOptions, setSkillOptions] = useState([])
   const [loading, setLoading] = useState(false)
   const [loadingSkills, setLoadingSkills] = useState(true)
+  const [customSkill, setCustomSkill] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
@@ -53,6 +66,8 @@ export default function RegisterPage() {
     fetchSkills()
   }, [])
 
+  const groupedSkillOptions = useMemo(() => SKILL_GROUP_CONFIG, [])
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setForm((prev) => ({ ...prev, [name]: value }))
@@ -60,11 +75,36 @@ export default function RegisterPage() {
 
   const handleSkillToggle = (skill) => {
     setForm((prev) => {
-      const next = prev.skills.includes(skill)
-        ? prev.skills.filter((s) => s !== skill)
-        : [...prev.skills, skill]
+      const already = prev.skills.includes(skill)
+      if (already) {
+        const next = prev.skills.filter((s) => s !== skill)
+        return { ...prev, skills: next }
+      }
+      if (prev.skills.length >= MAX_SKILLS) {
+        setError(`技能最多可選擇 ${MAX_SKILLS} 項。若要更換，請先取消部分已選技能。`)
+        return prev
+      }
+      const next = [...prev.skills, skill]
       return { ...prev, skills: next }
     })
+  }
+
+  const handleAddCustomSkill = () => {
+    const value = customSkill.trim()
+    if (!value) return
+    setForm((prev) => {
+      if (prev.skills.includes(value)) {
+        setCustomSkill('')
+        return prev
+      }
+      if (prev.skills.length >= MAX_SKILLS) {
+        setError(`技能最多可選擇 ${MAX_SKILLS} 項。若要新增其他技能，請先取消部分已選技能。`)
+        return prev
+      }
+      const next = [...prev.skills, value]
+      return { ...prev, skills: next }
+    })
+    setCustomSkill('')
   }
 
   const handleSendCode = async (e) => {
@@ -130,7 +170,7 @@ export default function RegisterPage() {
 
       setSuccess(
         '註冊成功！信箱已完成驗證。您可以使用此帳號登入。' +
-          (data.institutionalEmail ? ' 您使用機構信箱，已獲得機構驗證標章。' : ''),
+          (data.institutionalEmail ? ' 您使用學術機構信箱，已獲得學術機構信箱驗證標章。' : ''),
       )
       setForm({
         name: '',
@@ -158,7 +198,7 @@ export default function RegisterPage() {
       <div className="auth-card">
         <h1>註冊</h1>
         <p className="auth-hint auth-hint-top">
-          請先填寫信箱並取得驗證碼，完成信箱驗證後再填寫其餘資料。使用 .edu / 學校信箱可獲得「機構信箱」標章。
+          請先填寫信箱並取得驗證碼，完成信箱驗證後再填寫其餘資料。若使用學術機構信箱（如 .edu），驗證成功後將獲得「學術機構信箱驗證」標章，提高其他研究人員對您的信賴度。
         </p>
         <form className="auth-form" onSubmit={handleSubmit}>
           <div>
@@ -168,7 +208,7 @@ export default function RegisterPage() {
               name="email"
               type="email"
               required
-              placeholder="建議使用 .edu 或學校信箱"
+              placeholder="請填寫常用信箱"
               value={form.email}
               onChange={handleChange}
             />
@@ -208,13 +248,13 @@ export default function RegisterPage() {
           <hr className="form-divider" />
 
           <div>
-            <label htmlFor="name">真實姓名 / 暱稱 *</label>
+            <label htmlFor="name">真實姓名 *</label>
             <input
               id="name"
               name="name"
               type="text"
               required
-              placeholder="平台顯示用，建議實名制"
+              placeholder="請確實填寫，採實名制"
               value={form.name}
               onChange={handleChange}
             />
@@ -247,7 +287,9 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="orcid_id">ORCID ID *</label>
+            <label htmlFor="orcid_id">
+              ORCID ID * <img src="/orcid-badge.png" alt="ORCID" className="orcid-icon-inline" />
+            </label>
             <input
               id="orcid_id"
               name="orcid_id"
@@ -283,29 +325,71 @@ export default function RegisterPage() {
               id="phone"
               name="phone"
               type="tel"
-              placeholder="選填，用於聯絡"
+              placeholder="選填"
               value={form.phone}
               onChange={handleChange}
             />
           </div>
 
-          {!loadingSkills && skillOptions.length > 0 && (
-            <div className="form-group-skills">
-              <label>技能標籤（選填，利於任務媒合）</label>
-              <div className="skill-chips">
-                {skillOptions.map((skill) => (
-                  <button
-                    key={skill}
-                    type="button"
-                    className={`skill-chip ${form.skills.includes(skill) ? 'active' : ''}`}
-                    onClick={() => handleSkillToggle(skill)}
-                  >
-                    {skill}
-                  </button>
-                ))}
+          <div className="form-group-skills">
+            <label>技能標籤（選填，利於任務媒合）</label>
+            <p className="skill-selected-count">
+              已選擇 {form.skills.length} / {MAX_SKILLS} 項
+            </p>
+
+            {Object.entries(groupedSkillOptions).map(([groupName, skills]) => (
+              <div key={groupName} className="skill-group">
+                <p className="skill-group-title">{groupName}</p>
+                <div className="skill-chips">
+                  {skills.map((skill) => (
+                    <button
+                      key={skill}
+                      type="button"
+                      className={`skill-chip ${form.skills.includes(skill) ? 'active' : ''}`}
+                      onClick={() => handleSkillToggle(skill)}
+                    >
+                      {skill}
+                    </button>
+                  ))}
+                </div>
               </div>
+            ))}
+
+            <div className="skill-custom-row">
+              <input
+                type="text"
+                placeholder="自訂技能，例如：醫學統計顧問"
+                value={customSkill}
+                onChange={(e) => setCustomSkill(e.target.value)}
+              />
+              <button
+                type="button"
+                className="btn btn-outline btn-sm"
+                onClick={handleAddCustomSkill}
+                disabled={!customSkill.trim()}
+              >
+                新增技能
+              </button>
             </div>
-          )}
+
+            {form.skills.length > 0 && (
+              <div className="skill-selected-tags">
+                <p className="skill-group-title">已選技能（再點一次可取消）：</p>
+                <div className="skill-chips">
+                  {form.skills.map((skill) => (
+                    <button
+                      key={skill}
+                      type="button"
+                      className="skill-chip active"
+                      onClick={() => handleSkillToggle(skill)}
+                    >
+                      {skill}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           <div>
             <label htmlFor="password">密碼 *</label>

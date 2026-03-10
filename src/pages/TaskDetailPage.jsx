@@ -13,13 +13,16 @@ export default function TaskDetailPage() {
   const [error, setError] = useState('')
   const [currentUser, setCurrentUser] = useState(null)
   const [deleting, setDeleting] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
+  const [favoriteLoading, setFavoriteLoading] = useState(false)
   const [bidPrice, setBidPrice] = useState('')
   const [bidMessage, setBidMessage] = useState('')
   const [submittingBid, setSubmittingBid] = useState(false)
   const [acceptingBidId, setAcceptingBidId] = useState(null)
 
-  const loadTask = async () => {
-    const res = await apiFetch(`/api/tasks/${id}`)
+  const loadTask = async (userId) => {
+    const q = userId ? `?userId=${userId}` : ''
+    const res = await apiFetch(`/api/tasks/${id}${q}`)
     const data = await res.json()
     if (!res.ok) throw new Error(data.error || '取得任務詳情失敗')
     const cat = categories.find((c) => c.value === data.category)
@@ -45,8 +48,9 @@ export default function TaskDetailPage() {
       setLoading(true)
       setError('')
       try {
-        const [taskData, bidsData] = await Promise.all([loadTask(), loadBids()])
+        const [taskData, bidsData] = await Promise.all([loadTask(user?.id), loadBids()])
         setTask(taskData)
+        setIsFavorite(Boolean(taskData.isFavorite))
         setBids(bidsData)
       } catch (err) {
         setError(err.message || '取得任務詳情失敗')
@@ -108,7 +112,7 @@ export default function TaskDetailPage() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || '接受報價失敗')
-      const [taskData, bidsData] = await Promise.all([loadTask(), loadBids()])
+      const [taskData, bidsData] = await Promise.all([loadTask(currentUser?.id), loadBids()])
       setTask(taskData)
       setBids(bidsData)
     } catch (err) {
@@ -146,6 +150,32 @@ export default function TaskDetailPage() {
     }
   }
 
+  const handleToggleFavorite = async () => {
+    if (!task || favoriteLoading) return
+    if (!currentUser?.id) {
+      navigate('/login')
+      return
+    }
+
+    setFavoriteLoading(true)
+    setError('')
+    try {
+      const method = isFavorite ? 'DELETE' : 'POST'
+      const res = await apiFetch(`/api/tasks/${id}/favorite`, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUser.id }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || '更新收藏狀態失敗')
+      setIsFavorite(Boolean(data.favorite))
+    } catch (err) {
+      setError(err.message || '更新收藏狀態失敗')
+    } finally {
+      setFavoriteLoading(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="task-detail-page">
@@ -177,7 +207,19 @@ export default function TaskDetailPage() {
       <div className="task-detail-card">
         <div className="task-detail-header">
           <span className="task-detail-category">{task.categoryLabel}</span>
-          <span className="task-detail-budget">NT$ {task.budget?.toLocaleString()}</span>
+          <div className="task-detail-header-right">
+            <button
+              type="button"
+              className={`favorite-btn ${isFavorite ? 'active' : ''}`}
+              onClick={handleToggleFavorite}
+              disabled={favoriteLoading}
+              aria-label={isFavorite ? '取消收藏此任務' : '收藏此任務'}
+              title={currentUser ? (isFavorite ? '取消收藏' : '加入收藏清單') : '請先登入後才能收藏任務'}
+            >
+              {isFavorite ? '♥' : '♡'}
+            </button>
+            <span className="task-detail-budget">NT$ {task.budget?.toLocaleString()}</span>
+          </div>
         </div>
         <h1>{task.title}</h1>
         <div className="task-detail-meta">
@@ -188,6 +230,28 @@ export default function TaskDetailPage() {
         <section className="task-detail-section">
           <h3>任務描述</h3>
           <p>{task.description}</p>
+        </section>
+
+        <section className="task-detail-section task-publisher">
+          <h3>刊登者</h3>
+          <p>
+            <strong>{task.publisherName || '使用者'}</strong>
+            {task.publisherInstitution && (
+              <span className="publisher-institution"> · {task.publisherInstitution}</span>
+            )}
+          </p>
+          <div className="publisher-badges">
+            {task.publisherInstitutionalEmail && task.publisherEmailVerified && (
+              <span className="badge badge-institutional" title="學術機構信箱已驗證">
+                學術機構信箱驗證
+              </span>
+            )}
+            {task.publisherOrcidId && (
+              <span className="badge badge-orcid" title="ORCID 已連結">
+                ORCID <img src="/orcid-badge.png" alt="ORCID" className="badge-orcid-icon" />
+              </span>
+            )}
+          </div>
         </section>
 
         <section className="task-detail-section">
@@ -211,9 +275,19 @@ export default function TaskDetailPage() {
             <ul className="bids-list">
               {bids.map((b) => (
                 <li key={b.id} className="bid-item">
-                  <div>
+                  <div className="bidder-info">
                     <strong>{b.bidderName}</strong>
                     {b.bidderInstitution && <span className="bid-institution"> · {b.bidderInstitution}</span>}
+                    <div className="bidder-badges">
+                      {b.bidderInstitutionalEmail && b.bidderEmailVerified && (
+                        <span className="badge badge-institutional" title="學術機構信箱已驗證">學術機構信箱驗證</span>
+                      )}
+                      {b.bidderOrcidId && (
+                        <span className="badge badge-orcid" title="ORCID 已連結">
+                          ORCID <img src="/orcid-badge.png" alt="ORCID" className="badge-orcid-icon" />
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div>報價 NT$ {b.proposedPrice?.toLocaleString()}</div>
                   {b.message && <p className="bid-message">{b.message}</p>}
