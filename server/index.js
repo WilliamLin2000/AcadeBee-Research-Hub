@@ -1215,7 +1215,26 @@ app.delete('/api/tasks/:id', async (req, res) => {
   }
 })
 
-app.listen(port, () => {
-  console.log(`API server listening on http://localhost:${port}`)
+// 啟動時自動建立 task_favorites 表（若不存在），避免雲端 DB 未執行 migration 006
+async function ensureTaskFavoritesTable() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS task_favorites (
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        task_id UUID NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (user_id, task_id)
+      )
+    `)
+    console.log('task_favorites table ready')
+  } catch (err) {
+    console.error('Failed to ensure task_favorites:', err.message)
+  }
+}
+
+ensureTaskFavoritesTable().then(() => {
+  app.listen(port, () => {
+    console.log(`API server listening on http://localhost:${port}`)
+  })
 })
 
