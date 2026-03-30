@@ -66,6 +66,7 @@ export default function TaskDetailPage() {
   const isPublisher = canEditOrDelete
   const myBid = currentUser && bids.find((b) => b.bidderId === currentUser.id)
   const canBid = currentUser && task && task.status === 'open' && !isPublisher
+  const isClosed = task && task.status !== 'open'
 
   const handleSubmitBid = async (e) => {
     e.preventDefault()
@@ -227,6 +228,20 @@ export default function TaskDetailPage() {
           <span>刊登日期：{task.createdAt}</span>
         </div>
 
+        {task.status === 'open' && (() => {
+          const today = new Date()
+          today.setHours(0, 0, 0, 0)
+          const deadlineDate = new Date(`${task.deadline}T00:00:00`)
+          const diffDays = Math.round((deadlineDate - today) / 86400000)
+          if (diffDays === 1) {
+            return <p className="text-muted">此任務將於明天截止，建議把握時程。</p>
+          }
+          if (diffDays === 0) {
+            return <p className="text-muted">此任務今日截止，請儘快完成承接與溝通。</p>
+          }
+          return null
+        })()}
+
         <section className="task-detail-section">
           <h3>任務描述</h3>
           <p>{task.description}</p>
@@ -343,6 +358,14 @@ export default function TaskDetailPage() {
               </button>
             </form>
           </section>
+        )}
+
+        {isClosed && !isPublisher && (
+          <p className="text-muted">
+            {task.status === 'in_progress' && '此任務已被承接，暫時無法再送出報價。'}
+            {task.status === 'expired' && '此任務已到期，無法再送出報價。'}
+            {task.status !== 'in_progress' && task.status !== 'expired' && '此任務目前無法承接。'}
+          </p>
         )}
 
         {canBid && myBid && (

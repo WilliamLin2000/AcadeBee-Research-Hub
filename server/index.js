@@ -18,6 +18,107 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 })
 
+// 將已過期的 open 任務標記為 expired（避免未設定排程時狀態不更新）
+async function expireOpenTasks(clientOrPool = pool) {
+  try {
+    await clientOrPool.query(
+      `UPDATE tasks
+       SET status = 'expired', updated_at = CURRENT_TIMESTAMP
+       WHERE status = 'open' AND deadline < CURRENT_DATE`,
+    )
+  } catch (err) {
+    console.warn('Expire tasks failed (non-critical):', err.message)
+  }
+}
+
+// 新增期限提醒狀態欄位（若尚未存在）
+async function ensureTaskDeadlineReminderColumns(clientOrPool = pool) {
+  try {
+    await clientOrPool.query(`
+      ALTER TABLE tasks
+        ADD COLUMN IF NOT EXISTS deadline_reminder_1d_sent BOOLEAN DEFAULT FALSE,
+        ADD COLUMN IF NOT EXISTS deadline_reminder_due_sent BOOLEAN DEFAULT FALSE
+    `)
+  } catch (err) {
+    console.warn('Ensure deadline reminder columns failed (non-critical):', err.message)
+  }
+}
+
+// 寄送「到期前一天」與「到期當天」通知（避免重複寄送）
+async function sendDeadlineReminders(clientOrPool = pool) {
+  try {
+    await ensureTaskDeadlineReminderColumns(clientOrPool)
+
+    // 1) 到期前一天（deadline = 明天）
+    const tomorrowRows = await clientOrPool.query(
+      `SELECT
+         t.id AS task_id,
+         t.title,
+         t.deadline,
+         pub.email AS publisher_email,
+         pub.display_name AS publisher_name
+       FROM tasks t
+       JOIN users pub ON pub.id = t.publisher_id
+       WHERE t.status = 'open'
+         AND t.deadline = (CURRENT_DATE + INTERVAL '1 day')::date
+         AND COALESCE(t.deadline_reminder_1d_sent, FALSE) = FALSE`,
+    )
+
+    for (const row of tomorrowRows.rows) {
+      try {
+        if (row.publisher_email) {
+          await sendEmail({
+            to: row.publisher_email,
+            subject: '[AcadeBee] 任務即將到期（明天截止）',
+            text: `您好${row.publisher_name ? ` ${row.publisher_name}` : ''}，\n\n您的任務「${row.title}」將於明天（${row.deadline}）截止。\n\n請登入平台查看任務詳情。`,
+          })
+        }
+        await clientOrPool.query(
+          `UPDATE tasks SET deadline_reminder_1d_sent = TRUE, updated_at = CURRENT_TIMESTAMP WHERE id = $1`,
+          [row.task_id],
+        )
+      } catch (mailErr) {
+        console.warn('Send 1-day reminder failed (non-critical):', mailErr.message)
+      }
+    }
+
+    // 2) 到期當天（deadline = 今天）
+    const dueRows = await clientOrPool.query(
+      `SELECT
+         t.id AS task_id,
+         t.title,
+         t.deadline,
+         pub.email AS publisher_email,
+         pub.display_name AS publisher_name
+       FROM tasks t
+       JOIN users pub ON pub.id = t.publisher_id
+       WHERE t.status = 'open'
+         AND t.deadline = CURRENT_DATE
+         AND COALESCE(t.deadline_reminder_due_sent, FALSE) = FALSE`,
+    )
+
+    for (const row of dueRows.rows) {
+      try {
+        if (row.publisher_email) {
+          await sendEmail({
+            to: row.publisher_email,
+            subject: '[AcadeBee] 任務到期通知（今天截止）',
+            text: `您好${row.publisher_name ? ` ${row.publisher_name}` : ''}，\n\n您的任務「${row.title}」今天（${row.deadline}）截止。\n\n請登入平台查看任務詳情。`,
+          })
+        }
+        await clientOrPool.query(
+          `UPDATE tasks SET deadline_reminder_due_sent = TRUE, updated_at = CURRENT_TIMESTAMP WHERE id = $1`,
+          [row.task_id],
+        )
+      } catch (mailErr) {
+        console.warn('Send due reminder failed (non-critical):', mailErr.message)
+      }
+    }
+  } catch (err) {
+    console.warn('Send deadline reminders failed (non-critical):', err.message)
+  }
+}
+
 // 學術信箱後綴：僅允許以下網域註冊，之後可擴充（如 .edu.tw、.ac.uk）
 const ALLOWED_ACADEMIC_SUFFIXES = ['.edu']
 
@@ -573,8 +674,10 @@ app.post('/api/tasks', async (req, res) => {
 })
 
 app.get('/api/tasks', async (req, res) => {
-  const { category, search, budgetMin, budgetMax, userId } = req.query
+  const { category, search, budgetMin, budgetMax, userId, includeAll } = req.query
   try {
+    await expireOpenTasks(pool)
+    await sendDeadlineReminders(pool)
     let query = `
       SELECT
         t.id,
@@ -603,6 +706,11 @@ app.get('/api/tasks', async (req, res) => {
       WHERE 1=1`
     const params = [userId || null]
     let paramIndex = 2
+
+    // 預設只顯示可承接的任務（open）；需要看全部狀態可帶 includeAll=1
+    if (!includeAll || String(includeAll) !== '1') {
+      query += ` AND t.status = 'open'`
+    }
 
     if (category) {
       query += ` AND t.category = $${paramIndex}`
@@ -778,6 +886,8 @@ app.get('/api/tasks/:id', async (req, res) => {
   const { userId } = req.query
 
   try {
+    await expireOpenTasks(pool)
+    await sendDeadlineReminders(pool)
     const result = await pool.query(
       `SELECT
          t.id,
@@ -932,6 +1042,8 @@ app.get('/api/tasks/:id/bids', async (req, res) => {
   const { userId } = req.query
 
   try {
+    await expireOpenTasks(pool)
+    await sendDeadlineReminders(pool)
     const taskResult = await pool.query(
       'SELECT id, publisher_id, status FROM tasks WHERE id = $1',
       [taskId],
@@ -995,6 +1107,8 @@ app.post('/api/tasks/:id/bids', async (req, res) => {
   }
 
   try {
+    await expireOpenTasks(pool)
+    await sendDeadlineReminders(pool)
     const taskResult = await pool.query(
       'SELECT id, publisher_id, status FROM tasks WHERE id = $1',
       [taskId],
@@ -1020,6 +1134,41 @@ app.post('/api/tasks/:id/bids', async (req, res) => {
       [taskId, bidderId, price, (message || '').trim() || null],
     )
 
+    // 寄送「提出報價」通知（不影響主流程）
+    try {
+      const notifyRows = await pool.query(
+        `SELECT
+           t.title AS task_title,
+           pub.email AS publisher_email,
+           pub.display_name AS publisher_name,
+           bidder.email AS bidder_email,
+           bidder.display_name AS bidder_name
+         FROM tasks t
+         JOIN users pub ON pub.id = t.publisher_id
+         JOIN users bidder ON bidder.id = $2
+         WHERE t.id = $1`,
+        [taskId, bidderId],
+      )
+
+      const d = notifyRows.rows[0]
+      if (d?.publisher_email) {
+        await sendEmail({
+          to: d.publisher_email,
+          subject: '[AcadeBee] 有新的報價提出',
+          text: `您好${d.publisher_name ? ` ${d.publisher_name}` : ''}，\n\n您的任務「${d.task_title}」收到新的報價。\n\n請登入平台查看任務詳情並回覆。\n`,
+        })
+      }
+      if (d?.bidder_email) {
+        await sendEmail({
+          to: d.bidder_email,
+          subject: '[AcadeBee] 報價已送出，請等待回覆',
+          text: `您好${d.bidder_name ? ` ${d.bidder_name}` : ''}，\n\n您已成功送出對任務「${d.task_title}」的報價，刊登者將審核並回覆。\n\n請登入平台查看任務狀態。\n`,
+        })
+      }
+    } catch (mailErr) {
+      console.warn('Send bid notification failed (non-critical):', mailErr.message)
+    }
+
     res.status(201).json({ message: '報價已送出，請等待刊登者回覆' })
   } catch (err) {
     if (err.code === '23503') {
@@ -1042,6 +1191,8 @@ app.post('/api/tasks/:taskId/bids/:bidId/accept', async (req, res) => {
   const client = await pool.connect()
   try {
     await client.query('BEGIN')
+
+    await expireOpenTasks(client)
 
     const taskRow = await client.query(
       'SELECT id, publisher_id, status FROM tasks WHERE id = $1',
@@ -1084,8 +1235,44 @@ app.post('/api/tasks/:taskId/bids/:bidId/accept', async (req, res) => {
       [bid.bidder_id, 'in_progress', taskId],
     )
 
+    // 取得寄信資訊（交易內查詢，避免資料不一致）
+    const detailRow = await client.query(
+      `SELECT
+         t.title,
+         pub.email AS publisher_email,
+         pub.display_name AS publisher_name,
+         bidder.email AS bidder_email,
+         bidder.display_name AS bidder_name
+       FROM tasks t
+       JOIN users pub ON pub.id = t.publisher_id
+       JOIN users bidder ON bidder.id = $2
+       WHERE t.id = $1`,
+      [taskId, bid.bidder_id],
+    )
+
     await client.query('COMMIT')
     res.json({ message: '已接受此報價，任務進行中' })
+
+    // 寄信通知（不影響主流程）
+    try {
+      const d = detailRow.rows[0]
+      if (d?.publisher_email) {
+        await sendEmail({
+          to: d.publisher_email,
+          subject: '[AcadeBee] 任務已確認承接',
+          text: `您好${d.publisher_name ? ` ${d.publisher_name}` : ''}，\n\n您的任務「${d.title}」已接受承接者${d.bidder_name ? ` ${d.bidder_name}` : ''}的報價，任務已進入進行中。\n\n請登入平台查看任務詳情。`,
+        })
+      }
+      if (d?.bidder_email) {
+        await sendEmail({
+          to: d.bidder_email,
+          subject: '[AcadeBee] 您的報價已被接受',
+          text: `您好${d.bidder_name ? ` ${d.bidder_name}` : ''}，\n\n您對任務「${d.title}」的報價已被接受，任務已進入進行中。\n\n請登入平台查看任務詳情。`,
+        })
+      }
+    } catch (mailErr) {
+      console.warn('Send accept notification failed (non-critical):', mailErr.message)
+    }
   } catch (err) {
     await client.query('ROLLBACK')
     console.error('Error accepting bid:', err)
@@ -1233,8 +1420,10 @@ async function ensureTaskFavoritesTable() {
 }
 
 ensureTaskFavoritesTable().then(() => {
-  app.listen(port, () => {
-    console.log(`API server listening on http://localhost:${port}`)
+  ensureTaskDeadlineReminderColumns(pool).finally(() => {
+    app.listen(port, () => {
+      console.log(`API server listening on http://localhost:${port}`)
+    })
   })
 })
 
