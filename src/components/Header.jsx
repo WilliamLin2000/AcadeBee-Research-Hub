@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import logo from '../assets/square img1.png'
+import logo from '../assets/square img0.png'
 import './Header.css'
 
 export default function Header() {
@@ -41,7 +41,16 @@ export default function Header() {
     <header className="header">
       <div className="header-inner">
         <Link to="/" className="header-logo">
-        <img src={logo} alt="AcadeBee | 學術小蜜蜂" className="header-logo-img" />
+          <img
+            src={logo}
+            alt=""
+            aria-hidden="true"
+            className="header-logo-img-mark"
+          />
+          <span className="header-logo-text" aria-label="AcadeBee">
+            <span className="header-logo-acade">Acade</span>
+            <span className="header-logo-bee">Bee</span>
+          </span>
         </Link>
         <nav className="header-nav">
           <Link to="/tasks">瀏覽任務</Link>

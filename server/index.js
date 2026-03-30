@@ -1057,9 +1057,18 @@ app.get('/api/tasks/:id/bids', async (req, res) => {
     const result = await pool.query(
       `SELECT b.id, b.task_id, b.bidder_id, b.proposed_price, b.message, b.status, b.created_at,
               u.display_name AS bidder_name, u.institution AS bidder_institution,
+              u.job_title AS bidder_job_title, u.field AS bidder_field,
               COALESCE(u.institutional_email, FALSE) AS bidder_institutional_email,
               COALESCE(u.email_verified, FALSE) AS bidder_email_verified,
-              u.orcid_id AS bidder_orcid_id
+              u.orcid_id AS bidder_orcid_id,
+              COALESCE(
+                (
+                  SELECT json_agg(us.skill_name ORDER BY us.skill_name)
+                  FROM user_skills us
+                  WHERE us.user_id = u.id
+                ),
+                '[]'::json
+              ) AS bidder_skills
        FROM bids b
        JOIN users u ON u.id = b.bidder_id
        WHERE b.task_id = $1
@@ -1074,9 +1083,12 @@ app.get('/api/tasks/:id/bids', async (req, res) => {
       bidderId: row.bidder_id,
       bidderName: row.bidder_name,
       bidderInstitution: row.bidder_institution,
+      bidderJobTitle: row.bidder_job_title || null,
+      bidderField: row.bidder_field || null,
       bidderInstitutionalEmail: row.bidder_institutional_email,
       bidderEmailVerified: row.bidder_email_verified,
       bidderOrcidId: row.bidder_orcid_id || null,
+      bidderSkills: Array.isArray(row.bidder_skills) ? row.bidder_skills : [],
       proposedPrice: row.proposed_price,
       message: row.message,
       status: row.status,

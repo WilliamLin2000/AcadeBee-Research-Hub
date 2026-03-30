@@ -1,6 +1,7 @@
 .header {
-  background: var(--color-card);
+  background: var(--color-deep-blue);
   box-shadow: var(--shadow-sm);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.12);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -15,20 +16,45 @@
   justify-content: space-between;
 }
 
-.header-logo-img {
-  height: 60px;
-  display: block;
-}
-
 .header-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--color-primary);
+  color: rgba(226, 232, 240, 0.95);
   text-decoration: none !important;
 }
 
+.header-logo-img-mark {
+  /* square img1.png 含「蜂圖示 + AcadeBee文字」，這裡只顯示左側蜂圖示 */
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  border-radius: 10px;
+}
+
+.header-logo-text {
+  display: inline-flex;
+  align-items: baseline;
+  line-height: 1.1;
+  letter-spacing: 0.2px;
+}
+
+.header-logo-acade {
+  color: rgba(226, 232, 240, 0.95);
+  font-weight: 800;
+}
+
+.header-logo-bee {
+  color: var(--color-accent);
+  font-weight: 800;
+}
+
 .header-logo:hover {
-  color: var(--color-primary-dark);
+  color: rgba(226, 232, 240, 1);
   text-decoration: none !important;
 }
 
@@ -38,7 +64,7 @@
 }
 
 .header-nav a {
-  color: var(--color-text);
+  color: rgba(226, 232, 240, 0.92);
   font-weight: 500;
 }
 
@@ -56,13 +82,15 @@
   padding: 0.5rem 1rem;
   border-radius: var(--radius);
   font-weight: 500;
-  border: none;
+  border: 1px solid transparent;
   font-size: 0.9rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .btn-primary {
   background: var(--color-primary);
   color: white;
+  border-color: rgba(37, 99, 235, 0.35);
 }
 
 .btn-primary:hover {
@@ -72,11 +100,12 @@
 .btn-outline {
   background: transparent;
   color: var(--color-primary);
-  border: 1px solid var(--color-primary);
+  border: 1px solid rgba(37, 99, 235, 0.7);
+  box-shadow: none;
 }
 
 .btn-outline:hover {
-  background: rgba(37, 99, 235, 0.1);
+  background: rgba(37, 99, 235, 0.12);
 }
 
 .header-user-pill {
@@ -84,14 +113,15 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.4rem 0.75rem;
-  color: var(--color-text);
+  color: rgba(226, 232, 240, 0.95);
   text-decoration: none;
   border-radius: var(--radius);
+  border: 1px solid rgba(226, 232, 240, 0.12);
 }
 
 .header-user-pill:hover {
   color: var(--color-primary);
-  background: rgba(37, 99, 235, 0.06);
+  background: rgba(37, 99, 235, 0.12);
 }
 
 .header-user-name {

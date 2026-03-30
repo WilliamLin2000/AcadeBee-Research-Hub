@@ -289,13 +289,33 @@ export default function TaskDetailPage() {
             <h3>收到的報價</h3>
             <ul className="bids-list">
               {bids.map((b) => (
-                <li key={b.id} className="bid-item">
-                  <div className="bidder-info">
-                    <strong>{b.bidderName}</strong>
-                    {b.bidderInstitution && <span className="bid-institution"> · {b.bidderInstitution}</span>}
-                    <div className="bidder-badges">
+                <li key={b.id} className="expert-card">
+                  <div className="expert-card-header">
+                    <div className="expert-card-name-row">
+                      <strong className="expert-card-name">{b.bidderName}</strong>
+                      {b.bidderInstitution && (
+                        <span className="expert-card-institution"> · {b.bidderInstitution}</span>
+                      )}
+                    </div>
+
+                    <div className="expert-card-badges-row">
+                      {b.bidderJobTitle && (
+                        <span className="expert-card-badge expert-card-badge-edu" title="最高學歷">
+                          最高學歷：{b.bidderJobTitle}
+                        </span>
+                      )}
+                      {b.bidderField && (
+                        <span className="expert-card-badge expert-card-badge-field" title="研究領域">
+                          研究領域：{b.bidderField}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="bidder-badges expert-card-verification-badges">
                       {b.bidderInstitutionalEmail && b.bidderEmailVerified && (
-                        <span className="badge badge-institutional" title="學術機構信箱已驗證">學術機構信箱驗證</span>
+                        <span className="badge badge-institutional" title="學術機構信箱已驗證">
+                          學術機構信箱驗證
+                        </span>
                       )}
                       {b.bidderOrcidId && (
                         <span className="badge badge-orcid" title="ORCID 已連結">
@@ -304,23 +324,51 @@ export default function TaskDetailPage() {
                       )}
                     </div>
                   </div>
-                  <div>報價 NT$ {b.proposedPrice?.toLocaleString()}</div>
-                  {b.message && <p className="bid-message">{b.message}</p>}
-                  <span className={`bid-status bid-status-${b.status}`}>
-                    {b.status === 'pending' && '審核中'}
-                    {b.status === 'accepted' && '已接受'}
-                    {b.status === 'rejected' && '已拒絕'}
-                  </span>
-                  {b.status === 'pending' && (
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-sm"
-                      onClick={() => handleAcceptBid(b.id)}
-                      disabled={acceptingBidId !== null}
-                    >
-                      {acceptingBidId === b.id ? '處理中…' : '接受報價'}
-                    </button>
+
+                  {Array.isArray(b.bidderSkills) && b.bidderSkills.length > 0 && (
+                    <div className="expert-card-skills">
+                      {b.bidderSkills.slice(0, 5).map((skill) => (
+                        <span key={skill} className="skill-tag expert-skill-tag">
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   )}
+
+                  {b.message && <p className="bid-message">{b.message}</p>}
+
+                  <div className="expert-card-actions">
+                    <span className={`bid-status bid-status-${b.status}`}>
+                      {b.status === 'pending' && '審核中'}
+                      {b.status === 'accepted' && '已接受'}
+                      {b.status === 'rejected' && '已拒絕'}
+                    </span>
+                    {b.status === 'pending' && (
+                      <button
+                        type="button"
+                        className="btn btn-primary btn-sm"
+                        onClick={() => handleAcceptBid(b.id)}
+                        disabled={acceptingBidId !== null}
+                      >
+                        {acceptingBidId === b.id ? '處理中…' : '接受報價'}
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="expert-card-bottom">
+                    <div className="expert-card-rate">
+                      NT$ {b.proposedPrice != null ? b.proposedPrice.toLocaleString() : '-'} / hr
+                    </div>
+                    <a
+                      href="#"
+                      className="expert-card-view-file"
+                      onClick={(e) => {
+                        e.preventDefault()
+                      }}
+                    >
+                      查看檔案
+                    </a>
+                  </div>
                 </li>
               ))}
             </ul>

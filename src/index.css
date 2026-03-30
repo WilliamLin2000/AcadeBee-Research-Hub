@@ -1,17 +1,20 @@
 /* 全域樣式 - 學術研究任務平台 */
 :root {
+  --color-deep-blue: #0f172a;
   --color-primary: #2563eb;
   --color-primary-dark: #1d4ed8;
   --color-secondary: #64748b;
   --color-success: #059669;
   --color-warning: #d97706;
-  --color-bg: #f8fafc;
+  --color-accent: #facc15;
+  --color-bg: #f1f5f9;
   --color-card: #ffffff;
   --color-text: #1e293b;
   --color-text-muted: #64748b;
+  --color-border: #e2e8f0;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --radius: 8px;
+  --radius: 16px;
 }
 
 * {
@@ -21,10 +24,20 @@
 }
 
 body {
-  font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+  font-family: 'Inter', 'Noto Sans TC', 'Microsoft JhengHei', system-ui, -apple-system, Segoe UI, sans-serif;
   background: var(--color-bg);
   color: var(--color-text);
   line-height: 1.6;
+  font-weight: 400;
+}
+
+/* 標題與內文字重層級 */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: 700;
 }
 
 a {

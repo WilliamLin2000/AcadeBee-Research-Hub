@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import TaskCard from '../components/TaskCard'
 import { categories } from '../data/mockTasks'
 import { apiFetch } from '../apiClient'
+import { Plus, Search } from 'lucide-react'
 import './DashboardPage.css'
 
 export default function DashboardPage() {
@@ -112,11 +113,11 @@ export default function DashboardPage() {
         <h2>快速操作</h2>
         <div className="quick-actions">
           <Link to="/tasks/new" className="quick-action-card">
-            <span className="quick-action-icon">➕</span>
+            <Plus className="quick-action-icon" size={22} />
             <span>刊登新任務</span>
           </Link>
           <Link to="/tasks" className="quick-action-card">
-            <span className="quick-action-icon">🔍</span>
+            <Search className="quick-action-icon" size={22} />
             <span>瀏覽任務</span>
           </Link>
         </div>
