@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { ChevronLeft, ChevronRight, Mail, ShieldCheck, Wrench, Users } from 'lucide-react'
 import brandLogo from '../assets/square img0.png'
 import williamPhoto from '../assets/square img3.png'
+import williamPhoto1 from '../assets/square img5.png'
+import williamPhoto2 from '../assets/square img6.png'
 import './AboutPage.css'
 
 const TEAM_MEMBERS = [
@@ -16,18 +18,22 @@ const TEAM_MEMBERS = [
     featured: true,
   },
   {
-    name: 'Member 2',
-    role: 'Full-stack Engineer',
-    bio: '負責前後端開發、部署與資料庫維運。',
-    story: '負責網站與 API 開發，讓任務流程、通知與資料在雲端穩定運作。',
+    name: 'Fang (Willy) Lin',
+    role: 'CTO',
+    bio: 'Data Scientist',
+    story: '不敢社交的小小社畜，期待透過數據分析找到自己的價值。',
     initials: 'M2',
+    photo: williamPhoto1,
+    featured: true,
   },
   {
-    name: 'Member 3',
-    role: 'Research Operations',
-    bio: '負責研究流程整理、使用者訪談與內容優化。',
-    story: '整理學術端真實需求與訪談回饋，協助把平台做成研究者真的願意日常使用的工具。',
+    name: 'Jui (Wasabi) Lin',
+    role: 'CFO',
+    bio: 'Researcher and Athlete',
+    story: '熱愛運動與研究，其希望能透過平台幫助更多人找到自己的需求。',
     initials: 'M3',
+    photo: williamPhoto2,
+    featured: true,
   },
 ]
 
