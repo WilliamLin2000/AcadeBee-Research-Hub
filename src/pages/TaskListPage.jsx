@@ -2,14 +2,18 @@ import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import TaskCard from '../components/TaskCard'
 import { categories } from '../data/mockTasks'
+import { academicFields } from '../data/academicFields'
 import { apiFetch } from '../apiClient'
 import './TaskListPage.css'
 
 export default function TaskListPage() {
   const [searchParams] = useSearchParams()
   const categoryFromUrl = searchParams.get('category')
+  const fieldFromUrl = searchParams.get('field')
+  const searchFromUrl = searchParams.get('search')
   const [selectedCategory, setSelectedCategory] = useState(categoryFromUrl || '')
-  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedField, setSelectedField] = useState(fieldFromUrl || '')
+  const [searchQuery, setSearchQuery] = useState(searchFromUrl || '')
   const [budgetMin, setBudgetMin] = useState('')
   const [budgetMax, setBudgetMax] = useState('')
   const [tasks, setTasks] = useState([])
@@ -24,12 +28,19 @@ export default function TaskListPage() {
   }, [])
 
   useEffect(() => {
+    setSelectedCategory(searchParams.get('category') || '')
+    setSelectedField(searchParams.get('field') || '')
+    setSearchQuery(searchParams.get('search') || '')
+  }, [searchParams])
+
+  useEffect(() => {
     const fetchTasks = async () => {
       setLoading(true)
       setError('')
       try {
         const params = new URLSearchParams()
         if (selectedCategory) params.set('category', selectedCategory)
+        if (selectedField) params.set('field', selectedField)
         if (searchQuery.trim()) params.set('search', searchQuery.trim())
         if (budgetMin.trim()) params.set('budgetMin', budgetMin.trim())
         if (budgetMax.trim()) params.set('budgetMax', budgetMax.trim())
@@ -59,7 +70,7 @@ export default function TaskListPage() {
     }
 
     fetchTasks()
-  }, [selectedCategory, searchQuery, budgetMin, budgetMax, currentUser])
+  }, [selectedCategory, selectedField, searchQuery, budgetMin, budgetMax, currentUser])
 
   const handleToggleFavorite = async (task) => {
     if (!currentUser?.id) return
@@ -116,12 +127,28 @@ export default function TaskListPage() {
             onChange={(e) => setBudgetMax(e.target.value)}
           />
         </div>
+        <div className="filter-row filter-row-field">
+          <label htmlFor="task-list-field">學術領域：</label>
+          <select
+            id="task-list-field"
+            className="task-list-field-select"
+            value={selectedField}
+            onChange={(e) => setSelectedField(e.target.value)}
+          >
+            <option value="">全部領域</option>
+            {academicFields.map((f) => (
+              <option key={f.value} value={f.value}>
+                {f.label}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="category-filters">
           <button
             className={`filter-btn ${!selectedCategory ? 'active' : ''}`}
             onClick={() => setSelectedCategory('')}
           >
-            全部
+            全部類型
           </button>
           {categories.map((cat) => (
             <button

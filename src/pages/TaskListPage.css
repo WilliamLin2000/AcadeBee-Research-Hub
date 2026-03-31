@@ -42,6 +42,26 @@
   font-size: 0.9rem;
 }
 
+.filter-row-field {
+  margin-bottom: 0.85rem;
+}
+
+.task-list-field-select {
+  min-width: min(100%, 22rem);
+  max-width: 100%;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-family: inherit;
+  background: var(--color-card);
+}
+
+.task-list-field-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
 .category-filters {
   display: flex;
   gap: 0.5rem;

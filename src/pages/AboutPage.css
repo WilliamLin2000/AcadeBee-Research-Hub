@@ -1,0 +1,479 @@
+.about-page {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.about-hero {
+  text-align: center;
+  padding: 1rem 0 2rem;
+}
+
+.about-hero h1 {
+  font-size: 2rem;
+  color: var(--color-deep-blue);
+  margin-bottom: 0.75rem;
+}
+
+.about-hero p {
+  color: var(--color-text-muted);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.about-section {
+  margin-bottom: 2.25rem;
+}
+
+.about-section h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.85rem;
+}
+
+.about-section-note {
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+  margin-bottom: 1rem;
+}
+
+.about-values-grid,
+.about-team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.about-team-carousel {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.about-team-nav-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-card);
+  color: var(--color-primary-dark);
+  box-shadow: var(--shadow-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-team-nav-btn:hover {
+  box-shadow: var(--shadow-md);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.about-value-card,
+.about-team-card,
+.about-contact-card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.about-value-card {
+  padding: 1rem;
+}
+
+.about-value-icon {
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.about-value-card h3,
+.about-team-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+}
+
+.about-value-card p,
+.about-team-card .about-team-media-overlay p {
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+}
+
+.about-team-card {
+  padding: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.about-team-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.about-team-card-featured:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.about-team-card-featured {
+  padding: 0;
+  overflow: visible;
+  position: relative;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.about-team-content {
+  padding: 0;
+}
+
+.about-team-card-featured .about-team-content {
+  padding: 0;
+}
+
+.about-team-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  background: rgba(37, 99, 235, 0.12);
+  margin-bottom: 0.7rem;
+}
+
+.about-team-avatar-featured {
+  width: 120px;
+  height: 120px;
+  margin: 2rem auto 0.8rem;
+  font-size: 1.8rem;
+}
+
+.about-team-avatar-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  margin-bottom: 0.7rem;
+  border: 1px solid var(--color-border);
+}
+
+/* 外層裁切區：加高後較容易容納「七分身」；一律 cover 填滿，避免畫面留白條。
+   注意：請勿對圖片使用 scale(<1)，縮小會在框內露出空隙；要「變小」請改框高度或改 object-position。 */
+.about-team-photo-frame {
+  position: relative;
+  grid-column: 2;
+  width: 100%;
+  height: 440px;
+  overflow: visible;
+  border: none;
+  z-index: 1;
+  background: transparent;
+}
+
+.about-team-photo-frame-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 人物框右上角：僅商標 + 公司名（無底框） */
+.about-team-photo-brand {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.about-team-photo-brand-mark {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  flex-shrink: 0;
+}
+
+.about-team-photo-brand-text {
+  display: inline-flex;
+  align-items: baseline;
+  font-size: 2.50rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.about-team-photo-brand-acade {
+  color: var(--color-deep-blue);
+}
+
+.about-team-photo-brand-bee {
+  color: var(--color-accent);
+}
+
+/* 人物約佔區塊橫向五成：以父層寬度 50% 為顯示框，contain 維持比例 */
+.about-team-photo-featured {
+  position: absolute;
+  right: 12%;
+  bottom: 0;
+  width: 70%;
+  max-width: 70%;
+  height: 100%;
+  max-height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: bottom center;
+  transform: none;
+  z-index: 2;
+  filter: drop-shadow(0 10px 20px rgba(15, 23, 42, 0.12));
+}
+
+.about-team-media {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: stretch;
+  min-height: 440px;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.about-team-left {
+  position: relative;
+  grid-column: 1;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.5rem 1rem 6.5rem 1.5rem;
+}
+
+.about-team-intro-eyebrow {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin: 0 0 0.65rem;
+}
+
+.about-team-intro-story {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: var(--color-text);
+  max-width: 34rem;
+}
+
+/* 背景底層 + 額外裝飾（不疊在人像上，z-index 僅在內容下） */
+.about-team-media::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  background:
+    radial-gradient(ellipse 90% 80% at 95% 35%, rgba(37, 99, 235, 0.11), transparent 58%),
+    radial-gradient(ellipse 70% 60% at 8% 25%, rgba(250, 204, 21, 0.18), transparent 52%),
+    radial-gradient(circle at 50% 100%, rgba(37, 99, 235, 0.06), transparent 45%),
+    repeating-linear-gradient(
+      -12deg,
+      transparent,
+      transparent 14px,
+      rgba(148, 163, 184, 0.06) 14px,
+      rgba(148, 163, 184, 0.06) 15px
+    ),
+    linear-gradient(175deg, rgba(255, 255, 255, 0.96), rgba(241, 245, 249, 0.75));
+  z-index: 0;
+  pointer-events: none;
+}
+
+.about-team-bg-decor {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.about-team-bg-decor::before {
+  content: '';
+  position: absolute;
+  width: clamp(140px, 28vw, 220px);
+  height: clamp(140px, 28vw, 220px);
+  border: 2px solid rgba(37, 99, 235, 0.14);
+  border-radius: 50%;
+  left: 6%;
+  top: 10%;
+}
+
+.about-team-bg-decor::after {
+  content: '';
+  position: absolute;
+  width: clamp(72px, 14vw, 110px);
+  height: clamp(72px, 14vw, 110px);
+  background: rgba(250, 204, 21, 0.22);
+  border-radius: 22px;
+  right: 52%;
+  bottom: 18%;
+  transform: rotate(-8deg);
+  opacity: 0.85;
+}
+
+.about-team-media-overlay {
+  position: absolute;
+  left: 1.25rem;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 3;
+  min-width: 0;
+  max-width: none;
+  padding: 0.7rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: var(--shadow-sm);
+}
+
+.about-team-media-overlay .about-team-role {
+  margin-bottom: 0;
+  color: var(--color-primary-dark);
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.25);
+}
+
+.about-team-media-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.45rem;
+}
+
+.about-team-name-inline {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.25;
+}
+
+.about-team-heading-sep {
+  color: rgba(100, 116, 139, 0.65);
+  font-weight: 600;
+  font-size: 0.95rem;
+  user-select: none;
+}
+
+.about-team-media-overlay p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.about-team-carousel-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-top: 0.8rem;
+}
+
+.about-team-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(100, 116, 139, 0.35);
+}
+
+.about-team-dot.active {
+  width: 20px;
+  background: var(--color-primary);
+}
+
+.about-team-role {
+  display: inline-flex;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+}
+
+.about-contact-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.about-contact-card svg {
+  color: var(--color-primary);
+}
+
+.about-contact-label {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.about-contact-value {
+  margin: 0.1rem 0 0;
+  font-weight: 600;
+}
+
+.about-disclaimer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 820px) {
+  .about-team-media {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .about-team-left {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 1.25rem 1rem 0.5rem;
+  }
+
+  .about-team-photo-frame {
+    grid-column: 1;
+    grid-row: 2;
+    height: 360px;
+  }
+
+  .about-team-photo-featured {
+    right: 10%;
+    width: 55%;
+    max-width: 55%;
+    height: 100%;
+    max-height: 100%;
+    object-position: bottom center;
+  }
+
+  .about-team-media-overlay {
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    margin-top: 1rem;
+  }
+
+  .about-team-nav-btn {
+    justify-self: center;
+  }
+}

@@ -56,6 +56,7 @@ export default function Header() {
           <Link to="/tasks">瀏覽任務</Link>
           <Link to="/tasks/new">刊登任務</Link>
           <Link to="/dashboard">我的任務</Link>
+          <Link to="/about">關於我們</Link>
         </nav>
         {user ? (
           <div className="header-actions">

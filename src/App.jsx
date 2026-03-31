@@ -10,6 +10,7 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
 import VerifyEmailPage from './pages/VerifyEmailPage'
+import AboutPage from './pages/AboutPage'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/about" element={<AboutPage />} />
       </Route>
     </Routes>
   )

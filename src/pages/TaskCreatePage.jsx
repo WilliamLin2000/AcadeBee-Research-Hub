@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { categories } from '../data/mockTasks'
+import { academicFields, mergeSkillsWithAcademicFields } from '../data/academicFields'
 import { apiFetch } from '../apiClient'
 import './TaskCreatePage.css'
 
@@ -15,6 +16,8 @@ export default function TaskCreatePage() {
     description: '',
     skills: '',
   })
+  const [academicSlugs, setAcademicSlugs] = useState([])
+  const [selectedAcademicSlug, setSelectedAcademicSlug] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -31,6 +34,18 @@ export default function TaskCreatePage() {
   const handleChange = (e) => {
     const { name, value } = e.target
     setForm((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleAddAcademicField = () => {
+    if (!selectedAcademicSlug) return
+    setAcademicSlugs((prev) =>
+      prev.includes(selectedAcademicSlug) ? prev : [...prev, selectedAcademicSlug],
+    )
+    setSelectedAcademicSlug('')
+  }
+
+  const handleRemoveAcademicField = (slug) => {
+    setAcademicSlugs((prev) => prev.filter((s) => s !== slug))
   }
 
   const handleSubmit = async (e) => {
@@ -57,7 +72,7 @@ export default function TaskCreatePage() {
           budget: Number(form.budget),
           deadline: form.deadline,
           description: form.description,
-          skills: form.skills,
+          skills: mergeSkillsWithAcademicFields(form.skills, academicSlugs),
           publisherId: currentUser.id,
         }),
       })
@@ -77,6 +92,8 @@ export default function TaskCreatePage() {
         description: '',
         skills: '',
       })
+      setAcademicSlugs([])
+      setSelectedAcademicSlug('')
     } catch (err) {
       setError(err.message || '刊登任務失敗，請稍後再試')
     } finally {
@@ -155,7 +172,58 @@ export default function TaskCreatePage() {
         </div>
 
         <div className="form-group">
-          <label>所需技能（以逗號分隔）</label>
+          <label>學術領域（可複選，將一併列入任務關鍵字）</label>
+          <p className="form-hint">與任務類型分開標示，方便領域相近的人搜尋到此任務。</p>
+          <div className="academic-field-picker">
+            <select
+              value={selectedAcademicSlug}
+              onChange={(e) => setSelectedAcademicSlug(e.target.value)}
+              aria-label="選擇學術領域"
+            >
+              <option value="">請選擇學術領域</option>
+              {academicFields
+                .filter((f) => !academicSlugs.includes(f.value))
+                .map((f) => (
+                  <option key={f.value} value={f.value}>
+                    {f.label}
+                  </option>
+                ))}
+            </select>
+            <button
+              type="button"
+              className="btn btn-outline"
+              onClick={handleAddAcademicField}
+              disabled={!selectedAcademicSlug}
+            >
+              新增
+            </button>
+          </div>
+          <div className="academic-field-chips">
+            {academicSlugs.length === 0 ? (
+              <span className="academic-field-empty">尚未選擇學術領域</span>
+            ) : (
+              academicSlugs.map((slug) => {
+                const label = academicFields.find((f) => f.value === slug)?.label || slug
+                return (
+                  <span key={slug} className="academic-field-chip">
+                    {label}
+                    <button
+                      type="button"
+                      className="academic-field-chip-remove"
+                      onClick={() => handleRemoveAcademicField(slug)}
+                      aria-label={`移除 ${label}`}
+                    >
+                      ×
+                    </button>
+                  </span>
+                )
+              })
+            )}
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label>其他所需技能（以逗號分隔）</label>
           <input
             type="text"
             name="skills"

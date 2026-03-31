@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt'
 import nodemailer from 'nodemailer'
 import { Resend } from 'resend'
 import pkg from 'pg'
+import { getAcademicFieldLabelBySlug } from '../src/data/academicFields.js'
 
 dotenv.config()
 
@@ -674,7 +675,7 @@ app.post('/api/tasks', async (req, res) => {
 })
 
 app.get('/api/tasks', async (req, res) => {
-  const { category, search, budgetMin, budgetMax, userId, includeAll } = req.query
+  const { category, field, search, budgetMin, budgetMax, userId, includeAll } = req.query
   try {
     await expireOpenTasks(pool)
     await sendDeadlineReminders(pool)
@@ -716,6 +717,17 @@ app.get('/api/tasks', async (req, res) => {
       query += ` AND t.category = $${paramIndex}`
       params.push(category)
       paramIndex += 1
+    }
+    if (field && String(field).trim()) {
+      const fieldLabel = getAcademicFieldLabelBySlug(String(field).trim())
+      if (fieldLabel) {
+        query += ` AND EXISTS (
+          SELECT 1 FROM task_skills ts_discipline
+          WHERE ts_discipline.task_id = t.id AND ts_discipline.skill_name = $${paramIndex}
+        )`
+        params.push(fieldLabel)
+        paramIndex += 1
+      }
     }
     if (search && search.trim()) {
       query += ` AND (t.title ILIKE $${paramIndex} OR t.description ILIKE $${paramIndex})`

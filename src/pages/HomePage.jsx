@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import TaskCard from '../components/TaskCard'
 import { categories } from '../data/mockTasks'
+import { academicFields } from '../data/academicFields'
 import { apiFetch } from '../apiClient'
 import {
   BarChart3,
@@ -12,6 +13,10 @@ import {
   MessageSquare,
   Handshake,
   CheckCircle2,
+  ShieldCheck,
+  BadgeCheck,
+  BellRing,
+  History,
 } from 'lucide-react'
 import './HomePage.css'
 
@@ -53,9 +58,14 @@ export default function HomePage() {
   const navigate = useNavigate()
 
   const [keyword, setKeyword] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('')
+  const [selectedField, setSelectedField] = useState('')
 
-  const TRUST_LOGOS = ['NTU', 'NTHU', 'AS', 'NYCU']
+  const TRUST_SIGNALS = [
+    { label: '學術信箱驗證', icon: BadgeCheck },
+    { label: 'ORCID 身分連結', icon: ShieldCheck },
+    { label: '截止與狀態提醒', icon: BellRing },
+    { label: '報價流程可追蹤', icon: History },
+  ]
   const STATS = [
     { value: '1,200+', label: '專業人才' },
     { value: '500+', label: '已完成任務' },
@@ -88,7 +98,7 @@ export default function HomePage() {
     e.preventDefault()
     const params = new URLSearchParams()
     if (keyword.trim()) params.set('search', keyword.trim())
-    if (selectedCategory) params.set('category', selectedCategory)
+    if (selectedField) params.set('field', selectedField)
 
     const qs = params.toString()
     navigate(qs ? `/tasks?${qs}` : '/tasks')
@@ -114,14 +124,14 @@ export default function HomePage() {
 
             <div className="hero-search-field">
               <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                value={selectedField}
+                onChange={(e) => setSelectedField(e.target.value)}
                 aria-label="學術領域下拉選單"
               >
                 <option value="">學術領域（全部）</option>
-                {categories.map((c) => (
-                  <option key={c.value} value={c.value}>
-                    {c.label}
+                {academicFields.map((f) => (
+                  <option key={f.value} value={f.value}>
+                    {f.label}
                   </option>
                 ))}
               </select>
@@ -133,13 +143,18 @@ export default function HomePage() {
           </form>
 
           <div className="trust-wall">
-            <div className="trust-title">信任牆</div>
-            <div className="trust-logos">
-              {TRUST_LOGOS.map((name) => (
-                <span key={name} className="trust-logo">
-                  {name}
-                </span>
-              ))}
+            <div className="trust-title">平台信任機制</div>
+            <p className="trust-note">目前尚未使用任何機構官方授權標誌，以下為平台已上線之信任設計。</p>
+            <div className="trust-signals">
+              {TRUST_SIGNALS.map((item) => {
+                const Icon = item.icon
+                return (
+                  <span key={item.label} className="trust-signal">
+                    <Icon size={10} />
+                    {item.label}
+                  </span>
+                )
+              })}
             </div>
           </div>
 
@@ -227,6 +242,7 @@ export default function HomePage() {
         <div className="footer-links">
           <Link to="/tasks">瀏覽任務</Link>
           <Link to="/tasks/new">刊登任務</Link>
+          <Link to="/about">關於我們</Link>
           <Link to="/register">註冊</Link>
           <Link to="/login">登入</Link>
         </div>
