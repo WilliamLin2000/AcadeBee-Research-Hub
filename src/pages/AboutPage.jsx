@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ChevronLeft, ChevronRight, Mail, ShieldCheck, Wrench, Users } from 'lucide-react'
 import brandLogo from '../assets/square img0.png'
-import williamPhoto from '../assets/square img2.png'
+import williamPhoto from '../assets/square img3.png'
 import './AboutPage.css'
 
 const TEAM_MEMBERS = [
