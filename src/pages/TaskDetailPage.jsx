@@ -19,6 +19,11 @@ export default function TaskDetailPage() {
   const [bidMessage, setBidMessage] = useState('')
   const [submittingBid, setSubmittingBid] = useState(false)
   const [acceptingBidId, setAcceptingBidId] = useState(null)
+  const PLATFORM_DECLARATION_VERSION = 'v1_platform_matchmaking_disclaimer'
+  const platformDeclarationText =
+    '我已了解本平台宗旨為學術任務媒合，平台僅提供資訊刊登與雙方媒合服務。任務履約、付款安排、溝通爭議與其他衍生風險，均由合作雙方自行協調並負責，與平台無涉。'
+  const [bidderTermsAccepted, setBidderTermsAccepted] = useState(false)
+  const [publisherTermsAccepted, setPublisherTermsAccepted] = useState(false)
 
   const loadTask = async (userId) => {
     const q = userId ? `?userId=${userId}` : ''
@@ -71,6 +76,12 @@ export default function TaskDetailPage() {
   const handleSubmitBid = async (e) => {
     e.preventDefault()
     if (!currentUser?.id || !task || submittingBid) return
+
+    if (!bidderTermsAccepted) {
+      setError('請先閱讀並同意平台聲明書，才能送出報價')
+      return
+    }
+
     const price = parseInt(bidPrice, 10)
     if (Number.isNaN(price) || price < 0) {
       setError('請輸入有效的報價金額')
@@ -86,12 +97,15 @@ export default function TaskDetailPage() {
           bidderId: currentUser.id,
           proposedPrice: price,
           message: bidMessage.trim() || undefined,
+          bidderTermsAccepted,
+          bidderTermsPolicyVersion: PLATFORM_DECLARATION_VERSION,
         }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || '送出報價失敗')
       setBidPrice('')
       setBidMessage('')
+      setBidderTermsAccepted(false)
       const newBids = await loadBids()
       setBids(newBids)
     } catch (err) {
@@ -103,13 +117,23 @@ export default function TaskDetailPage() {
 
   const handleAcceptBid = async (bidId) => {
     if (!currentUser?.id || !task || acceptingBidId) return
+
+    if (!publisherTermsAccepted) {
+      setError('請先閱讀並同意平台聲明書，才能接受報價')
+      return
+    }
+
     setAcceptingBidId(bidId)
     setError('')
     try {
       const res = await apiFetch(`/api/tasks/${id}/bids/${bidId}/accept`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ publisherId: currentUser.id }),
+        body: JSON.stringify({
+          publisherId: currentUser.id,
+          publisherTermsAccepted,
+          publisherTermsPolicyVersion: PLATFORM_DECLARATION_VERSION,
+        }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || '接受報價失敗')
@@ -287,6 +311,20 @@ export default function TaskDetailPage() {
         {isPublisher && bids.length > 0 && task.status === 'open' && (
           <section className="task-detail-section task-bids-section">
             <h3>收到的報價</h3>
+            <div className="terms-check-row">
+              <p className="terms-check-note">
+                {platformDeclarationText}
+              </p>
+              <label className="terms-check">
+                <input
+                  type="checkbox"
+                  checked={publisherTermsAccepted}
+                  onChange={(e) => setPublisherTermsAccepted(e.target.checked)}
+                  required
+                />
+                <span>我已閱讀並同意平台聲明</span>
+              </label>
+            </div>
             <ul className="bids-list">
               {bids.map((b) => (
                 <li key={b.id} className="expert-card">
@@ -348,7 +386,7 @@ export default function TaskDetailPage() {
                         type="button"
                         className="btn btn-primary btn-sm"
                         onClick={() => handleAcceptBid(b.id)}
-                        disabled={acceptingBidId !== null}
+                        disabled={acceptingBidId !== null || !publisherTermsAccepted}
                       >
                         {acceptingBidId === b.id ? '處理中…' : '接受報價'}
                       </button>
@@ -400,6 +438,21 @@ export default function TaskDetailPage() {
                   value={bidMessage}
                   onChange={(e) => setBidMessage(e.target.value)}
                 />
+              </div>
+              <div className="form-group">
+                <label>平台聲明書 *</label>
+                <p className="form-hint" style={{ marginBottom: '0.6rem' }}>
+                  {platformDeclarationText}
+                </p>
+                <label className="terms-check">
+                  <input
+                    type="checkbox"
+                    checked={bidderTermsAccepted}
+                    onChange={(e) => setBidderTermsAccepted(e.target.checked)}
+                    required
+                  />
+                  <span>我已閱讀並同意上述聲明</span>
+                </label>
               </div>
               <button type="submit" className="btn btn-primary" disabled={submittingBid}>
                 {submittingBid ? '送出中…' : '送出報價'}

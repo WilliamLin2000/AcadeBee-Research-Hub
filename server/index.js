@@ -45,6 +45,28 @@ async function ensureTaskDeadlineReminderColumns(clientOrPool = pool) {
   }
 }
 
+// 新增「平台聲明同意」欄位（若尚未存在）
+async function ensurePaymentPolicyConsentColumns(clientOrPool = pool) {
+  try {
+    await clientOrPool.query(`
+      ALTER TABLE tasks
+        ADD COLUMN IF NOT EXISTS publisher_terms_accepted BOOLEAN DEFAULT FALSE,
+        ADD COLUMN IF NOT EXISTS publisher_terms_accepted_at TIMESTAMP,
+        ADD COLUMN IF NOT EXISTS publisher_terms_policy_version VARCHAR(50);
+
+      ALTER TABLE bids
+        ADD COLUMN IF NOT EXISTS bidder_terms_accepted BOOLEAN DEFAULT FALSE,
+        ADD COLUMN IF NOT EXISTS bidder_terms_accepted_at TIMESTAMP,
+        ADD COLUMN IF NOT EXISTS bidder_terms_policy_version VARCHAR(50),
+        ADD COLUMN IF NOT EXISTS publisher_terms_accepted BOOLEAN DEFAULT FALSE,
+        ADD COLUMN IF NOT EXISTS publisher_terms_accepted_at TIMESTAMP,
+        ADD COLUMN IF NOT EXISTS publisher_terms_policy_version VARCHAR(50);
+    `)
+  } catch (err) {
+    console.warn('Ensure payment policy consent columns failed (non-critical):', err.message)
+  }
+}
+
 // 寄送「到期前一天」與「到期當天」通知（避免重複寄送）
 async function sendDeadlineReminders(clientOrPool = pool) {
   try {
@@ -599,7 +621,17 @@ app.get('/api/verify-email', async (req, res) => {
 })
 
 app.post('/api/tasks', async (req, res) => {
-  const { title, category, budget, deadline, description, skills, publisherId } = req.body || {}
+  const {
+    title,
+    category,
+    budget,
+    deadline,
+    description,
+    skills,
+    publisherId,
+    publisherTermsAccepted,
+    publisherTermsPolicyVersion,
+  } = req.body || {}
 
   if (!publisherId) {
     return res.status(401).json({ error: '請先登入後再刊登任務' })
@@ -609,16 +641,22 @@ app.post('/api/tasks', async (req, res) => {
     return res.status(400).json({ error: '請填寫所有必填欄位' })
   }
 
+  if (!publisherTermsAccepted) {
+    return res.status(400).json({ error: '請先閱讀並同意平台聲明書' })
+  }
+
   const client = await pool.connect()
 
   try {
     await client.query('BEGIN')
 
     const taskResult = await client.query(
-      `INSERT INTO tasks (publisher_id, title, category, description, budget, deadline, status)
-       VALUES ($1, $2, $3, $4, $5, $6, 'open')
+      `INSERT INTO tasks (publisher_id, title, category, description, budget, deadline, status,
+                           publisher_terms_accepted, publisher_terms_accepted_at, publisher_terms_policy_version)
+       VALUES ($1, $2, $3, $4, $5, $6, 'open',
+               $7, CURRENT_TIMESTAMP, $8)
        RETURNING id, publisher_id, title, category, description, budget, deadline, status, created_at`,
-      [publisherId, title, category, description, budget, deadline],
+      [publisherId, title, category, description, budget, deadline, publisherTermsAccepted, publisherTermsPolicyVersion],
     )
 
     const task = taskResult.rows[0]
@@ -1117,7 +1155,7 @@ app.get('/api/tasks/:id/bids', async (req, res) => {
 // 對任務送出報價（承接）
 app.post('/api/tasks/:id/bids', async (req, res) => {
   const { id: taskId } = req.params
-  const { bidderId, proposedPrice, message } = req.body || {}
+  const { bidderId, proposedPrice, message, bidderTermsAccepted, bidderTermsPolicyVersion } = req.body || {}
 
   if (!bidderId) {
     return res.status(401).json({ error: '請先登入後再送出報價' })
@@ -1128,6 +1166,10 @@ app.post('/api/tasks/:id/bids', async (req, res) => {
   const price = parseInt(proposedPrice, 10)
   if (Number.isNaN(price) || price < 0) {
     return res.status(400).json({ error: '報價金額須為有效數字' })
+  }
+
+  if (!bidderTermsAccepted) {
+    return res.status(400).json({ error: '請先閱讀並同意平台聲明書' })
   }
 
   try {
@@ -1149,13 +1191,17 @@ app.post('/api/tasks/:id/bids', async (req, res) => {
     }
 
     await pool.query(
-      `INSERT INTO bids (task_id, bidder_id, proposed_price, message, status)
-       VALUES ($1, $2, $3, $4, 'pending')
+      `INSERT INTO bids (task_id, bidder_id, proposed_price, message, status,
+                          bidder_terms_accepted, bidder_terms_accepted_at, bidder_terms_policy_version)
+       VALUES ($1, $2, $3, $4, 'pending', $5, CURRENT_TIMESTAMP, $6)
        ON CONFLICT (task_id, bidder_id) DO UPDATE SET
          proposed_price = $3,
          message = $4,
+         bidder_terms_accepted = $5,
+         bidder_terms_accepted_at = CURRENT_TIMESTAMP,
+         bidder_terms_policy_version = $6,
          created_at = CURRENT_TIMESTAMP`,
-      [taskId, bidderId, price, (message || '').trim() || null],
+      [taskId, bidderId, price, (message || '').trim() || null, bidderTermsAccepted, bidderTermsPolicyVersion],
     )
 
     // 寄送「提出報價」通知（不影響主流程）
@@ -1206,10 +1252,14 @@ app.post('/api/tasks/:id/bids', async (req, res) => {
 // 刊登者接受某筆報價
 app.post('/api/tasks/:taskId/bids/:bidId/accept', async (req, res) => {
   const { taskId, bidId } = req.params
-  const { publisherId } = req.body || {}
+  const { publisherId, publisherTermsAccepted, publisherTermsPolicyVersion } = req.body || {}
 
   if (!publisherId) {
     return res.status(401).json({ error: '請先登入' })
+  }
+
+  if (!publisherTermsAccepted) {
+    return res.status(400).json({ error: '請先閱讀並同意平台聲明書' })
   }
 
   const client = await pool.connect()
@@ -1247,8 +1297,13 @@ app.post('/api/tasks/:taskId/bids/:bidId/accept', async (req, res) => {
     const bid = bidRow.rows[0]
 
     await client.query(
-      'UPDATE bids SET status = $1 WHERE task_id = $2 AND id = $3',
-      ['accepted', taskId, bidId],
+      `UPDATE bids
+       SET status = $1,
+           publisher_terms_accepted = $4,
+           publisher_terms_accepted_at = CURRENT_TIMESTAMP,
+           publisher_terms_policy_version = $5
+       WHERE task_id = $2 AND id = $3`,
+      ['accepted', taskId, bidId, publisherTermsAccepted, publisherTermsPolicyVersion],
     )
     await client.query(
       'UPDATE bids SET status = $1 WHERE task_id = $2 AND id != $3',
@@ -1444,10 +1499,13 @@ async function ensureTaskFavoritesTable() {
 }
 
 ensureTaskFavoritesTable().then(() => {
-  ensureTaskDeadlineReminderColumns(pool).finally(() => {
-    app.listen(port, () => {
-      console.log(`API server listening on http://localhost:${port}`)
-    })
-  })
+  ensurePaymentPolicyConsentColumns(pool)
+    .then(() =>
+      ensureTaskDeadlineReminderColumns(pool).finally(() => {
+        app.listen(port, () => {
+          console.log(`API server listening on http://localhost:${port}`)
+        })
+      }),
+    )
 })
 

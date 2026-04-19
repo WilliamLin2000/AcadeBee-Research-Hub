@@ -16,8 +16,10 @@ export default function TaskCreatePage() {
     description: '',
     skills: '',
   })
+  const PLATFORM_DECLARATION_VERSION = 'v1_platform_matchmaking_disclaimer'
   const [academicSlugs, setAcademicSlugs] = useState([])
   const [selectedAcademicSlug, setSelectedAcademicSlug] = useState('')
+  const [publisherTermsAccepted, setPublisherTermsAccepted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
@@ -58,6 +60,11 @@ export default function TaskCreatePage() {
       return
     }
 
+    if (!publisherTermsAccepted) {
+      setError('請先閱讀並同意平台聲明書，才能刊登任務')
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -74,6 +81,8 @@ export default function TaskCreatePage() {
           description: form.description,
           skills: mergeSkillsWithAcademicFields(form.skills, academicSlugs),
           publisherId: currentUser.id,
+          publisherTermsAccepted,
+          publisherTermsPolicyVersion: PLATFORM_DECLARATION_VERSION,
         }),
       })
 
@@ -94,6 +103,7 @@ export default function TaskCreatePage() {
       })
       setAcademicSlugs([])
       setSelectedAcademicSlug('')
+      setPublisherTermsAccepted(false)
     } catch (err) {
       setError(err.message || '刊登任務失敗，請稍後再試')
     } finally {
@@ -231,6 +241,23 @@ export default function TaskCreatePage() {
             onChange={handleChange}
             placeholder="例如：Python, Pandas, 統計分析"
           />
+        </div>
+
+        <div className="form-group">
+          <label>平台聲明書 *</label>
+          <p className="form-hint">
+            我已了解本平台宗旨為學術任務媒合，平台僅提供資訊刊登與雙方媒合服務。任務履約、付款安排、
+            溝通爭議與其他衍生風險，均由合作雙方自行協調並負責，與平台無涉。
+          </p>
+          <label className="terms-check">
+            <input
+              type="checkbox"
+              checked={publisherTermsAccepted}
+              onChange={(e) => setPublisherTermsAccepted(e.target.checked)}
+              required
+            />
+            <span>我已閱讀並同意上述聲明</span>
+          </label>
         </div>
 
         {error && <p className="auth-error">{error}</p>}

@@ -1,9 +1,6 @@
-import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Mail, ShieldCheck, Wrench, Users } from 'lucide-react'
+import { Mail, ShieldCheck, Wrench, Users } from 'lucide-react'
 import brandLogo from '../assets/square img0.png'
 import williamPhoto from '../assets/square img3.png'
-import williamPhoto1 from '../assets/square img5.png'
-import williamPhoto2 from '../assets/square img6.png'
 import './AboutPage.css'
 
 const TEAM_MEMBERS = [
@@ -11,29 +8,9 @@ const TEAM_MEMBERS = [
     name: 'Jeng Heng (William) Lin',
     role: 'CEO',
     bio: 'Biomedical Engineer and Biomechanist',
-    story:
-      '期待以研究背景與產品思維，讓學術合作者能在平台上用更少的溝通成本找到彼此。',
-    initials: 'WL',
+    story: '以研究背景與產品思維，持續降低學術合作的溝通成本。',
     photo: williamPhoto,
-    featured: true,
-  },
-  {
-    name: 'Fang (Willy) Lin',
-    role: 'CTO',
-    bio: 'Data Scientist',
-    story: '不敢社交的小小社畜，期待透過數據分析找到自己的價值。',
-    initials: 'M2',
-    photo: williamPhoto1,
-    featured: true,
-  },
-  {
-    name: 'Jui (Wasabi) Lin',
-    role: 'CFO',
-    bio: 'Researcher and Athlete',
-    story: '熱愛運動與研究，其希望能透過平台幫助更多人找到自己的需求。',
-    initials: 'M3',
-    photo: williamPhoto2,
-    featured: true,
+    initials: 'WL',
   },
 ]
 
@@ -56,16 +33,7 @@ const VALUES = [
 ]
 
 export default function AboutPage() {
-  const [activeMemberIdx, setActiveMemberIdx] = useState(0)
-  const activeMember = TEAM_MEMBERS[activeMemberIdx]
-
-  const handlePrevMember = () => {
-    setActiveMemberIdx((prev) => (prev - 1 + TEAM_MEMBERS.length) % TEAM_MEMBERS.length)
-  }
-
-  const handleNextMember = () => {
-    setActiveMemberIdx((prev) => (prev + 1) % TEAM_MEMBERS.length)
-  }
+  const leadMember = TEAM_MEMBERS[0]
 
   return (
     <div className="about-page">
@@ -94,71 +62,39 @@ export default function AboutPage() {
 
       <section className="about-section">
         <h2>開發團隊</h2>
-        <p className="about-section-note">以下為暫定資料，後續可替換為正式成員資訊與照片。</p>
-        <div className="about-team-carousel">
-          <button type="button" className="about-team-nav-btn" onClick={handlePrevMember} aria-label="上一位成員">
-            <ChevronLeft size={18} />
-          </button>
-
-          <article className="about-team-card about-team-card-featured">
-            <div className="about-team-media">
-              <div className="about-team-bg-decor" aria-hidden="true" />
-              <div className="about-team-left">
-                <div className="about-team-intro">
-                  <p className="about-team-intro-eyebrow">個人願景</p>
-                  <p className="about-team-intro-story">
-                    {activeMember.story || activeMember.bio}
-                  </p>
-                </div>
-                <div className="about-team-media-overlay">
-                  <div className="about-team-media-heading">
-                    <span className="about-team-role">{activeMember.role}</span>
-                    <span className="about-team-heading-sep" aria-hidden="true">
-                      |
-                    </span>
-                    <span className="about-team-name-inline">{activeMember.name}</span>
-                  </div>
-                  <p>{activeMember.bio}</p>
-                </div>
+        <p className="about-section-note">
+          目前由核心成員主導產品與技術方向，持續優化平台體驗與合作品質。
+        </p>
+        <article className="about-team-profile">
+          <div className="about-team-brand" aria-hidden="true">
+            <img src={brandLogo} alt="" className="about-team-brand-mark" />
+            <span className="about-team-brand-text">
+              <span className="about-team-brand-acade">Acade</span>
+              <span className="about-team-brand-bee">Bee</span>
+            </span>
+          </div>
+          <div className="about-team-profile-media">
+            {leadMember.photo ? (
+              <img
+                src={leadMember.photo}
+                alt={`${leadMember.name} portrait`}
+                className="about-team-portrait"
+              />
+            ) : (
+              <div className="about-team-avatar-fallback about-team-portrait-fallback" aria-hidden="true">
+                {leadMember.initials}
               </div>
-              <div
-                className={`about-team-photo-frame${activeMember.photo ? '' : ' about-team-photo-frame-placeholder'}`}
-              >
-                <div className="about-team-photo-brand" aria-hidden="true">
-                  <img src={brandLogo} alt="" className="about-team-photo-brand-mark" />
-                  <span className="about-team-photo-brand-text">
-                    <span className="about-team-photo-brand-acade">Acade</span>
-                    <span className="about-team-photo-brand-bee">Bee</span>
-                  </span>
-                </div>
-                {activeMember.photo ? (
-                  <img
-                    src={activeMember.photo}
-                    alt={`${activeMember.name} photo`}
-                    className="about-team-photo-featured"
-                  />
-                ) : (
-                  <div className="about-team-avatar about-team-avatar-featured" aria-hidden="true">
-                    {activeMember.initials}
-                  </div>
-                )}
-              </div>
-            </div>
-          </article>
-
-          <button type="button" className="about-team-nav-btn" onClick={handleNextMember} aria-label="下一位成員">
-            <ChevronRight size={18} />
-          </button>
-        </div>
-
-        <div className="about-team-carousel-indicators" aria-hidden="true">
-          {TEAM_MEMBERS.map((member, idx) => (
-            <span
-              key={member.name}
-              className={`about-team-dot ${idx === activeMemberIdx ? 'active' : ''}`}
-            />
-          ))}
-        </div>
+            )}
+          </div>
+          <div className="about-team-profile-body">
+            <p className="about-team-profile-label">Core Leadership</p>
+            <h3>{leadMember.name}</h3>
+            <p className="about-team-profile-role">{leadMember.role}</p>
+            <p className="about-team-bio">{leadMember.bio}</p>
+            <div className="about-team-profile-divider" aria-hidden="true" />
+            <p className="about-team-story">{leadMember.story}</p>
+          </div>
+        </article>
       </section>
 
       <section className="about-section">
@@ -173,7 +109,10 @@ export default function AboutPage() {
       </section>
 
       <section className="about-disclaimer">
-        <p>聲明：AcadeBee 為獨立技術平台，非任何學校或研究機構之官方代表單位。</p>
+        <p>
+          聲明：AcadeBee 的核心宗旨是提供研究需求方與專業接案者的媒合服務。平台僅提供資訊刊登、
+          配對與溝通管道，不介入雙方履約內容、報酬支付、驗收標準或其他衍生爭議；相關責任由合作雙方自行承擔。
+        </p>
       </section>
     </div>
   )

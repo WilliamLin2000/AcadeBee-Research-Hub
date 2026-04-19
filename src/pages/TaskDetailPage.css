@@ -220,6 +220,37 @@
   color: var(--color-primary-dark);
 }
 
+.terms-check-row {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: rgba(226, 232, 240, 0.22);
+}
+
+.terms-check-note {
+  margin: 0 0 0.65rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.terms-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.terms-check input {
+  margin-top: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--color-primary);
+}
+
 .expert-card-view-file {
   font-weight: 700;
   color: var(--color-primary);

@@ -108,7 +108,7 @@ export default function HomePage() {
     <div className="home-page">
       <section className="hero">
         <div className="hero-content">
-          <h1>全台最專業的學術研究人才庫</h1>
+          <h1>全台最專業的學術研究人才媒合庫</h1>
           <p className="hero-sub">連結頂尖研究者與技術專家</p>
 
           <form className="hero-search" onSubmit={handleHeroSearch}>

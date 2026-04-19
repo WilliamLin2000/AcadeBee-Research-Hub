@@ -28,6 +28,9 @@ CREATE TABLE tasks (
     deadline DATE NOT NULL,
     status VARCHAR(20) DEFAULT 'open',  -- open, in_progress, completed, cancelled
     worker_id UUID REFERENCES users(id), -- 承接者 (完成配對後填入)
+    publisher_terms_accepted BOOLEAN DEFAULT FALSE,
+    publisher_terms_accepted_at TIMESTAMP,
+    publisher_terms_policy_version VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -48,6 +51,12 @@ CREATE TABLE bids (
     proposed_price INTEGER NOT NULL,
     message TEXT,
     status VARCHAR(20) DEFAULT 'pending', -- pending, accepted, rejected
+    bidder_terms_accepted BOOLEAN DEFAULT FALSE,
+    bidder_terms_accepted_at TIMESTAMP,
+    bidder_terms_policy_version VARCHAR(50),
+    publisher_terms_accepted BOOLEAN DEFAULT FALSE,
+    publisher_terms_accepted_at TIMESTAMP,
+    publisher_terms_policy_version VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(task_id, bidder_id)
 );
