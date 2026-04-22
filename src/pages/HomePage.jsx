@@ -192,7 +192,7 @@ export default function HomePage() {
           <div className="hero-visual" aria-hidden="true">
             <div className="hero-card hero-card-1">
               <div className="hero-card-title">機器學習模型訓練</div>
-              <div className="hero-card-meta">生醫工程 · 台大醫院研究團隊</div>
+              <div className="hero-card-meta">醫學工程 · 學術蜜蜂醫院研究團隊</div>
               <div className="hero-card-row">
                 <span className="hero-card-pill">數據分析</span>
                 <span className="hero-card-budget">NT$ 45,000</span>
