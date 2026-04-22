@@ -43,7 +43,7 @@ export default function TaskDetailPage() {
 
     const text = await res.text()
     const hint = text.trim().startsWith('<!DOCTYPE')
-      ? 'API 端點回傳了 HTML，請確認後端已重啟且前端環境變數 VITE_API_BASE_URL 指向正確後端。'
+      ? 'API 端點回傳了 HTML，請確認後端已部署最新版本，且前端 VITE_API_BASE_URL 指向正確後端。'
       : `伺服器回應格式異常（HTTP ${res.status}）`
     throw new Error(hint)
   }
@@ -51,8 +51,7 @@ export default function TaskDetailPage() {
   const loadTask = async (userId) => {
     const q = userId ? `?userId=${userId}` : ''
     const res = await apiFetch(`/api/tasks/${id}${q}`)
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.error || '取得任務詳情失敗')
+    const data = await readJsonResponse(res, '取得任務詳情失敗')
     const cat = categories.find((c) => c.value === data.category)
     return { ...data, categoryLabel: cat ? cat.label : data.category }
   }
@@ -62,8 +61,7 @@ export default function TaskDetailPage() {
     const user = raw ? JSON.parse(raw) : null
     const q = user?.id ? `?userId=${user.id}` : ''
     const res = await apiFetch(`/api/tasks/${id}/bids${q}`)
-    const data = await res.json()
-    if (!res.ok) return []
+    const data = await readJsonResponse(res, '取得報價列表失敗')
     return Array.isArray(data) ? data : []
   }
 
@@ -177,8 +175,7 @@ export default function TaskDetailPage() {
           bidderTermsPolicyVersion: PLATFORM_DECLARATION_VERSION,
         }),
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || '送出報價失敗')
+      await readJsonResponse(res, '送出報價失敗')
       setBidPrice('')
       setBidMessage('')
       setBidderTermsAccepted(false)
@@ -211,8 +208,7 @@ export default function TaskDetailPage() {
           publisherTermsPolicyVersion: PLATFORM_DECLARATION_VERSION,
         }),
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || '接受報價失敗')
+      await readJsonResponse(res, '接受報價失敗')
       const [taskData, bidsData] = await Promise.all([loadTask(currentUser?.id), loadBids()])
       setTask(taskData)
       setBids(bidsData)
@@ -284,8 +280,7 @@ export default function TaskDetailPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: currentUser.id }),
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || '更新收藏狀態失敗')
+      const data = await readJsonResponse(res, '更新收藏狀態失敗')
       setIsFavorite(Boolean(data.favorite))
     } catch (err) {
       setError(err.message || '更新收藏狀態失敗')

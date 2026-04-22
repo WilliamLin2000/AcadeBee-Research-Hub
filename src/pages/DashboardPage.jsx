@@ -18,6 +18,23 @@ export default function DashboardPage() {
   const [assignedError, setAssignedError] = useState('')
   const [unreadCount, setUnreadCount] = useState(0)
 
+  const readJsonResponse = async (res, fallbackErrorMessage) => {
+    const contentType = res.headers.get('content-type') || ''
+    if (contentType.includes('application/json')) {
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data?.error || fallbackErrorMessage)
+      }
+      return data
+    }
+
+    const text = await res.text()
+    const hint = text.trim().startsWith('<!DOCTYPE')
+      ? 'API 端點回傳了 HTML，請確認後端已部署最新版本，且前端 VITE_API_BASE_URL 指向正確後端。'
+      : `伺服器回應格式異常（HTTP ${res.status}）`
+    throw new Error(hint)
+  }
+
   useEffect(() => {
     const raw = window.localStorage.getItem('currentUser')
     const user = raw ? JSON.parse(raw) : null
@@ -32,10 +49,7 @@ export default function DashboardPage() {
       setError('')
       try {
         const res = await apiFetch(`/api/my-tasks?publisherId=${user.id}`)
-        const data = await res.json()
-        if (!res.ok) {
-          throw new Error(data.error || '取得我的任務失敗')
-        }
+        const data = await readJsonResponse(res, '取得我的任務失敗')
 
         const enriched = data.map((task) => {
           const cat = categories.find((c) => c.value === task.category)
@@ -56,10 +70,7 @@ export default function DashboardPage() {
     const fetchFavorites = async () => {
       try {
         const res = await apiFetch(`/api/my-favorites?userId=${user.id}`)
-        const data = await res.json()
-        if (!res.ok) {
-          throw new Error(data.error || '取得收藏任務失敗')
-        }
+        const data = await readJsonResponse(res, '取得收藏任務失敗')
         const enriched = data.map((task) => {
           const cat = categories.find((c) => c.value === task.category)
           return {
@@ -77,12 +88,8 @@ export default function DashboardPage() {
       setAssignedLoading(true)
       setAssignedError('')
       try {
-        const encodedUserId = encodeURIComponent(user.id)
-        const res = await apiFetch(`/api/my-assigned-tasks/${encodedUserId}`)
-        const data = await res.json()
-        if (!res.ok) {
-          throw new Error(data.error || '取得承接任務失敗')
-        }
+        const res = await apiFetch(`/api/my-assigned-tasks?workerId=${encodeURIComponent(user.id)}`)
+        const data = await readJsonResponse(res, '取得承接任務失敗')
 
         const enriched = data.map((task) => {
           const cat = categories.find((c) => c.value === task.category)
@@ -102,10 +109,7 @@ export default function DashboardPage() {
     const fetchUnreadCount = async () => {
       try {
         const res = await apiFetch(`/api/messages/unread-count?userId=${user.id}`)
-        const data = await res.json()
-        if (!res.ok) {
-          throw new Error(data.error || '取得未讀訊息失敗')
-        }
+        const data = await readJsonResponse(res, '取得未讀訊息失敗')
         setUnreadCount(Number(data.unreadCount) || 0)
       } catch (err) {
         console.error(err)
