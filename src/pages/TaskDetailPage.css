@@ -127,6 +127,106 @@
   font-weight: 500;
 }
 
+.task-chat-section {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  background: #fff;
+}
+
+.task-chat-note {
+  margin: 0 0 0.75rem;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.task-chat-box {
+  max-height: 360px;
+  overflow: auto;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.8rem;
+}
+
+.task-chat-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.task-chat-item {
+  max-width: min(92%, 640px);
+  border-radius: 12px;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--color-border);
+}
+
+.task-chat-item.other {
+  align-self: flex-start;
+  background: #fff;
+}
+
+.task-chat-item.mine {
+  align-self: flex-end;
+  background: rgba(15, 161, 157, 0.1);
+  border-color: rgba(15, 161, 157, 0.28);
+}
+
+.task-chat-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.task-chat-item p {
+  margin: 0;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.task-chat-error {
+  margin: 0.65rem 0 0;
+  color: #b42318;
+  font-size: 0.9rem;
+}
+
+.task-chat-form {
+  margin-top: 0.85rem;
+}
+
+.task-chat-form textarea {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  font-family: inherit;
+  font-size: 0.92rem;
+  resize: vertical;
+}
+
+.task-chat-form textarea:focus {
+  outline: none;
+  border-color: var(--color-teal-500);
+  box-shadow: 0 0 0 3px rgba(15, 161, 157, 0.12);
+}
+
+.task-chat-form-footer {
+  margin-top: 0.55rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 .task-bids-section h3 {
   margin-bottom: 0.75rem;
   font-size: 1.05rem;

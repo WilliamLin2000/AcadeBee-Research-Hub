@@ -137,7 +137,14 @@ export default function ArticleListPage() {
             <h3>加入 FB 學術研究社群</h3>
             <p>提供專業學者、研究者的討論空間，分享工具、方法與產業脈動。</p>
           </div>
-          <a href="#community" className="btn btn-gold">加入社群</a>
+          <a
+            href="https://www.facebook.com/share/g/18HqkiYdnu/"
+            target="_blank"
+            rel="noreferrer"
+            className="btn btn-gold"
+          >
+            加入社群
+          </a>
         </div>
       </section>
     </div>

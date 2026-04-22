@@ -10,9 +10,13 @@ export default function DashboardPage() {
   const navigate = useNavigate()
   const [currentUser, setCurrentUser] = useState(null)
   const [myPostedTasks, setMyPostedTasks] = useState([])
+  const [myAssignedTasks, setMyAssignedTasks] = useState([])
   const [favoriteTasks, setFavoriteTasks] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [assignedLoading, setAssignedLoading] = useState(false)
+  const [assignedError, setAssignedError] = useState('')
+  const [unreadCount, setUnreadCount] = useState(0)
 
   useEffect(() => {
     const raw = window.localStorage.getItem('currentUser')
@@ -69,13 +73,77 @@ export default function DashboardPage() {
       }
     }
 
+    const fetchAssignedTasks = async () => {
+      setAssignedLoading(true)
+      setAssignedError('')
+      try {
+        const res = await apiFetch(`/api/my-assigned-tasks?workerId=${user.id}`)
+        const data = await res.json()
+        if (!res.ok) {
+          throw new Error(data.error || '取得承接任務失敗')
+        }
+
+        const enriched = data.map((task) => {
+          const cat = categories.find((c) => c.value === task.category)
+          return {
+            ...task,
+            categoryLabel: cat ? cat.label : task.category,
+          }
+        })
+        setMyAssignedTasks(enriched)
+      } catch (err) {
+        setAssignedError(err.message || '取得承接任務失敗')
+      } finally {
+        setAssignedLoading(false)
+      }
+    }
+
+    const fetchUnreadCount = async () => {
+      try {
+        const res = await apiFetch(`/api/messages/unread-count?userId=${user.id}`)
+        const data = await res.json()
+        if (!res.ok) {
+          throw new Error(data.error || '取得未讀訊息失敗')
+        }
+        setUnreadCount(Number(data.unreadCount) || 0)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
     fetchMyTasks()
     fetchFavorites()
+    fetchAssignedTasks()
+    fetchUnreadCount()
+
+    const handleMessagesUpdated = () => {
+      fetchUnreadCount()
+    }
+    window.addEventListener('messages-updated', handleMessagesUpdated)
+    const timer = window.setInterval(fetchUnreadCount, 30000)
+
+    return () => {
+      window.removeEventListener('messages-updated', handleMessagesUpdated)
+      window.clearInterval(timer)
+    }
   }, [navigate])
 
   return (
     <div className="dashboard-page">
       <h1>我的研究儀表板</h1>
+
+      <section className="dashboard-section">
+        <h2>訊息提醒</h2>
+        <div className="dashboard-message-reminder">
+          {unreadCount > 0 ? (
+            <p>
+              你目前有 <strong>{unreadCount}</strong> 則未讀訊息，建議優先查看「我刊登的任務」與「我承接的任務」中的對話。
+            </p>
+          ) : (
+            <p>目前沒有未讀訊息。</p>
+          )}
+        </div>
+      </section>
 
       <section className="dashboard-section">
         <h2>我刊登的任務</h2>
@@ -89,6 +157,25 @@ export default function DashboardPage() {
               ) : (
                 <p className="empty-state">
                   尚未刊登任何任務。<Link to="/tasks/new">刊登第一個任務</Link>
+                </p>
+              )}
+            </>
+          )}
+        </div>
+      </section>
+
+      <section className="dashboard-section">
+        <h2>我承接的任務</h2>
+        <div className="dashboard-task-grid">
+          {assignedLoading && <p className="empty-state">載入中…</p>}
+          {assignedError && !assignedLoading && <p className="empty-state">{assignedError}</p>}
+          {!assignedLoading && !assignedError && (
+            <>
+              {myAssignedTasks.length > 0 ? (
+                myAssignedTasks.map((task) => <TaskCard key={task.id} task={task} />)
+              ) : (
+                <p className="empty-state">
+                  目前沒有承接中的任務。<Link to="/tasks">前往瀏覽任務</Link>
                 </p>
               )}
             </>

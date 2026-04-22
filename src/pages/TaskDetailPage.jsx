@@ -16,6 +16,11 @@ export default function TaskDetailPage() {
   const [deleting, setDeleting] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
   const [favoriteLoading, setFavoriteLoading] = useState(false)
+  const [messages, setMessages] = useState([])
+  const [messagesLoading, setMessagesLoading] = useState(false)
+  const [messagesError, setMessagesError] = useState('')
+  const [chatInput, setChatInput] = useState('')
+  const [sendingMessage, setSendingMessage] = useState(false)
   const [bidPrice, setBidPrice] = useState('')
   const [bidMessage, setBidMessage] = useState('')
   const [submittingBid, setSubmittingBid] = useState(false)
@@ -45,6 +50,25 @@ export default function TaskDetailPage() {
     return Array.isArray(data) ? data : []
   }
 
+  const canAccessTaskChat = (taskData, userData) =>
+    Boolean(
+      userData?.id &&
+      taskData?.workerId &&
+      (userData.id === taskData.publisherId || userData.id === taskData.workerId),
+    )
+
+  const loadMessages = async (userId) => {
+    if (!userId) return []
+    const res = await apiFetch(`/api/tasks/${id}/messages?userId=${userId}`)
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error || '取得對話失敗')
+    return Array.isArray(data) ? data : []
+  }
+
+  const notifyMessagesUpdated = () => {
+    window.dispatchEvent(new Event('messages-updated'))
+  }
+
   useEffect(() => {
     const raw = window.localStorage.getItem('currentUser')
     const user = raw ? JSON.parse(raw) : null
@@ -58,6 +82,23 @@ export default function TaskDetailPage() {
         setTask(taskData)
         setIsFavorite(Boolean(taskData.isFavorite))
         setBids(bidsData)
+        if (canAccessTaskChat(taskData, user)) {
+          try {
+            setMessagesLoading(true)
+            setMessagesError('')
+            const messageData = await loadMessages(user.id)
+            setMessages(messageData)
+            notifyMessagesUpdated()
+          } catch (chatErr) {
+            setMessages([])
+            setMessagesError(chatErr.message || '取得對話失敗')
+          } finally {
+            setMessagesLoading(false)
+          }
+        } else {
+          setMessages([])
+          setMessagesError('')
+        }
       } catch (err) {
         setError(err.message || '取得任務詳情失敗')
       } finally {
@@ -70,6 +111,7 @@ export default function TaskDetailPage() {
 
   const canEditOrDelete = currentUser && task && currentUser.id === task.publisherId
   const isPublisher = canEditOrDelete
+  const canChat = canAccessTaskChat(task, currentUser)
   const myBid = currentUser && bids.find((b) => b.bidderId === currentUser.id)
   const canBid = currentUser && task && task.status === 'open' && !isPublisher
   const isClosed = task && task.status !== 'open'
@@ -141,6 +183,23 @@ export default function TaskDetailPage() {
       const [taskData, bidsData] = await Promise.all([loadTask(currentUser?.id), loadBids()])
       setTask(taskData)
       setBids(bidsData)
+      if (canAccessTaskChat(taskData, currentUser)) {
+        try {
+          setMessagesLoading(true)
+          setMessagesError('')
+          const messageData = await loadMessages(currentUser.id)
+          setMessages(messageData)
+          notifyMessagesUpdated()
+        } catch (chatErr) {
+          setMessages([])
+          setMessagesError(chatErr.message || '取得對話失敗')
+        } finally {
+          setMessagesLoading(false)
+        }
+      } else {
+        setMessages([])
+        setMessagesError('')
+      }
     } catch (err) {
       setError(err.message || '接受報價失敗')
     } finally {
@@ -199,6 +258,38 @@ export default function TaskDetailPage() {
       setError(err.message || '更新收藏狀態失敗')
     } finally {
       setFavoriteLoading(false)
+    }
+  }
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault()
+    if (!currentUser?.id || !task || sendingMessage) return
+    if (!canAccessTaskChat(task, currentUser)) return
+
+    const content = chatInput.trim()
+    if (!content) return
+
+    setSendingMessage(true)
+    setMessagesError('')
+    try {
+      const res = await apiFetch(`/api/tasks/${id}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: currentUser.id,
+          content,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || '送出訊息失敗')
+      setChatInput('')
+      const updatedMessages = await loadMessages(currentUser.id)
+      setMessages(updatedMessages)
+      notifyMessagesUpdated()
+    } catch (err) {
+      setMessagesError(err.message || '送出訊息失敗')
+    } finally {
+      setSendingMessage(false)
     }
   }
 
@@ -312,6 +403,58 @@ export default function TaskDetailPage() {
           <p className="task-detail-worker">
             已由 <strong>{task.workerName || '接案者'}</strong> 承接
           </p>
+        )}
+
+        {canChat && (
+          <section className="task-detail-section task-chat-section">
+            <h3>任務對話</h3>
+            <p className="task-chat-note">僅限刊登者與承接者可見，用於任務協作溝通。</p>
+
+            <div className="task-chat-box">
+              {messagesLoading ? (
+                <p className="text-muted">對話載入中…</p>
+              ) : messages.length > 0 ? (
+                <ul className="task-chat-list">
+                  {messages.map((msg) => {
+                    const isMine = msg.senderId === currentUser?.id
+                    return (
+                      <li key={msg.id} className={`task-chat-item ${isMine ? 'mine' : 'other'}`}>
+                        <div className="task-chat-meta">
+                          <strong>{isMine ? '我' : msg.senderName || '對方'}</strong>
+                          <span>{new Date(msg.createdAt).toLocaleString()}</span>
+                        </div>
+                        <p>{msg.content}</p>
+                      </li>
+                    )
+                  })}
+                </ul>
+              ) : (
+                <p className="text-muted">目前尚無訊息，開始第一則對話吧。</p>
+              )}
+            </div>
+
+            {messagesError && <p className="task-chat-error">{messagesError}</p>}
+
+            <form className="task-chat-form" onSubmit={handleSendMessage}>
+              <textarea
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                rows={3}
+                maxLength={2000}
+                placeholder="輸入想與對方討論的內容…"
+              />
+              <div className="task-chat-form-footer">
+                <span className="text-muted">{chatInput.trim().length}/2000</span>
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-sm"
+                  disabled={sendingMessage || !chatInput.trim()}
+                >
+                  {sendingMessage ? '送出中…' : '送出訊息'}
+                </button>
+              </div>
+            </form>
+          </section>
         )}
 
         {isPublisher && bids.length > 0 && task.status === 'open' && (

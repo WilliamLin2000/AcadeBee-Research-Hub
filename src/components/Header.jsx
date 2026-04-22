@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
+import { Bell, Menu, X } from 'lucide-react'
 import logo from '../assets/square img0.png'
+import { apiFetch } from '../apiClient'
 import './Header.css'
 
 export default function Header() {
   const [user, setUser] = useState(null)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [unreadCount, setUnreadCount] = useState(0)
   const location = useLocation()
 
   useEffect(() => {
@@ -35,6 +37,37 @@ export default function Header() {
       window.removeEventListener('user-changed', handleUserChange)
     }
   }, [])
+
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      if (!user?.id) {
+        setUnreadCount(0)
+        return
+      }
+      try {
+        const res = await apiFetch(`/api/messages/unread-count?userId=${user.id}`)
+        const data = await res.json()
+        if (!res.ok) return
+        setUnreadCount(Number(data.unreadCount) || 0)
+      } catch {
+        // 未讀提醒失敗不阻斷主流程
+      }
+    }
+
+    fetchUnreadCount()
+
+    const handleMessagesUpdated = () => {
+      fetchUnreadCount()
+    }
+
+    window.addEventListener('messages-updated', handleMessagesUpdated)
+    const timer = window.setInterval(fetchUnreadCount, 30000)
+
+    return () => {
+      window.removeEventListener('messages-updated', handleMessagesUpdated)
+      window.clearInterval(timer)
+    }
+  }, [user?.id, location.pathname])
 
   const displayName = user?.name || user?.email
 
@@ -98,6 +131,11 @@ export default function Header() {
           </Link>
           <Link to="/dashboard" onClick={closeMenu}>
             我的任務
+            {unreadCount > 0 && (
+              <span className="header-unread-dot" title={`有 ${unreadCount} 則未讀訊息`}>
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
+            )}
           </Link>
           <Link to="/about" onClick={closeMenu}>
             關於我們
@@ -109,6 +147,12 @@ export default function Header() {
             className={`header-actions ${menuOpen ? 'header-actions-open' : ''}`}
           >
             <Link to="/profile" className="header-user-pill" onClick={closeMenu}>
+              {unreadCount > 0 && (
+                <span className="header-chat-alert" title={`有 ${unreadCount} 則未讀訊息`}>
+                  <Bell size={14} strokeWidth={2.2} aria-hidden />
+                  <strong>{unreadCount > 99 ? '99+' : unreadCount}</strong>
+                </span>
+              )}
               <span className="header-user-name">
                 {displayName || '個人資料'}
               </span>

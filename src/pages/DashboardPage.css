@@ -29,6 +29,20 @@
   margin-bottom: 2.5rem;
 }
 
+.dashboard-message-reminder {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-teal-500);
+  border-radius: var(--radius-lg);
+  padding: 0.95rem 1.05rem;
+  color: var(--color-text);
+}
+
+.dashboard-message-reminder p {
+  margin: 0;
+  line-height: 1.7;
+}
+
 .dashboard-section h2 {
   font-size: 1.15rem;
   font-weight: 700;

@@ -872,6 +872,65 @@ app.get('/api/my-tasks', async (req, res) => {
   }
 })
 
+// 使用者承接中的任務清單（接案者視角）
+app.get('/api/my-assigned-tasks', async (req, res) => {
+  const { workerId } = req.query
+
+  if (!workerId) {
+    return res.status(400).json({ error: '缺少 workerId' })
+  }
+
+  try {
+    await expireOpenTasks(pool)
+    await sendDeadlineReminders(pool)
+    const result = await pool.query(
+      `SELECT
+         t.id,
+         t.publisher_id,
+         t.title,
+         t.category,
+         t.description,
+         t.budget,
+         TO_CHAR(t.deadline, 'YYYY-MM-DD') AS deadline,
+         t.status,
+         t.worker_id,
+         t.created_at,
+         pub.display_name AS publisher_name,
+         COALESCE(
+           ARRAY_AGG(ts.skill_name) FILTER (WHERE ts.skill_name IS NOT NULL),
+           '{}'
+         ) AS skills
+       FROM tasks t
+       LEFT JOIN task_skills ts ON ts.task_id = t.id
+       LEFT JOIN users pub ON pub.id = t.publisher_id
+       WHERE t.worker_id = $1
+       GROUP BY t.id, pub.display_name
+       ORDER BY t.updated_at DESC, t.created_at DESC`,
+      [workerId],
+    )
+
+    const tasks = result.rows.map((row) => ({
+      id: row.id,
+      publisherId: row.publisher_id,
+      publisherName: row.publisher_name,
+      title: row.title,
+      category: row.category,
+      description: row.description,
+      budget: row.budget,
+      deadline: row.deadline,
+      status: row.status,
+      workerId: row.worker_id,
+      createdAt: row.created_at,
+      skills: row.skills,
+    }))
+
+    res.json(tasks)
+  } catch (err) {
+    console.error('Error fetching assigned tasks:', err)
+    res.status(500).json({ error: '取得承接任務時發生錯誤，請稍後再試' })
+  }
+})
+
 // 使用者收藏的任務清單
 app.get('/api/my-favorites', async (req, res) => {
   const { userId } = req.query
@@ -1029,6 +1088,194 @@ app.get('/api/tasks/:id', async (req, res) => {
   } catch (err) {
     console.error('Error fetching task detail:', err)
     res.status(500).json({ error: '取得任務詳情時發生錯誤，請稍後再試' })
+  }
+})
+
+// 取得任務對話訊息（僅刊登者與承接者可查看）
+app.get('/api/tasks/:id/messages', async (req, res) => {
+  const { id: taskId } = req.params
+  const { userId } = req.query
+
+  if (!userId) {
+    return res.status(401).json({ error: '請先登入' })
+  }
+
+  try {
+    const taskResult = await pool.query(
+      'SELECT id, publisher_id, worker_id FROM tasks WHERE id = $1',
+      [taskId],
+    )
+    if (taskResult.rows.length === 0) {
+      return res.status(404).json({ error: '找不到此任務' })
+    }
+
+    const task = taskResult.rows[0]
+    const canAccess =
+      task.worker_id &&
+      (task.publisher_id === userId || task.worker_id === userId)
+
+    if (!canAccess) {
+      return res.status(403).json({ error: '目前無權限查看此任務對話' })
+    }
+
+    // 只要使用者打開對話，就把「別人傳給我」的訊息標記為已讀
+    await pool.query(
+      `UPDATE messages
+       SET is_read = TRUE
+       WHERE task_id = $1 AND receiver_id = $2 AND is_read = FALSE`,
+      [taskId, userId],
+    )
+
+    const result = await pool.query(
+      `SELECT
+         m.id,
+         m.task_id,
+         m.sender_id,
+         m.receiver_id,
+         m.content,
+         m.is_read,
+         m.created_at,
+         sender.display_name AS sender_name,
+         receiver.display_name AS receiver_name
+       FROM messages m
+       JOIN users sender ON sender.id = m.sender_id
+       JOIN users receiver ON receiver.id = m.receiver_id
+       WHERE m.task_id = $1
+       ORDER BY m.created_at ASC`,
+      [taskId],
+    )
+
+    const messages = result.rows.map((row) => ({
+      id: row.id,
+      taskId: row.task_id,
+      senderId: row.sender_id,
+      senderName: row.sender_name,
+      receiverId: row.receiver_id,
+      receiverName: row.receiver_name,
+      content: row.content,
+      isRead: row.is_read,
+      createdAt: row.created_at,
+    }))
+
+    res.json(messages)
+  } catch (err) {
+    if (err.code === '42P01') {
+      return res.status(500).json({
+        error: '訊息功能尚未初始化，請重新啟動後端以建立 messages 表',
+      })
+    }
+    console.error('Error fetching task messages:', err)
+    res.status(500).json({ error: '取得任務對話時發生錯誤，請稍後再試' })
+  }
+})
+
+// 任務內發送訊息（僅刊登者與承接者可互傳）
+app.post('/api/tasks/:id/messages', async (req, res) => {
+  const { id: taskId } = req.params
+  const { userId, content } = req.body || {}
+
+  if (!userId) {
+    return res.status(401).json({ error: '請先登入' })
+  }
+
+  const contentTrim = (content || '').trim()
+  if (!contentTrim) {
+    return res.status(400).json({ error: '請輸入訊息內容' })
+  }
+  if (contentTrim.length > 2000) {
+    return res.status(400).json({ error: '訊息長度不可超過 2000 字元' })
+  }
+
+  try {
+    const taskResult = await pool.query(
+      'SELECT id, publisher_id, worker_id FROM tasks WHERE id = $1',
+      [taskId],
+    )
+    if (taskResult.rows.length === 0) {
+      return res.status(404).json({ error: '找不到此任務' })
+    }
+
+    const task = taskResult.rows[0]
+    if (!task.worker_id) {
+      return res.status(400).json({ error: '任務尚未完成承接，暫時無法對話' })
+    }
+
+    let receiverId = null
+    if (task.publisher_id === userId) {
+      receiverId = task.worker_id
+    } else if (task.worker_id === userId) {
+      receiverId = task.publisher_id
+    } else {
+      return res.status(403).json({ error: '目前無權限在此任務發送訊息' })
+    }
+
+    const insertResult = await pool.query(
+      `INSERT INTO messages (task_id, sender_id, receiver_id, content, is_read)
+       VALUES ($1, $2, $3, $4, FALSE)
+       RETURNING id, task_id, sender_id, receiver_id, content, is_read, created_at`,
+      [taskId, userId, receiverId, contentTrim],
+    )
+
+    const row = insertResult.rows[0]
+    res.status(201).json({
+      id: row.id,
+      taskId: row.task_id,
+      senderId: row.sender_id,
+      receiverId: row.receiver_id,
+      content: row.content,
+      isRead: row.is_read,
+      createdAt: row.created_at,
+    })
+  } catch (err) {
+    if (err.code === '42P01') {
+      return res.status(500).json({
+        error: '訊息功能尚未初始化，請重新啟動後端以建立 messages 表',
+      })
+    }
+    console.error('Error creating task message:', err)
+    res.status(500).json({ error: '送出訊息時發生錯誤，請稍後再試' })
+  }
+})
+
+// 未讀訊息提醒（Header / Dashboard 可用）
+app.get('/api/messages/unread-count', async (req, res) => {
+  const { userId } = req.query
+
+  if (!userId) {
+    return res.status(400).json({ error: '缺少 userId' })
+  }
+
+  try {
+    const totalResult = await pool.query(
+      `SELECT COUNT(*)::int AS unread_count
+       FROM messages
+       WHERE receiver_id = $1 AND is_read = FALSE`,
+      [userId],
+    )
+
+    const byTaskResult = await pool.query(
+      `SELECT task_id, COUNT(*)::int AS unread_count
+       FROM messages
+       WHERE receiver_id = $1 AND is_read = FALSE
+       GROUP BY task_id`,
+      [userId],
+    )
+
+    res.json({
+      unreadCount: totalResult.rows[0]?.unread_count || 0,
+      tasks: byTaskResult.rows.map((row) => ({
+        taskId: row.task_id,
+        unreadCount: row.unread_count,
+      })),
+    })
+  } catch (err) {
+    if (err.code === '42P01') {
+      return res.status(500).json({
+        error: '訊息功能尚未初始化，請重新啟動後端以建立 messages 表',
+      })
+    }
+    console.error('Error fetching unread message count:', err)
+    res.status(500).json({ error: '取得未讀訊息時發生錯誤，請稍後再試' })
   }
 })
 
@@ -1498,14 +1745,39 @@ async function ensureTaskFavoritesTable() {
   }
 }
 
-ensureTaskFavoritesTable().then(() => {
-  ensurePaymentPolicyConsentColumns(pool)
-    .then(() =>
-      ensureTaskDeadlineReminderColumns(pool).finally(() => {
-        app.listen(port, () => {
-          console.log(`API server listening on http://localhost:${port}`)
-        })
-      }),
+// 啟動時自動建立 messages 表（若不存在）
+async function ensureMessagesTable() {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS messages (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        task_id UUID NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+        sender_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        receiver_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        content TEXT NOT NULL,
+        is_read BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `)
+    await pool.query(
+      'CREATE INDEX IF NOT EXISTS idx_messages_task_created ON messages(task_id, created_at)',
     )
+    console.log('messages table ready')
+  } catch (err) {
+    console.error('Failed to ensure messages table:', err.message)
+  }
+}
+
+ensureTaskFavoritesTable().then(() => {
+  ensureMessagesTable().then(() => {
+    ensurePaymentPolicyConsentColumns(pool)
+      .then(() =>
+        ensureTaskDeadlineReminderColumns(pool).finally(() => {
+          app.listen(port, () => {
+            console.log(`API server listening on http://localhost:${port}`)
+          })
+        }),
+      )
+  })
 })
 
