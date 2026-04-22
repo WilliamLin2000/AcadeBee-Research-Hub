@@ -85,6 +85,13 @@ export default function TaskDetailPage() {
     window.dispatchEvent(new Event('messages-updated'))
   }
 
+  const canEditOrDelete = currentUser && task && currentUser.id === task.publisherId
+  const isPublisher = canEditOrDelete
+  const canChat = canAccessTaskChat(task, currentUser)
+  const myBid = currentUser && bids.find((b) => b.bidderId === currentUser.id)
+  const canBid = currentUser && task && task.status === 'open' && !isPublisher
+  const isClosed = task && task.status !== 'open'
+
   useEffect(() => {
     const raw = window.localStorage.getItem('currentUser')
     const user = raw ? JSON.parse(raw) : null
@@ -141,13 +148,6 @@ export default function TaskDetailPage() {
     const timer = window.setInterval(refreshMessages, 10000)
     return () => window.clearInterval(timer)
   }, [canChat, currentUser?.id, id])
-
-  const canEditOrDelete = currentUser && task && currentUser.id === task.publisherId
-  const isPublisher = canEditOrDelete
-  const canChat = canAccessTaskChat(task, currentUser)
-  const myBid = currentUser && bids.find((b) => b.bidderId === currentUser.id)
-  const canBid = currentUser && task && task.status === 'open' && !isPublisher
-  const isClosed = task && task.status !== 'open'
 
   const handleSubmitBid = async (e) => {
     e.preventDefault()
