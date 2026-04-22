@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="五個決策節點組成的流程圖">
+  <defs>
+    <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a7a77"/>
+      <stop offset="1" stop-color="#061a33"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="0.2" cy="0.9" r="0.7">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg1)"/>
+  <rect width="800" height="450" fill="url(#glow1)"/>
+
+  <!-- Grid dots -->
+  <g fill="#ffffff" opacity="0.08">
+    <circle cx="80" cy="60" r="1.5"/><circle cx="160" cy="60" r="1.5"/><circle cx="240" cy="60" r="1.5"/><circle cx="320" cy="60" r="1.5"/><circle cx="400" cy="60" r="1.5"/><circle cx="480" cy="60" r="1.5"/><circle cx="560" cy="60" r="1.5"/><circle cx="640" cy="60" r="1.5"/><circle cx="720" cy="60" r="1.5"/>
+    <circle cx="80" cy="140" r="1.5"/><circle cx="160" cy="140" r="1.5"/><circle cx="240" cy="140" r="1.5"/><circle cx="320" cy="140" r="1.5"/><circle cx="400" cy="140" r="1.5"/><circle cx="480" cy="140" r="1.5"/><circle cx="560" cy="140" r="1.5"/><circle cx="640" cy="140" r="1.5"/><circle cx="720" cy="140" r="1.5"/>
+    <circle cx="80" cy="390" r="1.5"/><circle cx="160" cy="390" r="1.5"/><circle cx="240" cy="390" r="1.5"/><circle cx="320" cy="390" r="1.5"/><circle cx="400" cy="390" r="1.5"/><circle cx="480" cy="390" r="1.5"/><circle cx="560" cy="390" r="1.5"/><circle cx="640" cy="390" r="1.5"/><circle cx="720" cy="390" r="1.5"/>
+  </g>
+
+  <!-- Connecting lines -->
+  <g stroke="#d4a537" stroke-width="2.5" fill="none" opacity="0.85">
+    <path d="M 110 225 L 250 150"/>
+    <path d="M 110 225 L 250 300"/>
+    <path d="M 300 150 L 440 225"/>
+    <path d="M 300 300 L 440 225"/>
+    <path d="M 490 225 L 630 150"/>
+    <path d="M 490 225 L 630 300"/>
+  </g>
+
+  <!-- Node 1 (start) -->
+  <g>
+    <circle cx="100" cy="225" r="36" fill="#0fa19d" stroke="#d4a537" stroke-width="3"/>
+    <text x="100" y="232" text-anchor="middle" font-family="Georgia, serif" font-size="18" font-weight="700" fill="#061a33">1</text>
+  </g>
+
+  <!-- Nodes 2 (top & bottom) -->
+  <g>
+    <circle cx="275" cy="150" r="30" fill="#ffffff" stroke="#d4a537" stroke-width="2"/>
+    <text x="275" y="157" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="700" fill="#061a33">2</text>
+  </g>
+  <g>
+    <circle cx="275" cy="300" r="30" fill="#ffffff" stroke="#d4a537" stroke-width="2"/>
+    <text x="275" y="307" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="700" fill="#061a33">3</text>
+  </g>
+
+  <!-- Node 3 (center) -->
+  <g>
+    <circle cx="465" cy="225" r="40" fill="#d4a537" stroke="#ffffff" stroke-width="3"/>
+    <text x="465" y="233" text-anchor="middle" font-family="Georgia, serif" font-size="20" font-weight="700" fill="#061a33">4</text>
+  </g>
+
+  <!-- Node 4 (top & bottom) -->
+  <g>
+    <circle cx="655" cy="150" r="30" fill="#ffffff" stroke="#d4a537" stroke-width="2"/>
+    <text x="655" y="157" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="700" fill="#061a33">5</text>
+  </g>
+  <g>
+    <circle cx="655" cy="300" r="30" fill="#0fa19d" stroke="#ffffff" stroke-width="2"/>
+    <text x="655" y="307" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="700" fill="#ffffff">✓</text>
+  </g>
+
+  <!-- Top label lines -->
+  <g stroke="#ffffff" stroke-width="1" opacity="0.3">
+    <line x1="60" y1="85" x2="140" y2="85"/>
+    <line x1="60" y1="400" x2="200" y2="400"/>
+  </g>
+
+  <!-- Small callout text -->
+  <text x="60" y="78" font-family="Arial, sans-serif" font-size="11" fill="#d4a537" letter-spacing="2" font-weight="700">BIOMECH × AI</text>
+  <text x="60" y="420" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" opacity="0.7" letter-spacing="1.5">DECISION MAP</text>
+</svg>

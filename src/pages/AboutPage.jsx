@@ -3,16 +3,15 @@ import brandLogo from '../assets/square img0.png'
 import williamPhoto from '../assets/square img3.png'
 import './AboutPage.css'
 
-const TEAM_MEMBERS = [
-  {
-    name: 'Jeng Heng (William) Lin',
-    role: 'CEO',
-    bio: 'Biomedical Engineer and Biomechanist',
-    story: '以研究背景與產品思維，持續降低學術合作的溝通成本。',
-    photo: williamPhoto,
-    initials: 'WL',
-  },
-]
+const FOUNDER = {
+  name: 'William Lin',
+  role: '創辦人 · 生醫工程博士生',
+  bio: '生物力學 / 醫學工程與人工智慧整合應用，負責 AcadeBee 的產品、工程與日常營運。',
+  story:
+    '我相信好的媒合工具應讓研究方與接案者都看得懂流程、找得到彼此。AcadeBee 由我獨立開發與營運，從一人專案起步，會依使用者回饋持續改進。',
+  photo: williamPhoto,
+  initials: 'WL',
+}
 
 const VALUES = [
   {
@@ -33,8 +32,6 @@ const VALUES = [
 ]
 
 export default function AboutPage() {
-  const leadMember = TEAM_MEMBERS[0]
-
   return (
     <div className="about-page">
       <section className="about-hero">
@@ -61,9 +58,9 @@ export default function AboutPage() {
       </section>
 
       <section className="about-section">
-        <h2>開發團隊</h2>
+        <h2>創辦人與營運</h2>
         <p className="about-section-note">
-          目前由核心成員主導產品與技術方向，持續優化平台體驗與合作品質。
+          AcadeBee 由 William Lin 獨立開發與營運。以下為創辦人背景與營運理念；平台亦持續依回饋迭代。
         </p>
         <article className="about-team-profile">
           <div className="about-team-brand" aria-hidden="true">
@@ -74,25 +71,25 @@ export default function AboutPage() {
             </span>
           </div>
           <div className="about-team-profile-media">
-            {leadMember.photo ? (
+            {FOUNDER.photo ? (
               <img
-                src={leadMember.photo}
-                alt={`${leadMember.name} portrait`}
+                src={FOUNDER.photo}
+                alt={`${FOUNDER.name} portrait`}
                 className="about-team-portrait"
               />
             ) : (
               <div className="about-team-avatar-fallback about-team-portrait-fallback" aria-hidden="true">
-                {leadMember.initials}
+                {FOUNDER.initials}
               </div>
             )}
           </div>
           <div className="about-team-profile-body">
-            <p className="about-team-profile-label">Core Leadership</p>
-            <h3>{leadMember.name}</h3>
-            <p className="about-team-profile-role">{leadMember.role}</p>
-            <p className="about-team-bio">{leadMember.bio}</p>
+            <p className="about-team-profile-label">獨立開發與營運</p>
+            <h3>{FOUNDER.name}</h3>
+            <p className="about-team-profile-role">{FOUNDER.role}</p>
+            <p className="about-team-bio">{FOUNDER.bio}</p>
             <div className="about-team-profile-divider" aria-hidden="true" />
-            <p className="about-team-story">{leadMember.story}</p>
+            <p className="about-team-story">{FOUNDER.story}</p>
           </div>
         </article>
       </section>

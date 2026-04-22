@@ -1,0 +1,1955 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AcadeBee · 新版介面預覽 (Mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@600;700&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  /* ============ Design tokens ============ */
+  :root {
+    --navy-900: #07243d;
+    --navy-800: #0b3558;
+    --navy-700: #0e4470;
+    --navy-600: #165f96;
+    --navy-500: #1b74b8;
+    --teal-500: #0fa19d;
+    --teal-600: #0c8884;
+    --gold-500: #d4a434;
+    --gold-600: #b88928;
+    --coral-500: #e85d4f;
+    --bg: #f5f8fc;
+    --bg-alt: #eef3f9;
+    --surface: #ffffff;
+    --text: #0f1f33;
+    --text-muted: #5a6a7e;
+    --text-subtle: #8a96a8;
+    --border: #dde4ee;
+    --border-strong: #c7d1e0;
+    --shadow-sm: 0 1px 2px rgba(14, 58, 95, 0.06);
+    --shadow-md: 0 6px 18px -6px rgba(14, 58, 95, 0.18), 0 2px 4px rgba(14, 58, 95, 0.06);
+    --shadow-lg: 0 20px 40px -18px rgba(14, 58, 95, 0.28), 0 6px 12px -6px rgba(14, 58, 95, 0.12);
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 16px;
+    --radius-pill: 999px;
+    --font-sans: 'Inter', 'Noto Sans TC', 'Microsoft JhengHei', 'PingFang TC', system-ui, sans-serif;
+    --font-serif: 'Noto Serif TC', 'Source Serif Pro', Georgia, serif;
+    --container: 1200px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: 'cv11','ss01';
+  }
+  a { color: var(--navy-600); text-decoration: none; }
+  a:hover { color: var(--navy-800); }
+  img, svg { display: block; }
+
+  h1, h2, h3, h4 { color: var(--navy-900); font-weight: 700; letter-spacing: -0.012em; }
+  h1 { font-size: clamp(2rem, 2rem + 1.6vw, 3.25rem); line-height: 1.15; font-weight: 800; }
+  h2 { font-size: clamp(1.55rem, 1.4rem + 0.8vw, 2.1rem); line-height: 1.25; }
+  h3 { font-size: 1.125rem; line-height: 1.35; }
+  p { color: var(--text); }
+
+  /* ============ Mockup frame ============ */
+  .mockup-toc {
+    position: fixed; top: 12px; right: 12px; z-index: 200;
+    background: var(--navy-900); color: #cfe0f2;
+    padding: 0.5rem 0.75rem; border-radius: var(--radius-pill);
+    font-size: 0.78rem; display: flex; gap: 0.4rem; align-items: center;
+    box-shadow: var(--shadow-md);
+  }
+  .mockup-toc a { color: #f0c46b; font-weight: 600; padding: 0.1rem 0.5rem; border-radius: var(--radius-pill); }
+  .mockup-toc a:hover { background: rgba(240,196,107,0.15); }
+  .mockup-label {
+    max-width: var(--container); margin: 2.5rem auto 0.5rem; padding: 0 1.5rem;
+    font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--text-subtle); font-weight: 600;
+  }
+  .mockup-label span { color: var(--teal-600); }
+  .mockup-frame {
+    max-width: var(--container); margin: 0 auto 2.5rem; padding: 0 1.5rem;
+  }
+  .mockup-frame-inner {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md);
+  }
+
+  /* ============ Header ============ */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .header-bar-top {
+    background: var(--navy-900); color: #b8c9da;
+    font-size: 0.78rem; padding: 0.4rem 0;
+  }
+  .header-bar-top-inner {
+    max-width: var(--container); margin: 0 auto; padding: 0 1.5rem;
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  }
+  .header-bar-top a { color: #e6b84d; font-weight: 500; }
+  .header-bar-top .sep { color: rgba(255,255,255,0.2); margin: 0 0.6rem; }
+  .header-inner {
+    max-width: var(--container); margin: 0 auto; padding: 0.9rem 1.5rem;
+    display: flex; align-items: center; gap: 1.5rem;
+  }
+  .header-logo {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    font-weight: 800; font-size: 1.35rem; letter-spacing: -0.01em;
+  }
+  .header-logo-mark {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--navy-700), var(--navy-900));
+    color: var(--gold-500); display: grid; place-items: center;
+    font-size: 1.1rem; font-weight: 800; font-family: var(--font-serif);
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.15);
+  }
+  .header-logo-text .acade { color: var(--navy-900); }
+  .header-logo-text .bee { color: var(--gold-600); }
+  .header-nav { display: flex; gap: 1.75rem; margin-left: 1rem; }
+  .header-nav a {
+    color: var(--text); font-weight: 500; font-size: 0.95rem;
+    padding: 0.35rem 0; border-bottom: 2px solid transparent;
+  }
+  .header-nav a:hover { color: var(--navy-700); border-bottom-color: var(--gold-500); }
+  .header-nav a.active { color: var(--navy-900); border-bottom-color: var(--navy-700); }
+  .header-actions { margin-left: auto; display: flex; gap: 0.6rem; align-items: center; }
+
+  /* ============ Buttons ============ */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 0.6rem 1.15rem; border-radius: var(--radius);
+    font-size: 0.92rem; font-weight: 600; font-family: inherit;
+    border: 1px solid transparent; cursor: pointer; transition: all 0.15s ease;
+    text-decoration: none !important; line-height: 1; letter-spacing: 0.01em;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--navy-700); color: #fff; box-shadow: var(--shadow-sm); }
+  .btn-primary:hover { background: var(--navy-800); color: #fff; box-shadow: var(--shadow-md); }
+  .btn-gold { background: var(--gold-500); color: var(--navy-900); box-shadow: var(--shadow-sm); }
+  .btn-gold:hover { background: var(--gold-600); color: #fff; }
+  .btn-outline { background: var(--surface); color: var(--navy-700); border-color: var(--border-strong); }
+  .btn-outline:hover { border-color: var(--navy-700); color: var(--navy-900); }
+  .btn-ghost { background: transparent; color: var(--navy-700); }
+  .btn-ghost:hover { background: rgba(14,68,112,0.06); }
+  .btn-lg { padding: 0.85rem 1.5rem; font-size: 1rem; }
+  .btn-sm { padding: 0.4rem 0.85rem; font-size: 0.82rem; }
+
+  /* ============ Hero ============ */
+  .hero {
+    position: relative; padding: 5rem 1.5rem 4rem; overflow: hidden;
+    background:
+      radial-gradient(1100px 500px at 80% -10%, rgba(15,161,157,0.18), transparent 60%),
+      radial-gradient(900px 600px at 0% 110%, rgba(212,164,52,0.12), transparent 55%),
+      linear-gradient(180deg, #f7fafd 0%, #eef3f9 100%);
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(11,53,88,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(11,53,88,0.04) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse at 50% 40%, #000 40%, transparent 80%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    max-width: var(--container); margin: 0 auto; position: relative;
+    display: grid; grid-template-columns: 1.2fr 0.9fr; gap: 3rem; align-items: center;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.35rem 0.85rem; border-radius: var(--radius-pill);
+    background: rgba(15,161,157,0.10); color: var(--teal-600);
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em;
+    border: 1px solid rgba(15,161,157,0.22);
+  }
+  .hero-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal-500); }
+  .hero h1 { margin-top: 1.1rem; }
+  .hero h1 .accent { color: var(--navy-700); position: relative; white-space: nowrap; }
+  .hero h1 .accent::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 10px;
+    background: rgba(212,164,52,0.32); z-index: -1; border-radius: 2px;
+  }
+  .hero-sub {
+    font-size: 1.1rem; color: var(--text-muted); max-width: 560px;
+    margin-top: 1.1rem; line-height: 1.7;
+  }
+  .hero-cta-row { display: flex; gap: 0.85rem; margin-top: 1.75rem; flex-wrap: wrap; }
+  .hero-search {
+    margin-top: 1.85rem; background: var(--surface); border: 1px solid var(--border);
+    padding: 0.55rem; border-radius: var(--radius-lg); display: flex; gap: 0.5rem;
+    align-items: center; box-shadow: var(--shadow-md); max-width: 620px;
+  }
+  .hero-search-field { flex: 1 1 180px; position: relative; }
+  .hero-search-field label {
+    display: block; font-size: 0.7rem; font-weight: 700;
+    color: var(--text-subtle); letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 0.55rem 0.85rem 0;
+  }
+  .hero-search-field input, .hero-search-field select {
+    width: 100%; border: none; background: transparent; outline: none;
+    padding: 0 0.85rem 0.55rem; font-size: 0.95rem; font-family: inherit;
+    color: var(--text);
+  }
+  .hero-search-divider { width: 1px; align-self: stretch; background: var(--border); margin: 0.3rem 0; }
+  .hero-search-btn { padding: 0.95rem 1.4rem; flex-shrink: 0; }
+  .hero-trust {
+    margin-top: 1.5rem; display: flex; gap: 1.25rem; flex-wrap: wrap;
+    color: var(--text-muted); font-size: 0.85rem; align-items: center;
+  }
+  .hero-trust strong { color: var(--navy-900); font-weight: 700; }
+
+  .hero-visual {
+    position: relative; height: 100%; min-height: 420px;
+  }
+  .hero-card {
+    position: absolute; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1rem 1.2rem; box-shadow: var(--shadow-lg);
+    font-size: 0.88rem;
+  }
+  .hero-card-1 { top: 0; right: 2rem; width: 260px; }
+  .hero-card-2 { top: 36%; left: 0; width: 250px; }
+  .hero-card-3 { bottom: 0; right: 0; width: 280px; }
+  .hero-card-title { font-weight: 700; color: var(--navy-900); margin-bottom: 0.3rem; }
+  .hero-card-meta { color: var(--text-muted); font-size: 0.78rem; }
+  .hero-card-row { display: flex; justify-content: space-between; align-items: center; margin-top: 0.55rem; }
+  .hero-card-pill {
+    display: inline-block; padding: 0.18rem 0.55rem; border-radius: var(--radius-pill);
+    font-size: 0.7rem; font-weight: 600;
+    background: rgba(15,161,157,0.12); color: var(--teal-600);
+  }
+  .hero-card-budget { color: var(--navy-800); font-weight: 700; font-size: 0.92rem; }
+  .hero-card-avatar {
+    width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+    color: #fff; font-weight: 700; font-size: 0.88rem;
+    background: linear-gradient(135deg, var(--navy-600), var(--navy-800));
+  }
+  .hero-card-avatars { display: flex; }
+  .hero-card-avatars .hero-card-avatar { border: 2px solid var(--surface); margin-left: -10px; width: 32px; height: 32px; font-size: 0.75rem; }
+  .hero-card-avatars .hero-card-avatar:first-child { margin-left: 0; }
+  .hero-card .stat-val { font-size: 1.35rem; font-weight: 800; color: var(--navy-900); }
+
+  /* ============ Stats strip ============ */
+  .stats-strip {
+    background: var(--navy-900); color: #d5e3f1;
+  }
+  .stats-strip-inner {
+    max-width: var(--container); margin: 0 auto; padding: 1.75rem 1.5rem;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-size: 1.85rem; font-weight: 800; color: #fff; font-family: var(--font-serif); letter-spacing: -0.01em; }
+  .stat-num .suf { color: var(--gold-500); margin-left: 2px; }
+  .stat-label { font-size: 0.85rem; margin-top: 0.15rem; color: #a6bcd0; }
+
+  /* ============ Section wrapper ============ */
+  .section { padding: 4.5rem 1.5rem; }
+  .section-alt { background: var(--surface); }
+  .section-inner { max-width: var(--container); margin: 0 auto; }
+  .section-head { text-align: center; max-width: 680px; margin: 0 auto 2.5rem; }
+  .section-eyebrow {
+    display: inline-block; font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal-600);
+    margin-bottom: 0.75rem;
+  }
+  .section-head p { color: var(--text-muted); margin-top: 0.85rem; font-size: 1.02rem; }
+
+  /* ============ Categories ============ */
+  .categories-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .cat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem 1.2rem; display: flex; gap: 0.95rem; align-items: center;
+    transition: all 0.18s ease; cursor: pointer;
+  }
+  .cat-card:hover {
+    border-color: var(--navy-600); transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .cat-icon {
+    width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+    background: rgba(14,68,112,0.08); color: var(--navy-700);
+    display: grid; place-items: center;
+  }
+  .cat-card.teal .cat-icon { background: rgba(15,161,157,0.12); color: var(--teal-600); }
+  .cat-card.gold .cat-icon { background: rgba(212,164,52,0.15); color: var(--gold-600); }
+  .cat-card.coral .cat-icon { background: rgba(232,93,79,0.12); color: var(--coral-500); }
+  .cat-title { font-weight: 700; color: var(--navy-900); font-size: 0.98rem; }
+  .cat-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+  /* ============ Task cards ============ */
+  .tasks-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+  .task-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.4rem;
+    display: flex; flex-direction: column; gap: 0.85rem;
+    transition: all 0.18s ease; cursor: pointer;
+    border-top: 3px solid var(--navy-700);
+  }
+  .task-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .task-card.teal { border-top-color: var(--teal-500); }
+  .task-card.gold { border-top-color: var(--gold-500); }
+  .task-card-top { display: flex; justify-content: space-between; align-items: center; }
+  .task-card-cat {
+    font-size: 0.74rem; font-weight: 700; color: var(--navy-700);
+    background: rgba(14,68,112,0.08); padding: 0.25rem 0.7rem;
+    border-radius: var(--radius-pill); letter-spacing: 0.04em;
+  }
+  .task-card-cat.teal { color: var(--teal-600); background: rgba(15,161,157,0.12); }
+  .task-card-cat.gold { color: var(--gold-600); background: rgba(212,164,52,0.15); }
+  .task-card-fav { color: var(--text-subtle); cursor: pointer; }
+  .task-card-fav:hover { color: var(--coral-500); }
+  .task-card-title { font-size: 1.05rem; font-weight: 700; color: var(--navy-900); line-height: 1.4; }
+  .task-card-desc {
+    font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .task-card-meta {
+    display: flex; gap: 0.85rem; flex-wrap: wrap;
+    padding-top: 0.75rem; border-top: 1px dashed var(--border);
+    font-size: 0.82rem; color: var(--text-muted);
+  }
+  .task-card-meta .meta-item { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .task-card-footer {
+    display: flex; justify-content: space-between; align-items: center; margin-top: 0.2rem;
+  }
+  .task-card-skills { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+  .skill-tag {
+    font-size: 0.72rem; padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-sm); background: var(--bg-alt);
+    color: var(--navy-800); font-weight: 500;
+  }
+  .task-card-budget {
+    font-weight: 800; color: var(--navy-900);
+    font-size: 1.05rem; font-family: var(--font-serif);
+  }
+  .task-card-budget .cur { color: var(--teal-600); font-size: 0.8rem; margin-right: 0.2rem; }
+
+  /* ============ How it works ============ */
+  .steps {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; position: relative;
+  }
+  .steps::before {
+    content: ""; position: absolute; top: 34px; left: 10%; right: 10%; height: 2px;
+    background: repeating-linear-gradient(90deg, var(--border-strong) 0 6px, transparent 6px 12px);
+    z-index: 0;
+  }
+  .step {
+    position: relative; z-index: 1; text-align: center; background: var(--bg);
+    padding: 0 0.5rem;
+  }
+  .step-num {
+    width: 68px; height: 68px; border-radius: 50%; margin: 0 auto 1rem;
+    background: var(--surface); border: 2px solid var(--navy-700); color: var(--navy-800);
+    display: grid; place-items: center; font-size: 1.4rem; font-weight: 800;
+    font-family: var(--font-serif); box-shadow: var(--shadow-sm);
+  }
+  .step:nth-child(2) .step-num { border-color: var(--teal-500); color: var(--teal-600); }
+  .step:nth-child(3) .step-num { border-color: var(--gold-500); color: var(--gold-600); }
+  .step:nth-child(4) .step-num { border-color: var(--navy-900); color: var(--navy-900); background: var(--gold-500); }
+  .step h3 { margin-bottom: 0.4rem; }
+  .step p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.65; max-width: 240px; margin: 0 auto; }
+
+  /* ============ Testimonials ============ */
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;
+  }
+  .testimonial {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 2rem; position: relative;
+  }
+  .testimonial::before {
+    content: "\201C"; position: absolute; top: 8px; left: 20px;
+    font-family: var(--font-serif); font-size: 4.5rem; line-height: 1;
+    color: var(--gold-500); opacity: 0.5;
+  }
+  .testimonial p { font-size: 1rem; line-height: 1.75; color: var(--text); position: relative; z-index: 1; }
+  .testimonial-author { display: flex; gap: 0.85rem; align-items: center; margin-top: 1.5rem; }
+  .testimonial-avatar {
+    width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--navy-600), var(--navy-900));
+    color: #fff; display: grid; place-items: center; font-weight: 700;
+  }
+  .testimonial-name { font-weight: 700; color: var(--navy-900); font-size: 0.95rem; }
+  .testimonial-role { font-size: 0.82rem; color: var(--text-muted); }
+
+  /* ============ Trust / Logos ============ */
+  .trust-band {
+    background: var(--bg-alt); padding: 2.5rem 1.5rem;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .trust-band-inner {
+    max-width: var(--container); margin: 0 auto; text-align: center;
+  }
+  .trust-band-title {
+    font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--text-subtle); font-weight: 700; margin-bottom: 1.25rem;
+  }
+  .trust-logos {
+    display: flex; flex-wrap: wrap; gap: 2.5rem; justify-content: center; align-items: center;
+    color: var(--navy-700); opacity: 0.65;
+  }
+  .trust-logo { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 700; letter-spacing: 0.02em; }
+
+  /* ============ CTA banner ============ */
+  .cta-banner {
+    background:
+      radial-gradient(600px 300px at 100% 0%, rgba(212,164,52,0.18), transparent 70%),
+      linear-gradient(135deg, var(--navy-800), var(--navy-900));
+    color: #fff; padding: 3.5rem 2rem; border-radius: var(--radius-lg);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 2rem; flex-wrap: wrap; margin-top: 1rem;
+  }
+  .cta-banner h2 { color: #fff; max-width: 560px; }
+  .cta-banner p { color: #cfdbe9; margin-top: 0.6rem; max-width: 560px; }
+
+  /* ============ Footer ============ */
+  .site-footer {
+    background: var(--navy-900); color: #c7d4e3;
+    padding: 3.5rem 1.5rem 1.5rem;
+  }
+  .site-footer-inner { max-width: var(--container); margin: 0 auto; }
+  .footer-cols {
+    display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2.5rem;
+    padding-bottom: 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .footer-brand h4 { color: #fff; margin-bottom: 0.75rem; font-size: 1.2rem; }
+  .footer-brand .brand-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(212,164,52,0.14); color: var(--gold-500);
+    padding: 0.3rem 0.8rem; border-radius: var(--radius-pill);
+    font-size: 0.78rem; font-weight: 600; margin-bottom: 0.9rem;
+  }
+  .footer-brand p { color: #9cb0c6; font-size: 0.92rem; line-height: 1.7; max-width: 320px; }
+  .footer-col-title {
+    color: #fff; font-size: 0.88rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 1rem;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+  .footer-col a { color: #9cb0c6; font-size: 0.92rem; }
+  .footer-col a:hover { color: var(--gold-500); }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center; padding-top: 1.5rem;
+    font-size: 0.82rem; color: #8095ac; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-bottom .legal { display: flex; gap: 1.25rem; }
+
+  /* ============ Smaller page previews ============ */
+  .preview-two {
+    display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem; padding: 2rem;
+  }
+  .preview-aside {
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+  .preview-aside h4 {
+    font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--text-subtle); margin-bottom: 0.75rem;
+  }
+  .preview-aside .filter-group { margin-bottom: 1.25rem; }
+  .preview-aside .filter-group:last-child { margin-bottom: 0; }
+  .preview-aside input, .preview-aside select {
+    width: 100%; padding: 0.55rem 0.75rem; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); font-family: inherit; font-size: 0.88rem;
+    background: var(--surface); color: var(--text);
+  }
+  .preview-aside .chip-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .chip {
+    font-size: 0.8rem; padding: 0.32rem 0.75rem; border-radius: var(--radius-pill);
+    border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer;
+  }
+  .chip.active { background: var(--navy-700); border-color: var(--navy-700); color: #fff; }
+  .chip:hover:not(.active) { border-color: var(--navy-600); color: var(--navy-700); }
+
+  .preview-list-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 2rem 0; flex-wrap: wrap; gap: 1rem;
+  }
+  .preview-list-head h3 { font-size: 1.45rem; }
+  .preview-list-head .meta { color: var(--text-muted); font-size: 0.9rem; }
+  .preview-sort {
+    display: flex; gap: 0.5rem; align-items: center; font-size: 0.88rem; color: var(--text-muted);
+  }
+
+  /* Task detail preview */
+  .detail-wrap { padding: 2rem; display: grid; grid-template-columns: 1fr 320px; gap: 2rem; }
+  .detail-main { }
+  .detail-breadcrumb {
+    font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;
+  }
+  .detail-breadcrumb a { color: var(--navy-600); }
+  .detail-top { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.75rem; }
+  .detail-h1 { font-size: 1.7rem; color: var(--navy-900); margin-bottom: 1rem; }
+  .detail-author-row {
+    display: flex; gap: 0.75rem; align-items: center; padding: 1rem 0;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 1.5rem;
+  }
+  .detail-author-meta { font-size: 0.88rem; color: var(--text-muted); }
+  .detail-author-name { color: var(--navy-900); font-weight: 700; font-size: 1rem; }
+  .detail-section { margin-bottom: 2rem; }
+  .detail-section h4 {
+    font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--teal-600); margin-bottom: 0.75rem;
+  }
+  .detail-section p { color: var(--text); line-height: 1.8; font-size: 0.98rem; }
+  .detail-specs {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;
+    background: var(--bg); border-radius: var(--radius); padding: 1.25rem;
+  }
+  .spec-item { display: flex; flex-direction: column; gap: 0.15rem; }
+  .spec-label { font-size: 0.78rem; color: var(--text-muted); }
+  .spec-value { font-weight: 700; color: var(--navy-900); }
+  .detail-aside {
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1.25rem; align-self: start; position: sticky; top: 1rem;
+  }
+  .aside-budget {
+    font-size: 2rem; font-weight: 800; color: var(--navy-900);
+    font-family: var(--font-serif);
+  }
+  .aside-budget .cur { color: var(--teal-600); font-size: 1.1rem; margin-right: 0.25rem; }
+  .aside-meta { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.25rem; }
+  .aside-actions { display: flex; flex-direction: column; gap: 0.65rem; }
+  .aside-trust {
+    margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 0.55rem;
+  }
+  .aside-trust .t-item {
+    display: flex; gap: 0.55rem; align-items: center;
+    font-size: 0.86rem; color: var(--text-muted);
+  }
+  .aside-trust .t-item svg { color: var(--teal-600); flex-shrink: 0; }
+
+  /* Auth preview */
+  .auth-preview { padding: 3rem 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%); }
+  .auth-side h2 { margin-bottom: 0.85rem; }
+  .auth-side p { color: var(--text-muted); line-height: 1.7; }
+  .auth-side ul { list-style: none; margin-top: 1.25rem; display: flex; flex-direction: column; gap: 0.65rem; }
+  .auth-side li { display: flex; gap: 0.6rem; align-items: center; font-size: 0.93rem; color: var(--text); }
+  .auth-side li svg { color: var(--teal-600); flex-shrink: 0; }
+  .auth-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 2.25rem; box-shadow: var(--shadow-md);
+    max-width: 440px; width: 100%; justify-self: end;
+  }
+  .auth-card h3 { margin-bottom: 0.4rem; font-size: 1.45rem; }
+  .auth-card .sub { color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.93rem; }
+  .form-group { margin-bottom: 1.1rem; }
+  .form-group label {
+    display: block; font-size: 0.85rem; font-weight: 600;
+    color: var(--navy-900); margin-bottom: 0.4rem;
+  }
+  .form-group input {
+    width: 100%; padding: 0.7rem 0.9rem; border: 1px solid var(--border);
+    border-radius: var(--radius); font-family: inherit; font-size: 0.95rem;
+    background: var(--surface); color: var(--text); transition: all 0.15s;
+  }
+  .form-group input:focus { outline: none; border-color: var(--navy-600); box-shadow: 0 0 0 3px rgba(14,68,112,0.1); }
+  .form-meta { display: flex; justify-content: space-between; align-items: center; margin: 0.85rem 0 1.25rem; font-size: 0.85rem; }
+  .form-divider {
+    position: relative; text-align: center; margin: 1.5rem 0; font-size: 0.82rem; color: var(--text-subtle);
+  }
+  .form-divider::before, .form-divider::after {
+    content: ""; position: absolute; top: 50%; width: 40%; height: 1px; background: var(--border);
+  }
+  .form-divider::before { left: 0; }
+  .form-divider::after { right: 0; }
+
+  /* ============ Founder strip ============ */
+  .founder-strip {
+    background: linear-gradient(90deg, rgba(11,53,88,0.04), rgba(15,161,157,0.06));
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .founder-strip-inner {
+    max-width: var(--container); margin: 0 auto; padding: 1rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    font-size: 0.92rem; color: var(--text-muted);
+  }
+  .founder-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy-700), var(--navy-900));
+    color: var(--gold-500); display: grid; place-items: center;
+    font-family: var(--font-serif); font-weight: 700; font-size: 1.05rem;
+    flex-shrink: 0;
+  }
+  .founder-strip .tag {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.2rem 0.6rem; border-radius: var(--radius-pill);
+    background: rgba(212,164,52,0.14); color: var(--gold-600);
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em;
+  }
+  .founder-strip strong { color: var(--navy-900); font-weight: 700; }
+  .founder-strip .spacer { flex: 1; min-width: 1rem; }
+  .founder-strip a { font-weight: 600; color: var(--navy-700); }
+
+  /* ============ Article (blog) cards ============ */
+  .articles-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;
+  }
+  .article-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); overflow: hidden; cursor: pointer;
+    display: flex; flex-direction: column;
+    transition: all 0.18s ease;
+  }
+  .article-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .article-cover {
+    height: 160px; position: relative;
+    background: linear-gradient(135deg, var(--navy-700), var(--navy-900));
+    color: #fff; padding: 1rem 1.2rem; display: flex; align-items: flex-end;
+  }
+  .article-cover.teal { background: linear-gradient(135deg, var(--teal-600), var(--navy-800)); }
+  .article-cover.gold { background: linear-gradient(135deg, var(--gold-600), var(--navy-800)); }
+  .article-cover.coral { background: linear-gradient(135deg, var(--coral-500), var(--navy-800)); }
+  .article-cover::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 1px, transparent 1.5px),
+      radial-gradient(circle at 80% 60%, rgba(255,255,255,0.1) 1px, transparent 1.5px);
+    background-size: 14px 14px;
+    opacity: 0.5;
+  }
+  .article-cover-tag {
+    position: relative; z-index: 1;
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    padding: 0.25rem 0.7rem; border-radius: var(--radius-pill);
+    background: rgba(255,255,255,0.18); backdrop-filter: blur(8px);
+    color: #fff; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em;
+  }
+  .article-body { padding: 1.25rem 1.35rem 1.35rem; display: flex; flex-direction: column; gap: 0.75rem; flex: 1; }
+  .article-date {
+    font-size: 0.78rem; color: var(--text-subtle); letter-spacing: 0.04em;
+    display: flex; gap: 0.5rem; align-items: center;
+  }
+  .article-date .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-subtle); }
+  .article-title {
+    font-size: 1.12rem; font-weight: 700; color: var(--navy-900); line-height: 1.4;
+    font-family: var(--font-serif);
+  }
+  .article-excerpt {
+    font-size: 0.9rem; color: var(--text-muted); line-height: 1.65;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    flex: 1;
+  }
+  .article-byline {
+    display: flex; gap: 0.6rem; align-items: center;
+    padding-top: 0.85rem; border-top: 1px dashed var(--border);
+    font-size: 0.82rem;
+  }
+  .article-byline-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy-700), var(--navy-900));
+    color: var(--gold-500); display: grid; place-items: center;
+    font-family: var(--font-serif); font-weight: 700; font-size: 0.78rem;
+  }
+  .article-byline-name { color: var(--navy-900); font-weight: 700; }
+  .article-byline-meta { color: var(--text-muted); }
+
+  /* Featured (wide) article */
+  .articles-featured {
+    display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;
+  }
+  .article-card-wide { display: grid; grid-template-columns: 0.9fr 1.1fr; min-height: 280px; }
+  .article-card-wide .article-cover { height: auto; }
+  .article-card-wide .article-body { padding: 1.75rem; }
+  .article-card-wide .article-title { font-size: 1.5rem; }
+  .articles-featured .article-side-list { display: flex; flex-direction: column; gap: 1rem; }
+  .article-list-item {
+    display: grid; grid-template-columns: 90px 1fr; gap: 1rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 0.85rem; cursor: pointer;
+    transition: all 0.18s ease;
+  }
+  .article-list-item:hover { border-color: var(--navy-600); transform: translateX(2px); }
+  .article-list-thumb {
+    height: 90px; border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--navy-700), var(--navy-900));
+    display: grid; place-items: center; color: var(--gold-500);
+    font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700;
+  }
+  .article-list-thumb.teal { background: linear-gradient(135deg, var(--teal-600), var(--navy-800)); color: #fff; }
+  .article-list-thumb.gold { background: linear-gradient(135deg, var(--gold-600), var(--navy-800)); color: #fff; }
+  .article-list-title { font-weight: 700; color: var(--navy-900); font-size: 0.98rem; line-height: 1.4; margin-bottom: 0.3rem; font-family: var(--font-serif); }
+  .article-list-meta { font-size: 0.78rem; color: var(--text-muted); display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+
+  /* ============ FB community banner ============ */
+  .community-banner {
+    background:
+      radial-gradient(400px 300px at 0% 50%, rgba(24,119,242,0.25), transparent 70%),
+      linear-gradient(135deg, #1b3a6e 0%, #1877f2 100%);
+    color: #fff; padding: 2.75rem 2rem; border-radius: var(--radius-lg);
+    display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .community-banner::before {
+    content: "f"; position: absolute; right: -30px; top: -60px;
+    font-size: 22rem; font-weight: 900; line-height: 1; color: rgba(255,255,255,0.06);
+    font-family: Georgia, serif;
+    pointer-events: none;
+  }
+  .community-banner h2 { color: #fff; font-size: 1.65rem; margin-bottom: 0.5rem; }
+  .community-banner p { color: #d0dcf0; max-width: 560px; line-height: 1.65; }
+  .community-banner-stats {
+    display: flex; gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap;
+  }
+  .community-banner-stat {
+    display: flex; gap: 0.6rem; align-items: center;
+    font-size: 0.88rem; color: #d0dcf0;
+  }
+  .community-banner-stat strong { color: #fff; font-weight: 800; font-size: 1.15rem; font-family: var(--font-serif); }
+  .community-banner .btn-fb {
+    background: #fff; color: #1877f2; font-weight: 700;
+    padding: 0.95rem 1.5rem; border-radius: var(--radius);
+    display: inline-flex; align-items: center; gap: 0.6rem; white-space: nowrap;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+  }
+  .community-banner .btn-fb:hover { transform: translateY(-1px); }
+
+  /* ============ Article list page ============ */
+  .article-list-head {
+    padding: 3rem 2rem 2rem; text-align: center;
+    background: linear-gradient(180deg, var(--bg) 0%, var(--surface) 100%);
+    border-bottom: 1px solid var(--border);
+  }
+  .article-list-head .section-eyebrow { color: var(--teal-600); }
+  .article-list-head h2 { font-size: 2.2rem; margin-top: 0.5rem; }
+  .article-list-head p { color: var(--text-muted); max-width: 620px; margin: 0.75rem auto 0; }
+  .article-cat-filter {
+    padding: 1.5rem 2rem 0; display: flex; justify-content: center;
+    gap: 0.5rem; flex-wrap: wrap;
+  }
+  .article-list-grid {
+    padding: 2rem; display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;
+  }
+
+  /* ============ Article detail page ============ */
+  .article-hero {
+    padding: 3rem 2rem 2rem; max-width: 860px; margin: 0 auto; text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .article-hero .cat {
+    display: inline-flex; padding: 0.3rem 0.85rem; border-radius: var(--radius-pill);
+    background: rgba(15,161,157,0.12); color: var(--teal-600);
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em;
+  }
+  .article-hero h1 {
+    font-family: var(--font-serif); font-size: clamp(1.9rem, 1.6rem + 1.4vw, 2.75rem);
+    margin-top: 1rem; line-height: 1.2; color: var(--navy-900); font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+  .article-hero .lead {
+    font-size: 1.15rem; color: var(--text-muted); margin-top: 1.25rem; line-height: 1.7;
+  }
+  .article-hero-meta {
+    margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center;
+    align-items: center; flex-wrap: wrap; font-size: 0.88rem; color: var(--text-muted);
+  }
+  .article-hero-author-card {
+    display: inline-flex; gap: 0.65rem; align-items: center;
+    padding: 0.35rem 0.9rem 0.35rem 0.4rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+  }
+  .article-hero-author-card .avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy-700), var(--navy-900));
+    color: var(--gold-500); display: grid; place-items: center;
+    font-family: var(--font-serif); font-weight: 700; font-size: 0.85rem;
+  }
+  .article-hero-author-card .name { font-weight: 700; color: var(--navy-900); font-size: 0.88rem; }
+
+  .article-body-wrap {
+    display: grid; grid-template-columns: 220px 1fr; gap: 3rem;
+    max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem 3rem;
+  }
+  .article-toc {
+    position: sticky; top: 2rem; align-self: start;
+    font-size: 0.88rem; color: var(--text-muted);
+  }
+  .article-toc-title {
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em;
+    font-weight: 700; color: var(--text-subtle); margin-bottom: 0.85rem;
+    padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+  }
+  .article-toc ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+  .article-toc a { color: var(--text-muted); padding-left: 0.75rem; border-left: 2px solid var(--border); display: block; line-height: 1.5; }
+  .article-toc a:hover { color: var(--navy-700); border-left-color: var(--navy-700); }
+  .article-toc a.active { color: var(--navy-900); border-left-color: var(--gold-500); font-weight: 600; }
+
+  .article-content h2 {
+    font-family: var(--font-serif); font-size: 1.55rem; color: var(--navy-900);
+    margin: 2.5rem 0 1rem; scroll-margin-top: 100px;
+  }
+  .article-content h2:first-child { margin-top: 0; }
+  .article-content h3 {
+    font-family: var(--font-serif); font-size: 1.2rem; color: var(--navy-900);
+    margin: 2rem 0 0.75rem;
+  }
+  .article-content p {
+    font-family: 'Noto Serif TC', Georgia, serif; font-size: 1.08rem;
+    line-height: 1.9; color: #26354a; margin-bottom: 1.25rem;
+  }
+  .article-content blockquote {
+    border-left: 3px solid var(--gold-500); padding: 0.4rem 1.25rem;
+    font-style: italic; color: var(--text-muted); margin: 1.5rem 0;
+    background: rgba(212,164,52,0.06);
+  }
+  .article-content ul { padding-left: 1.4rem; margin-bottom: 1.25rem; }
+  .article-content li { margin-bottom: 0.5rem; line-height: 1.75; font-family: 'Noto Serif TC', Georgia, serif; }
+  .article-content code {
+    background: var(--bg-alt); padding: 0.1rem 0.4rem;
+    border-radius: 4px; font-size: 0.9em; color: var(--navy-800);
+  }
+  .article-content .callout {
+    background: var(--bg-alt); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1rem 1.25rem; margin: 1.5rem 0;
+    font-size: 0.95rem;
+  }
+  .article-content .callout strong { color: var(--teal-600); }
+
+  .article-footer-author {
+    max-width: 860px; margin: 2rem auto; padding: 2rem;
+    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem; align-items: center;
+  }
+  .article-footer-author .big-avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy-700), var(--navy-900));
+    color: var(--gold-500); display: grid; place-items: center;
+    font-family: var(--font-serif); font-weight: 700; font-size: 2rem;
+  }
+  .article-footer-author h4 { font-size: 1.1rem; color: var(--navy-900); }
+  .article-footer-author .meta {
+    font-size: 0.85rem; color: var(--text-muted); margin-top: 0.35rem;
+    display: flex; gap: 0.75rem; flex-wrap: wrap;
+  }
+  .article-footer-author p { font-size: 0.92rem; color: var(--text-muted); margin-top: 0.75rem; line-height: 1.65; }
+
+  /* ============ Responsive ============ */
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .stats-strip-inner { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+    .steps { grid-template-columns: repeat(2, 1fr); }
+    .steps::before { display: none; }
+    .footer-cols { grid-template-columns: 1fr 1fr; }
+    .header-nav { display: none; }
+    .preview-two, .detail-wrap, .auth-preview { grid-template-columns: 1fr; padding: 1.5rem; }
+    .articles-featured { grid-template-columns: 1fr; }
+    .article-card-wide { grid-template-columns: 1fr; }
+    .article-card-wide .article-cover { min-height: 180px; }
+    .article-body-wrap { grid-template-columns: 1fr; padding: 2rem 1.5rem; }
+    .article-toc { display: none; }
+    .community-banner { grid-template-columns: 1fr; padding: 2rem 1.5rem; }
+    .article-footer-author { grid-template-columns: 1fr; text-align: center; }
+    .article-footer-author .big-avatar { margin: 0 auto; }
+  }
+  @media (max-width: 600px) {
+    .stats-strip-inner { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .footer-cols { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="mockup-toc" aria-label="預覽章節">
+  <span>跳至：</span>
+  <a href="#p-home">首頁</a>
+  <a href="#p-list">任務列表</a>
+  <a href="#p-detail">任務詳情</a>
+  <a href="#p-articles">文章列表</a>
+  <a href="#p-article">文章內頁</a>
+  <a href="#p-auth">登入 / 註冊</a>
+</nav>
+
+<!-- ============ PAGE 1: HOMEPAGE ============ -->
+<div class="mockup-label">頁面 1 · <span>首頁 HomePage</span> · 含全站 Header / Footer</div>
+<div id="p-home" class="mockup-frame">
+<div class="mockup-frame-inner">
+
+<!-- Top bar + header -->
+<header class="header">
+  <div class="header-bar-top">
+    <div class="header-bar-top-inner">
+      <span>學術合作 · 媒合研究任務與專業接案者</span>
+      <span>
+        <a href="#">研究者資源中心</a>
+        <span class="sep">·</span>
+        <a href="#">ORCID 登入</a>
+        <span class="sep">·</span>
+        <a href="#">繁體中文 ▾</a>
+      </span>
+    </div>
+  </div>
+  <div class="header-inner">
+    <a href="#" class="header-logo">
+      <span class="header-logo-mark">A</span>
+      <span class="header-logo-text"><span class="acade">Acade</span><span class="bee">Bee</span></span>
+    </a>
+    <nav class="header-nav">
+      <a href="#" class="active">首頁</a>
+      <a href="#">瀏覽任務</a>
+      <a href="#">刊登任務</a>
+      <a href="#">研究文章</a>
+      <a href="#">我的任務</a>
+      <a href="#">關於我們</a>
+    </nav>
+    <div class="header-actions">
+      <a href="#" class="btn btn-ghost">登入</a>
+      <a href="#" class="btn btn-primary">免費註冊</a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <span class="hero-eyebrow"><span class="dot"></span>已驗證學術機構 2,400+</span>
+      <h1>讓研究計畫與<br/><span class="accent">學術接案者</span>在同一個流程裡相遇</h1>
+      <p class="hero-sub">
+        AcadeBee 為研究人員量身打造的媒合平台。刊登任務、比較報價、追蹤進度，以透明流程與學術身分驗證，建立可信任的協作關係。
+      </p>
+      <div class="hero-cta-row">
+        <a href="#" class="btn btn-primary btn-lg">刊登研究任務 →</a>
+        <a href="#" class="btn btn-outline btn-lg">瀏覽任務</a>
+      </div>
+      <form class="hero-search" onsubmit="return false;">
+        <div class="hero-search-field">
+          <label>關鍵字</label>
+          <input type="text" placeholder="例如：問卷分析、資料清理" value="基因體資料分析" />
+        </div>
+        <div class="hero-search-divider"></div>
+        <div class="hero-search-field">
+          <label>學術領域</label>
+          <select>
+            <option>全部領域</option>
+            <option>生醫工程</option>
+            <option>公共衛生</option>
+            <option>資訊科學</option>
+          </select>
+        </div>
+        <button class="btn btn-primary hero-search-btn">搜尋</button>
+      </form>
+      <div class="hero-trust">
+        <span>信任機制：</span>
+        <span>✓ <strong>學術信箱驗證</strong></span>
+        <span>✓ <strong>ORCID 身分連結</strong></span>
+        <span>✓ <strong>報價流程可追蹤</strong></span>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-card hero-card-1">
+        <div class="hero-card-title">機器學習模型訓練</div>
+        <div class="hero-card-meta">生醫工程 · 台大醫院研究團隊</div>
+        <div class="hero-card-row">
+          <span class="hero-card-pill">數據分析</span>
+          <span class="hero-card-budget">NT$ 45,000</span>
+        </div>
+      </div>
+      <div class="hero-card hero-card-2">
+        <div class="hero-card-title">本月活躍接案者</div>
+        <div class="hero-card-row" style="margin-top:0.8rem;">
+          <div class="hero-card-avatars">
+            <div class="hero-card-avatar">W</div>
+            <div class="hero-card-avatar" style="background:linear-gradient(135deg,#0c8884,#0fa19d)">L</div>
+            <div class="hero-card-avatar" style="background:linear-gradient(135deg,#b88928,#d4a434)">C</div>
+            <div class="hero-card-avatar" style="background:linear-gradient(135deg,#082847,#165f96)">+</div>
+          </div>
+          <span class="hero-card-budget">1,280 位</span>
+        </div>
+      </div>
+      <div class="hero-card hero-card-3">
+        <div class="hero-card-title">平均任務媒合時間</div>
+        <div style="margin-top:0.4rem;">
+          <span class="stat-val">3.2</span>
+          <span style="color:var(--text-muted); margin-left:0.4rem;">天 · 比上季下降 18%</span>
+        </div>
+        <div style="height:6px;background:var(--bg-alt);border-radius:999px;margin-top:0.75rem;overflow:hidden;">
+          <div style="width:72%;height:100%;background:linear-gradient(90deg,var(--teal-500),var(--navy-600));"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Founder strip -->
+<section class="founder-strip">
+  <div class="founder-strip-inner">
+    <div class="founder-avatar">W</div>
+    <div>
+      <span class="tag">● Founder's Notes</span>
+      <div style="margin-top:0.25rem;">
+        由 <strong>Dr. Lin (William)</strong> 創辦 · 生醫工程博士 · 持續在這裡發表
+        <strong>研究方法論、專案經驗、產業觀察</strong>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <a href="#">閱讀最新研究筆記 →</a>
+  </div>
+</section>
+
+<!-- Stats strip -->
+<section class="stats-strip">
+  <div class="stats-strip-inner">
+    <div class="stat"><div class="stat-num">2,400<span class="suf">+</span></div><div class="stat-label">已驗證學術成員</div></div>
+    <div class="stat"><div class="stat-num">1,280<span class="suf">+</span></div><div class="stat-label">完成協作任務</div></div>
+    <div class="stat"><div class="stat-num">96<span class="suf">%</span></div><div class="stat-label">準時交付率</div></div>
+    <div class="stat"><div class="stat-num">32</div><div class="stat-label">合作研究機構</div></div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section class="section section-alt">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-eyebrow">任務類型</span>
+      <h2>依專長領域探索任務</h2>
+      <p>從資料分析到文獻整理、從實驗輔助到程式開發，依您的專業領域快速找到合適的研究任務。</p>
+    </div>
+    <div class="categories-grid">
+      <a class="cat-card" href="#">
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="4" width="3" height="14"/></svg></div>
+        <div><div class="cat-title">數據分析</div><div class="cat-meta">248 個任務</div></div>
+      </a>
+      <a class="cat-card teal" href="#">
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6l9-4 9 4-9 4-9-4z"/><path d="M3 10l9 4 9-4"/><path d="M3 14l9 4 9-4"/></svg></div>
+        <div><div class="cat-title">數據清理</div><div class="cat-meta">162 個任務</div></div>
+      </a>
+      <a class="cat-card gold" href="#">
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <div><div class="cat-title">程式設計</div><div class="cat-meta">194 個任務</div></div>
+      </a>
+      <a class="cat-card coral" href="#">
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><circle cx="7" cy="7" r="1.5"/></svg></div>
+        <div><div class="cat-title">數據標註</div><div class="cat-meta">86 個任務</div></div>
+      </a>
+      <a class="cat-card" href="#">
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div><div class="cat-title">文獻整理</div><div class="cat-meta">112 個任務</div></div>
+      </a>
+      <a class="cat-card teal" href="#">
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+        <div><div class="cat-title">問卷設計</div><div class="cat-meta">73 個任務</div></div>
+      </a>
+      <a class="cat-card gold" href="#">
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+        <div><div class="cat-title">實驗輔助</div><div class="cat-meta">58 個任務</div></div>
+      </a>
+      <a class="cat-card" href="#">
+        <div class="cat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20l9-5-9-5-9 5 9 5z"/><path d="M12 12l9-5-9-5-9 5 9 5z"/></svg></div>
+        <div><div class="cat-title">更多領域</div><div class="cat-meta">查看全部</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Featured tasks -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head" style="text-align:left; max-width:none; display:flex; justify-content:space-between; align-items:end; margin-bottom:2rem;">
+      <div>
+        <span class="section-eyebrow">近期任務</span>
+        <h2 style="margin-top:0.5rem;">正在招募的研究協作</h2>
+      </div>
+      <a href="#" class="btn btn-outline btn-sm">查看全部任務 →</a>
+    </div>
+    <div class="tasks-grid">
+      <a class="task-card" href="#">
+        <div class="task-card-top">
+          <span class="task-card-cat">數據分析</span>
+          <span class="task-card-fav">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+          </span>
+        </div>
+        <h3 class="task-card-title">基因體定序數據預處理與視覺化</h3>
+        <p class="task-card-desc">需要協助處理 RNA-seq 資料，含品質控制、對齊、差異表達分析並製作可發表的圖表。提供完整資料集與分析需求文件。</p>
+        <div class="task-card-meta">
+          <span class="meta-item">📅 截止 2026/05/20</span>
+          <span class="meta-item">⏱ 約 2 週</span>
+          <span class="meta-item">👁 38 次瀏覽</span>
+        </div>
+        <div class="task-card-footer">
+          <div class="task-card-skills">
+            <span class="skill-tag">R</span>
+            <span class="skill-tag">Bioconductor</span>
+            <span class="skill-tag">ggplot2</span>
+          </div>
+          <div class="task-card-budget"><span class="cur">NT$</span>45,000</div>
+        </div>
+      </a>
+
+      <a class="task-card teal" href="#">
+        <div class="task-card-top">
+          <span class="task-card-cat teal">數據清理</span>
+          <span class="task-card-fav">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+          </span>
+        </div>
+        <h3 class="task-card-title">健保資料庫大型檔案清理與欄位標準化</h3>
+        <p class="task-card-desc">協助清理約 300 萬筆健保就診資料，統一 ICD-10 編碼、處理缺失值並建立 data dictionary。</p>
+        <div class="task-card-meta">
+          <span class="meta-item">📅 截止 2026/05/10</span>
+          <span class="meta-item">⏱ 約 3 週</span>
+          <span class="meta-item">👁 52 次瀏覽</span>
+        </div>
+        <div class="task-card-footer">
+          <div class="task-card-skills">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">Pandas</span>
+            <span class="skill-tag">SQL</span>
+          </div>
+          <div class="task-card-budget"><span class="cur">NT$</span>62,000</div>
+        </div>
+      </a>
+
+      <a class="task-card gold" href="#">
+        <div class="task-card-top">
+          <span class="task-card-cat gold">程式設計</span>
+          <span class="task-card-fav" style="color:var(--coral-500)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+          </span>
+        </div>
+        <h3 class="task-card-title">建構生理訊號即時監測的 Python API</h3>
+        <p class="task-card-desc">建構 RESTful API，接收穿戴裝置傳送的 ECG 訊號並即時儲存至 PostgreSQL，包含異常偵測警示機制。</p>
+        <div class="task-card-meta">
+          <span class="meta-item">📅 截止 2026/06/02</span>
+          <span class="meta-item">⏱ 約 4 週</span>
+          <span class="meta-item">👁 29 次瀏覽</span>
+        </div>
+        <div class="task-card-footer">
+          <div class="task-card-skills">
+            <span class="skill-tag">FastAPI</span>
+            <span class="skill-tag">PostgreSQL</span>
+            <span class="skill-tag">Docker</span>
+          </div>
+          <div class="task-card-budget"><span class="cur">NT$</span>85,000</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Research Notes (blog) -->
+<section class="section section-alt">
+  <div class="section-inner">
+    <div class="section-head" style="text-align:left; max-width:none; display:flex; justify-content:space-between; align-items:end; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
+      <div>
+        <span class="section-eyebrow">Founder's Notes · 研究筆記</span>
+        <h2 style="margin-top:0.5rem;">William 的研究筆記與產業觀察</h2>
+        <p style="color:var(--text-muted); max-width:580px; margin-top:0.5rem;">從生醫工程博士的視角，分享方法論、專案經驗、產業趨勢與 FB 社群精選討論。</p>
+      </div>
+      <a href="#" class="btn btn-outline btn-sm">瀏覽所有文章 →</a>
+    </div>
+
+    <div class="articles-featured">
+      <!-- Featured large article -->
+      <a class="article-card article-card-wide" href="#">
+        <div class="article-cover teal">
+          <span class="article-cover-tag">方法論筆記</span>
+        </div>
+        <div class="article-body">
+          <div class="article-date">2026/04/12 <span class="dot"></span> 12 分鐘閱讀 <span class="dot"></span> 3.2k 次瀏覽</div>
+          <h3 class="article-title">從零開始:生醫研究者如何系統性地做好 RNA-seq 資料分析</h3>
+          <p class="article-excerpt">過去五年我協助超過 30 個臨床團隊處理 RNA-seq 資料,觀察到三個最常見的錯誤:品質控管流於形式、批次效應沒被處理、圖表無法登上期刊。這篇文章把完整的 pipeline 與實戰經驗一次整理。</p>
+          <div class="article-byline">
+            <div class="article-byline-avatar">W</div>
+            <span class="article-byline-name">Dr. Lin (William)</span>
+            <span class="article-byline-meta">· 生醫工程博士</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Side list -->
+      <div class="article-side-list">
+        <a class="article-list-item" href="#">
+          <div class="article-list-thumb gold">案</div>
+          <div>
+            <div class="article-list-title">一個博班論文的真實血淚:從選題到投稿的三個轉折點</div>
+            <div class="article-list-meta"><span>專案經驗</span><span>·</span><span>2026/04/05</span><span>·</span><span>8 分鐘閱讀</span></div>
+          </div>
+        </a>
+        <a class="article-list-item" href="#">
+          <div class="article-list-thumb">趨</div>
+          <div>
+            <div class="article-list-title">2026 年台灣生醫產業的三個觀察:AI、健保資料庫、臨床試驗</div>
+            <div class="article-list-meta"><span>產業觀察</span><span>·</span><span>2026/03/28</span><span>·</span><span>10 分鐘閱讀</span></div>
+          </div>
+        </a>
+        <a class="article-list-item" href="#">
+          <div class="article-list-thumb teal">社</div>
+          <div>
+            <div class="article-list-title">FB 社群精選:這週大家在討論的三個研究工具</div>
+            <div class="article-list-meta"><span>社群精選</span><span>·</span><span>2026/03/21</span><span>·</span><span>5 分鐘閱讀</span></div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Secondary grid -->
+    <div class="articles-grid">
+      <a class="article-card" href="#">
+        <div class="article-cover"><span class="article-cover-tag">方法論筆記</span></div>
+        <div class="article-body">
+          <div class="article-date">2026/03/15 <span class="dot"></span> 7 分鐘</div>
+          <h3 class="article-title">統計檢定選錯的三個徵兆:從審稿人角度看投稿</h3>
+          <p class="article-excerpt">每年我審的 30 多篇論文中,統計檢定選錯幾乎是最常見的退件原因之一。三個簡單的檢查清單,幫你在送審前先自我檢查。</p>
+          <div class="article-byline">
+            <div class="article-byline-avatar">W</div>
+            <span class="article-byline-name">Dr. Lin (William)</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="article-card" href="#">
+        <div class="article-cover gold"><span class="article-cover-tag">專案經驗</span></div>
+        <div class="article-body">
+          <div class="article-date">2026/03/08 <span class="dot"></span> 9 分鐘</div>
+          <h3 class="article-title">和 10 位接案者合作後,我學到的協作心得</h3>
+          <p class="article-excerpt">身為同時是 founder 和接案者,我整理了挑選合作夥伴、協調時程、給回饋的六個原則,適合第一次刊登任務的研究者參考。</p>
+          <div class="article-byline">
+            <div class="article-byline-avatar">W</div>
+            <span class="article-byline-name">Dr. Lin (William)</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="article-card" href="#">
+        <div class="article-cover coral"><span class="article-cover-tag">產業觀察</span></div>
+        <div class="article-body">
+          <div class="article-date">2026/03/01 <span class="dot"></span> 11 分鐘</div>
+          <h3 class="article-title">生成式 AI 正在改寫學術寫作:哪些該用、哪些不該</h3>
+          <p class="article-excerpt">從我自己的使用經驗 + 各期刊的最新政策,整理出 AI 在文獻回顧、語法潤飾、資料視覺化的合理邊界,以及哪些用途會被退件。</p>
+          <div class="article-byline">
+            <div class="article-byline-avatar">W</div>
+            <span class="article-byline-name">Dr. Lin (William)</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-eyebrow">運作流程</span>
+      <h2>四個步驟，啟動學術協作</h2>
+      <p>從刊登到完成，每一步都有透明的流程與身分驗證機制，協助雙方建立信任並安心交付成果。</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>刊登需求</h3>
+        <p>免費刊登研究任務，說明預算、截止日與所需技能。</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>接案者報價</h3>
+        <p>符合條件的接案者送出報價與簡短說明，可比較後選擇。</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>選擇人選</h3>
+        <p>接受報價後任務進入進行中，雙方可開始協作。</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h3>完成合作</h3>
+        <p>任務完成後，雙方可互相評價，建立長期信任。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-head">
+      <span class="section-eyebrow">使用者回饋</span>
+      <h2>來自研究者與接案者的真實分享</h2>
+    </div>
+    <div class="testimonials-grid">
+      <blockquote class="testimonial">
+        <p>在 AcadeBee 上很快找到能處理問卷分析的夥伴，溝通順暢、準時交件。平台的機構驗證讓我能安心把資料交出去。</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">陳</div>
+          <div>
+            <div class="testimonial-name">陳教授</div>
+            <div class="testimonial-role">大學教師 · 研究計畫主持人</div>
+          </div>
+        </div>
+      </blockquote>
+      <blockquote class="testimonial">
+        <p>接案流程清楚，刊登者會主動回覆報價。作為想兼職做研究的博士生，這個平台讓我可以選擇真正符合專長的題目。</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg,var(--teal-500),var(--teal-600))">林</div>
+          <div>
+            <div class="testimonial-name">林同學</div>
+            <div class="testimonial-role">博士生 · 生醫工程</div>
+          </div>
+        </div>
+      </blockquote>
+      <blockquote class="testimonial">
+        <p>我特別欣賞平台的報價追蹤機制，過去用 email 和研究夥伴協調常常訊息散落，現在所有版本與報價都在一起，效率高很多。</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:linear-gradient(135deg,var(--gold-500),var(--gold-600))">王</div>
+          <div>
+            <div class="testimonial-name">王博士</div>
+            <div class="testimonial-role">博士後研究員 · 公共衛生</div>
+          </div>
+        </div>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- FB Community banner -->
+<section class="section" style="padding-top:0;">
+  <div class="section-inner">
+    <div class="community-banner">
+      <div style="position:relative; z-index:1;">
+        <span style="display:inline-flex; align-items:center; gap:0.5rem; font-size:0.78rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#ffd96a; margin-bottom:0.6rem;">● 加入社群</span>
+        <h2>加入 Dr. Lin 的 FB 學術社群</h2>
+        <p>除了網站上的研究筆記,我在 FB 經營了一個專屬於生醫研究者的社群,每天有學術圈即時討論、工具資源分享、協作機會發布。歡迎加入,一起把台灣的學術合作做得更好。</p>
+        <div class="community-banner-stats">
+          <div class="community-banner-stat"><strong>3,200+</strong> 位成員</div>
+          <div class="community-banner-stat"><strong>每日</strong> 精選討論</div>
+          <div class="community-banner-stat"><strong>免費</strong> 加入</div>
+        </div>
+      </div>
+      <a href="#" class="btn-fb">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+        加入 FB 社群
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA banner -->
+<section class="section" style="padding-top:0;">
+  <div class="section-inner">
+    <div class="cta-banner">
+      <div>
+        <h2>準備好開始了嗎？</h2>
+        <p>免費註冊 AcadeBee，用學術機構信箱驗證身分，立即刊登或承接您的第一個研究任務。</p>
+      </div>
+      <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+        <a href="#" class="btn btn-gold btn-lg">免費註冊</a>
+        <a href="#" class="btn btn-outline btn-lg" style="background:transparent; color:#fff; border-color:rgba(255,255,255,0.4);">了解更多</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div class="footer-cols">
+      <div class="footer-brand">
+        <span class="brand-badge">● 學術合作平台</span>
+        <h4><span style="color:#fff">Acade</span><span style="color:var(--gold-500)">Bee</span></h4>
+        <p>為研究人員而生的任務媒合平台。透過學術身分驗證與透明流程，讓研究計畫與專業接案者高效相遇。</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">平台</div>
+        <ul>
+          <li><a href="#">瀏覽任務</a></li>
+          <li><a href="#">刊登任務</a></li>
+          <li><a href="#">我的任務</a></li>
+          <li><a href="#">個人資料</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">內容與社群</div>
+        <ul>
+          <li><a href="#">研究筆記</a></li>
+          <li><a href="#">方法論系列</a></li>
+          <li><a href="#">產業觀察</a></li>
+          <li><a href="#">FB 學術社群</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">關於與支援</div>
+        <ul>
+          <li><a href="#">關於 AcadeBee</a></li>
+          <li><a href="#">關於 Dr. Lin</a></li>
+          <li><a href="#">常見問題</a></li>
+          <li><a href="#">聯絡我們</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 AcadeBee · 學術任務媒合平台</div>
+      <div class="legal"><a href="#">繁體中文</a><a href="#">English</a></div>
+    </div>
+  </div>
+</footer>
+
+</div> <!-- /mockup-frame-inner -->
+</div> <!-- /mockup-frame -->
+
+
+<!-- ============ PAGE 2: TASK LIST ============ -->
+<div class="mockup-label">頁面 2 · <span>任務列表頁 TaskListPage</span></div>
+<div id="p-list" class="mockup-frame">
+<div class="mockup-frame-inner">
+  <!-- minimal header replay -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="#" class="header-logo">
+        <span class="header-logo-mark">A</span>
+        <span class="header-logo-text"><span class="acade">Acade</span><span class="bee">Bee</span></span>
+      </a>
+      <nav class="header-nav">
+        <a href="#">首頁</a>
+        <a href="#" class="active">瀏覽任務</a>
+        <a href="#">刊登任務</a>
+        <a href="#">研究文章</a>
+        <a href="#">我的任務</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#" class="btn btn-ghost">登入</a>
+        <a href="#" class="btn btn-primary">免費註冊</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="preview-list-head">
+    <div>
+      <div style="font-size:0.82rem; color:var(--text-muted); margin-bottom:0.4rem;">
+        <a href="#">首頁</a> / 瀏覽任務
+      </div>
+      <h3>瀏覽研究任務</h3>
+      <div class="meta">共 <strong>248</strong> 個進行中的任務，依領域與預算篩選</div>
+    </div>
+    <div class="preview-sort">
+      <span>排序：</span>
+      <select style="padding:0.45rem 0.75rem; border:1px solid var(--border); border-radius:var(--radius-sm); font-family:inherit; font-size:0.88rem; background:var(--surface);">
+        <option>最新刊登</option>
+        <option>截止日期近</option>
+        <option>預算高到低</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="preview-two">
+    <aside class="preview-aside">
+      <div class="filter-group">
+        <h4>關鍵字搜尋</h4>
+        <input type="text" placeholder="搜尋任務標題或描述" />
+      </div>
+      <div class="filter-group">
+        <h4>學術領域</h4>
+        <select><option>全部領域</option><option>生醫工程</option><option>公共衛生</option></select>
+      </div>
+      <div class="filter-group">
+        <h4>任務類型</h4>
+        <div class="chip-row">
+          <span class="chip active">全部</span>
+          <span class="chip">數據分析</span>
+          <span class="chip">數據清理</span>
+          <span class="chip">程式設計</span>
+          <span class="chip">數據標註</span>
+          <span class="chip">文獻整理</span>
+        </div>
+      </div>
+      <div class="filter-group">
+        <h4>預算範圍 (NT$)</h4>
+        <div style="display:flex;gap:0.5rem;">
+          <input type="number" placeholder="最低" />
+          <input type="number" placeholder="最高" />
+        </div>
+      </div>
+      <div class="filter-group">
+        <button class="btn btn-primary" style="width:100%;">套用篩選</button>
+      </div>
+    </aside>
+
+    <div class="tasks-grid" style="grid-template-columns:repeat(auto-fill, minmax(280px,1fr));">
+      <a class="task-card" href="#">
+        <div class="task-card-top">
+          <span class="task-card-cat">數據分析</span>
+          <span class="task-card-fav">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+          </span>
+        </div>
+        <h3 class="task-card-title">基因體定序數據預處理</h3>
+        <p class="task-card-desc">RNA-seq 品質控制、對齊與差異表達分析，需輸出可發表級圖表。</p>
+        <div class="task-card-footer">
+          <div class="task-card-skills"><span class="skill-tag">R</span><span class="skill-tag">ggplot2</span></div>
+          <div class="task-card-budget"><span class="cur">NT$</span>45,000</div>
+        </div>
+      </a>
+      <a class="task-card teal" href="#">
+        <div class="task-card-top">
+          <span class="task-card-cat teal">數據清理</span>
+          <span class="task-card-fav"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></span>
+        </div>
+        <h3 class="task-card-title">健保資料庫清理與標準化</h3>
+        <p class="task-card-desc">300 萬筆就診資料，統一 ICD-10 編碼、處理缺失值。</p>
+        <div class="task-card-footer">
+          <div class="task-card-skills"><span class="skill-tag">Python</span><span class="skill-tag">SQL</span></div>
+          <div class="task-card-budget"><span class="cur">NT$</span>62,000</div>
+        </div>
+      </a>
+      <a class="task-card gold" href="#">
+        <div class="task-card-top">
+          <span class="task-card-cat gold">程式設計</span>
+          <span class="task-card-fav"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></span>
+        </div>
+        <h3 class="task-card-title">ECG 即時監測 API 建置</h3>
+        <p class="task-card-desc">建構 RESTful API，接收穿戴裝置 ECG 訊號並警示異常。</p>
+        <div class="task-card-footer">
+          <div class="task-card-skills"><span class="skill-tag">FastAPI</span><span class="skill-tag">Docker</span></div>
+          <div class="task-card-budget"><span class="cur">NT$</span>85,000</div>
+        </div>
+      </a>
+      <a class="task-card" href="#">
+        <div class="task-card-top">
+          <span class="task-card-cat">文獻整理</span>
+          <span class="task-card-fav"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></span>
+        </div>
+        <h3 class="task-card-title">系統性文獻回顧 · 糖尿病相關併發症</h3>
+        <p class="task-card-desc">依 PRISMA 協議執行文獻檢索與資料萃取，提供摘要表。</p>
+        <div class="task-card-footer">
+          <div class="task-card-skills"><span class="skill-tag">EndNote</span><span class="skill-tag">PRISMA</span></div>
+          <div class="task-card-budget"><span class="cur">NT$</span>28,000</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ============ PAGE 3: TASK DETAIL ============ -->
+<div class="mockup-label">頁面 3 · <span>任務詳情頁 TaskDetailPage</span></div>
+<div id="p-detail" class="mockup-frame">
+<div class="mockup-frame-inner">
+  <header class="header">
+    <div class="header-inner">
+      <a href="#" class="header-logo">
+        <span class="header-logo-mark">A</span>
+        <span class="header-logo-text"><span class="acade">Acade</span><span class="bee">Bee</span></span>
+      </a>
+      <nav class="header-nav">
+        <a href="#">首頁</a>
+        <a href="#" class="active">瀏覽任務</a>
+        <a href="#">刊登任務</a>
+        <a href="#">研究文章</a>
+        <a href="#">我的任務</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#" class="btn btn-ghost">登入</a>
+        <a href="#" class="btn btn-primary">免費註冊</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="detail-wrap">
+    <div class="detail-main">
+      <div class="detail-breadcrumb">
+        <a href="#">首頁</a> / <a href="#">瀏覽任務</a> / <a href="#">數據分析</a> / <span>基因體定序數據預處理</span>
+      </div>
+      <div class="detail-top">
+        <span class="task-card-cat">數據分析</span>
+        <span class="skill-tag" style="background:rgba(15,161,157,0.12); color:var(--teal-600);">● 徵才中</span>
+      </div>
+      <h1 class="detail-h1">基因體定序數據預處理與視覺化</h1>
+      <div class="detail-author-row">
+        <div class="testimonial-avatar">陳</div>
+        <div>
+          <div class="detail-author-name">陳教授 · 台大醫院研究團隊</div>
+          <div class="detail-author-meta">✓ 機構信箱已驗證 · ✓ ORCID 已連結 · 刊登 12 個任務</div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h4>任務描述</h4>
+        <p>
+          本任務為臨床研究計畫的前置分析步驟，需要協助處理 RNA-seq 資料約 120 samples。具體工作內容包含：fastq 品質控制（FastQC / MultiQC）、基因體對齊（HISAT2 / STAR）、表達定量（featureCounts / Salmon），以及差異表達分析（DESeq2）。最後需產出符合投稿期刊規格的圖表（火山圖、熱圖、GO enrichment）。
+        </p>
+      </div>
+
+      <div class="detail-section">
+        <h4>任務規格</h4>
+        <div class="detail-specs">
+          <div class="spec-item"><span class="spec-label">預算</span><span class="spec-value">NT$ 45,000</span></div>
+          <div class="spec-item"><span class="spec-label">截止日期</span><span class="spec-value">2026/05/20</span></div>
+          <div class="spec-item"><span class="spec-label">預估工期</span><span class="spec-value">約 2 週</span></div>
+          <div class="spec-item"><span class="spec-label">學術領域</span><span class="spec-value">生醫工程 / 生物資訊</span></div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h4>所需技能</h4>
+        <div class="task-card-skills">
+          <span class="skill-tag">R</span>
+          <span class="skill-tag">Bioconductor</span>
+          <span class="skill-tag">DESeq2</span>
+          <span class="skill-tag">ggplot2</span>
+          <span class="skill-tag">HISAT2</span>
+          <span class="skill-tag">Linux</span>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h4>交付內容</h4>
+        <p>含程式碼 (R Markdown)、圖表原檔 (PDF + PNG)、分析報告 (約 5-8 頁)，並提供 2 次修改機會。資料需依機構 IRB 規範儲存於指定平台。</p>
+      </div>
+    </div>
+
+    <aside class="detail-aside">
+      <div class="aside-budget"><span class="cur">NT$</span>45,000</div>
+      <div class="aside-meta">截止 2026/05/20 · 目前 7 筆報價</div>
+      <div class="aside-actions">
+        <button class="btn btn-primary btn-lg">送出報價</button>
+        <button class="btn btn-outline">加入收藏</button>
+        <button class="btn btn-ghost">分享任務</button>
+      </div>
+      <div class="aside-trust">
+        <div class="t-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>機構信箱已驗證</div>
+        <div class="t-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>ORCID 身分連結</div>
+        <div class="t-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>報價流程可追蹤</div>
+      </div>
+    </aside>
+  </div>
+</div>
+</div>
+
+
+<!-- ============ PAGE 4: ARTICLE LIST ============ -->
+<div class="mockup-label">頁面 4 · <span>研究文章列表頁 ArticleListPage</span></div>
+<div id="p-articles" class="mockup-frame">
+<div class="mockup-frame-inner">
+  <header class="header">
+    <div class="header-inner">
+      <a href="#" class="header-logo">
+        <span class="header-logo-mark">A</span>
+        <span class="header-logo-text"><span class="acade">Acade</span><span class="bee">Bee</span></span>
+      </a>
+      <nav class="header-nav">
+        <a href="#">首頁</a>
+        <a href="#">瀏覽任務</a>
+        <a href="#">刊登任務</a>
+        <a href="#" class="active">研究文章</a>
+        <a href="#">我的任務</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#" class="btn btn-ghost">登入</a>
+        <a href="#" class="btn btn-primary">免費註冊</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="article-list-head">
+    <span class="section-eyebrow">Founder's Notes</span>
+    <h2>研究筆記</h2>
+    <p>由 Dr. Lin (William) 撰寫的研究方法論、專案經驗、產業觀察與 FB 社群精選。</p>
+  </div>
+
+  <div class="article-cat-filter">
+    <span class="chip active">全部</span>
+    <span class="chip">方法論筆記</span>
+    <span class="chip">專案經驗</span>
+    <span class="chip">產業觀察</span>
+    <span class="chip">社群精選</span>
+  </div>
+
+  <div class="article-list-grid">
+    <a class="article-card" href="#">
+      <div class="article-cover teal"><span class="article-cover-tag">方法論筆記</span></div>
+      <div class="article-body">
+        <div class="article-date">2026/04/12 <span class="dot"></span> 12 分鐘閱讀</div>
+        <h3 class="article-title">從零開始:生醫研究者如何系統性地做好 RNA-seq 資料分析</h3>
+        <p class="article-excerpt">過去五年我協助超過 30 個臨床團隊處理 RNA-seq 資料,觀察到三個最常見的錯誤:品質控管流於形式、批次效應沒被處理、圖表無法登上期刊。</p>
+        <div class="article-byline">
+          <div class="article-byline-avatar">W</div>
+          <span class="article-byline-name">Dr. Lin (William)</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="#">
+      <div class="article-cover gold"><span class="article-cover-tag">專案經驗</span></div>
+      <div class="article-body">
+        <div class="article-date">2026/04/05 <span class="dot"></span> 8 分鐘</div>
+        <h3 class="article-title">一個博班論文的真實血淚:從選題到投稿的三個轉折點</h3>
+        <p class="article-excerpt">讀博士前兩年我換過三次題目,差點延畢。回頭看整個過程,有三個關鍵決策點如果重來會不一樣。</p>
+        <div class="article-byline">
+          <div class="article-byline-avatar">W</div>
+          <span class="article-byline-name">Dr. Lin (William)</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="#">
+      <div class="article-cover"><span class="article-cover-tag">產業觀察</span></div>
+      <div class="article-body">
+        <div class="article-date">2026/03/28 <span class="dot"></span> 10 分鐘</div>
+        <h3 class="article-title">2026 年台灣生醫產業的三個觀察:AI、健保資料庫、臨床試驗</h3>
+        <p class="article-excerpt">從我接觸的案例 + 公開資料,整理台灣生醫產業今年最值得關注的三個趨勢,以及研究者該如何因應。</p>
+        <div class="article-byline">
+          <div class="article-byline-avatar">W</div>
+          <span class="article-byline-name">Dr. Lin (William)</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="#">
+      <div class="article-cover coral"><span class="article-cover-tag">社群精選</span></div>
+      <div class="article-body">
+        <div class="article-date">2026/03/21 <span class="dot"></span> 5 分鐘</div>
+        <h3 class="article-title">FB 社群精選:這週大家在討論的三個研究工具</h3>
+        <p class="article-excerpt">社群成員這週熱烈討論了三個工具(Zotero AI、Perplexity 學術版、R flexdashboard),整理出大家的使用心得與注意事項。</p>
+        <div class="article-byline">
+          <div class="article-byline-avatar">W</div>
+          <span class="article-byline-name">Dr. Lin (William)</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="#">
+      <div class="article-cover teal"><span class="article-cover-tag">方法論筆記</span></div>
+      <div class="article-body">
+        <div class="article-date">2026/03/15 <span class="dot"></span> 7 分鐘</div>
+        <h3 class="article-title">統計檢定選錯的三個徵兆:從審稿人角度看投稿</h3>
+        <p class="article-excerpt">每年我審的 30 多篇論文中,統計檢定選錯幾乎是最常見的退件原因。三個檢查清單幫你送審前自我檢查。</p>
+        <div class="article-byline">
+          <div class="article-byline-avatar">W</div>
+          <span class="article-byline-name">Dr. Lin (William)</span>
+        </div>
+      </div>
+    </a>
+    <a class="article-card" href="#">
+      <div class="article-cover gold"><span class="article-cover-tag">專案經驗</span></div>
+      <div class="article-body">
+        <div class="article-date">2026/03/08 <span class="dot"></span> 9 分鐘</div>
+        <h3 class="article-title">和 10 位接案者合作後,我學到的協作心得</h3>
+        <p class="article-excerpt">身為同時是 founder 和接案者,我整理了挑選合作夥伴、協調時程、給回饋的六個原則。</p>
+        <div class="article-byline">
+          <div class="article-byline-avatar">W</div>
+          <span class="article-byline-name">Dr. Lin (William)</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+</div>
+
+<!-- ============ PAGE 5: ARTICLE DETAIL ============ -->
+<div class="mockup-label">頁面 5 · <span>文章詳情頁 ArticleDetailPage</span></div>
+<div id="p-article" class="mockup-frame">
+<div class="mockup-frame-inner">
+  <header class="header">
+    <div class="header-inner">
+      <a href="#" class="header-logo">
+        <span class="header-logo-mark">A</span>
+        <span class="header-logo-text"><span class="acade">Acade</span><span class="bee">Bee</span></span>
+      </a>
+      <nav class="header-nav">
+        <a href="#">首頁</a>
+        <a href="#">瀏覽任務</a>
+        <a href="#">刊登任務</a>
+        <a href="#" class="active">研究文章</a>
+        <a href="#">我的任務</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#" class="btn btn-ghost">登入</a>
+        <a href="#" class="btn btn-primary">免費註冊</a>
+      </div>
+    </div>
+  </header>
+
+  <article>
+    <div class="article-hero">
+      <span class="cat">方法論筆記</span>
+      <h1>從零開始:生醫研究者如何系統性地做好 RNA-seq 資料分析</h1>
+      <p class="lead">
+        過去五年我協助超過 30 個臨床團隊處理 RNA-seq 資料,觀察到三個最常見的錯誤。這篇文章把完整的 pipeline 與實戰經驗一次整理,給剛接觸這個領域的研究者當參考地圖。
+      </p>
+      <div class="article-hero-meta">
+        <div class="article-hero-author-card">
+          <div class="avatar">W</div>
+          <span class="name">Dr. Lin (William)</span>
+        </div>
+        <span>·</span>
+        <span>2026 年 4 月 12 日</span>
+        <span>·</span>
+        <span>12 分鐘閱讀</span>
+      </div>
+    </div>
+
+    <div class="article-body-wrap">
+      <aside class="article-toc">
+        <div class="article-toc-title">文章目錄</div>
+        <ul>
+          <li><a href="#" class="active">一、為什麼這篇文章重要</a></li>
+          <li><a href="#">二、常見的三個錯誤</a></li>
+          <li><a href="#">三、完整 Pipeline 拆解</a></li>
+          <li><a href="#">四、品質控管的檢查點</a></li>
+          <li><a href="#">五、圖表達到期刊等級</a></li>
+          <li><a href="#">六、我會給研究生的三個建議</a></li>
+        </ul>
+      </aside>
+
+      <div class="article-content">
+        <h2>一、為什麼這篇文章重要</h2>
+        <p>
+          RNA-seq 已經是生醫研究的標準工具,但每次我接到新的諮詢案,都會發現同一批錯誤反覆出現。原因其實很單純:多數研究者是從某篇 tutorial 零碎地拼湊 pipeline,缺少系統性視角——知道「怎麼做」,但不知道「為什麼這樣做」以及「什麼時候該做不一樣的選擇」。
+        </p>
+        <p>
+          這篇文章會從一個 Bayesian 的視角,把 RNA-seq 分析拆解成六個決策節點,每個節點你都能問自己三個問題,讓整個分析流程不再是黑盒子。
+        </p>
+
+        <blockquote>
+          「好的研究者不是會用最多工具的人,而是在每個步驟都能清楚說明為什麼選這個工具的人。」 — 我的博士指導教授
+        </blockquote>
+
+        <h2>二、常見的三個錯誤</h2>
+        <h3>錯誤一:品質控管流於形式</h3>
+        <p>
+          大家都知道要跑 <code>FastQC</code>,但多數人只看了報告就存檔,沒有真的理解那些紅色警告代表什麼。批次效應、adapter 汙染、duplication rate 異常——這些訊號如果沒在前期處理,後面所有分析都會失真。
+        </p>
+
+        <div class="callout">
+          <strong>快速檢查清單:</strong>
+          每一個樣本都應該有 FastQC + MultiQC 的彙整報告,並且你要能親口解釋每個樣本 duplication rate、GC content、adapter contamination 的數值。
+        </div>
+
+        <h3>錯誤二:批次效應未處理</h3>
+        <p>
+          如果你的樣本是分成兩批或三批上機,批次效應 (batch effect) 幾乎一定存在。沒用 <code>ComBat</code> 或在 DESeq2 裡加入 batch covariate,你看到的差異表達很可能是批次雜訊,不是真正的生物訊號。
+        </p>
+
+        <h3>錯誤三:圖表無法登上期刊</h3>
+        <p>
+          預設 ggplot2 圖表投稿幾乎都會被要求修改。期刊要的是:一致的字型、色盲友善的配色、明確的標籤、向量格式 (PDF/SVG)。這些在分析一開始就該建立 template,而不是到投稿前才臨時調整。
+        </p>
+
+        <h2>三、完整 Pipeline 拆解</h2>
+        <p>接下來我會把整個流程拆成六個階段,每個階段都附上我實際用的工具組合與決策依據⋯⋯</p>
+      </div>
+    </div>
+
+    <div class="article-footer-author">
+      <div class="big-avatar">W</div>
+      <div>
+        <h4>關於作者 · Dr. Lin (William)</h4>
+        <div class="meta">
+          <span>生醫工程博士</span><span>·</span>
+          <span>ORCID: 0000-0000-0000-0000</span><span>·</span>
+          <span>AcadeBee 創辦人</span>
+        </div>
+        <p>專精於生醫訊號處理、臨床資料分析與機器學習。協助超過 30 個臨床研究團隊完成資料分析與發表。如果你的研究需要協助,<a href="#">歡迎在 AcadeBee 刊登任務</a>,或加入 <a href="#">FB 學術社群</a>一起討論。</p>
+      </div>
+    </div>
+
+    <!-- FB community compact -->
+    <div class="section-inner" style="padding: 0 2rem 2rem;">
+      <div class="community-banner" style="padding:2rem;">
+        <div style="position:relative; z-index:1;">
+          <h2 style="font-size:1.3rem; margin-bottom:0.35rem;">覺得這篇文章有幫助?</h2>
+          <p style="color:#d0dcf0; font-size:0.95rem;">加入 FB 社群跟其他 3,200+ 位研究者一起繼續討論</p>
+        </div>
+        <a href="#" class="btn-fb" style="padding:0.75rem 1.25rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+          加入 FB 社群
+        </a>
+      </div>
+    </div>
+  </article>
+</div>
+</div>
+
+
+<!-- ============ PAGE 6: AUTH ============ -->
+<div class="mockup-label">頁面 6 · <span>登入 / 註冊頁 AuthPage</span></div>
+<div id="p-auth" class="mockup-frame">
+<div class="mockup-frame-inner">
+  <header class="header">
+    <div class="header-inner">
+      <a href="#" class="header-logo">
+        <span class="header-logo-mark">A</span>
+        <span class="header-logo-text"><span class="acade">Acade</span><span class="bee">Bee</span></span>
+      </a>
+      <nav class="header-nav">
+        <a href="#">首頁</a>
+        <a href="#">瀏覽任務</a>
+        <a href="#">研究文章</a>
+        <a href="#">關於我們</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#" class="btn btn-ghost">登入</a>
+        <a href="#" class="btn btn-primary">免費註冊</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="auth-preview">
+    <div class="auth-side">
+      <span class="section-eyebrow">加入 AcadeBee</span>
+      <h2 style="margin-top:0.75rem;">和 2,400+ 位研究者一起協作</h2>
+      <p>使用學術機構信箱註冊，完成 ORCID 驗證後即可刊登任務或送出報價。身分驗證讓學術協作更透明、更安心。</p>
+      <ul>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>學術機構信箱驗證，確保身分可信</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>ORCID 連結，串接學術履歷</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>任務狀態與報價歷程完整可追蹤</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>免費註冊，無基本月費</li>
+      </ul>
+    </div>
+    <div class="auth-card">
+      <h3>歡迎回來</h3>
+      <div class="sub">使用您的學術信箱登入以繼續</div>
+      <div class="form-group">
+        <label>學術信箱</label>
+        <input type="email" placeholder="your.name@university.edu.tw" />
+      </div>
+      <div class="form-group">
+        <label>密碼</label>
+        <input type="password" placeholder="••••••••" />
+      </div>
+      <div class="form-meta">
+        <label style="display:flex;gap:0.4rem;align-items:center;color:var(--text-muted);">
+          <input type="checkbox" /> 保持登入
+        </label>
+        <a href="#">忘記密碼？</a>
+      </div>
+      <button class="btn btn-primary btn-lg" style="width:100%;">登入</button>
+      <div class="form-divider">或</div>
+      <button class="btn btn-outline" style="width:100%;">使用 ORCID 登入</button>
+      <div style="text-align:center; margin-top:1.5rem; color:var(--text-muted); font-size:0.9rem;">
+        還沒有帳號？<a href="#">立即註冊</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div style="max-width:var(--container); margin:0 auto 3rem; padding:1rem 1.5rem; color:var(--text-muted); font-size:0.85rem; text-align:center;">
+  以上為 AcadeBee 新版介面預覽（Mockup）— 若您滿意此方向，我將把樣式套用至實際 React 專案（src/ 下的 CSS 檔）。
+</div>
+
+</body>
+</html>

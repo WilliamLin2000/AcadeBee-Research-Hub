@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="AI 時代學習加速與專家落差">
+  <defs>
+    <linearGradient id="bg-gap" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a17d22"/>
+      <stop offset="1" stop-color="#061a33"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg-gap)"/>
+
+  <!-- Ground planes -->
+  <path d="M 0 350 L 370 280 L 370 450 L 0 450 Z" fill="#0b3558" opacity="0.55"/>
+  <path d="M 370 280 L 800 180 L 800 450 L 370 450 Z" fill="#07243d" opacity="0.75"/>
+  <line x1="370" y1="280" x2="370" y2="450" stroke="#f4efe6" stroke-opacity="0.28" stroke-width="2"/>
+
+  <!-- Left learner -->
+  <g transform="translate(180 270)">
+    <circle cx="0" cy="-52" r="18" fill="#f4efe6"/>
+    <rect x="-16" y="-32" width="32" height="48" rx="10" fill="#f4efe6"/>
+    <line x1="-6" y1="16" x2="-20" y2="56" stroke="#f4efe6" stroke-width="8" stroke-linecap="round"/>
+    <line x1="6" y1="16" x2="20" y2="56" stroke="#f4efe6" stroke-width="8" stroke-linecap="round"/>
+    <rect x="20" y="-20" width="44" height="32" rx="5" fill="#0fa19d"/>
+    <path d="M 30 -8 L 38 -2 L 50 -16" stroke="#07243d" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Right expert with AI amplification -->
+  <g transform="translate(610 200)">
+    <circle cx="0" cy="-56" r="20" fill="#d4a434"/>
+    <rect x="-18" y="-34" width="36" height="56" rx="10" fill="#d4a434"/>
+    <line x1="-8" y1="22" x2="-22" y2="66" stroke="#d4a434" stroke-width="9" stroke-linecap="round"/>
+    <line x1="8" y1="22" x2="22" y2="66" stroke="#d4a434" stroke-width="9" stroke-linecap="round"/>
+    <g transform="translate(-78 -28)">
+      <circle cx="0" cy="0" r="28" fill="#0fa19d" opacity="0.95"/>
+      <circle cx="-9" cy="-2" r="4.2" fill="#07243d"/>
+      <circle cx="9" cy="-2" r="4.2" fill="#07243d"/>
+      <path d="M -10 10 Q 0 18 10 10" stroke="#07243d" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <line x1="0" y1="-28" x2="0" y2="-37" stroke="#07243d" stroke-width="3"/>
+      <circle cx="0" cy="-41" r="4" fill="#d4a434"/>
+    </g>
+  </g>
+
+  <!-- Curves representing learning speed -->
+  <path d="M 80 318 Q 190 255 320 235" stroke="#f4efe6" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M 400 250 Q 530 178 720 120" stroke="#d4a434" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M 400 272 Q 540 230 720 190" stroke="#e85d4f" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="7 7" opacity="0.75"/>
+
+  <!-- Gap marker -->
+  <g>
+    <line x1="388" y1="130" x2="388" y2="228" stroke="#f4efe6" stroke-width="2" stroke-dasharray="4 4" opacity="0.65"/>
+    <line x1="715" y1="72" x2="715" y2="190" stroke="#f4efe6" stroke-width="2" stroke-dasharray="4 4" opacity="0.65"/>
+    <line x1="388" y1="130" x2="715" y2="72" stroke="#f4efe6" stroke-width="2" opacity="0.45"/>
+    <text x="566" y="93" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#f4efe6" opacity="0.85">GAP AMPLIFICATION</text>
+  </g>
+
+  <text x="60" y="58" font-family="Arial, sans-serif" font-size="11" fill="#d4a434" letter-spacing="2" font-weight="700">LEARNING ACCELERATION IN AI ERA</text>
+  <text x="60" y="410" font-family="Arial, sans-serif" font-size="11" fill="#fff" opacity="0.72" letter-spacing="1.4">FASTER START · WIDER ACCESS · EXPERT ADVANTAGE</text>
+</svg>

@@ -97,90 +97,124 @@ export default function TaskListPage() {
 
   return (
     <div className="task-list-page">
-      <h1>瀏覽任務</h1>
+      <header className="task-list-hero">
+        <div className="task-list-hero-inner">
+          <span className="task-list-eyebrow">瀏覽任務</span>
+          <h1>尋找下一個研究合作機會</h1>
+          <p className="task-list-subtitle">
+            篩選適合你專業背景的學術任務 — 從 生物力學、RNA-seq 分析、統計諮詢，到科普寫作與圖表設計，精選已驗證身分的研究需求。
+          </p>
+        </div>
+      </header>
 
-      <div className="filters">
-        <input
-          type="text"
-          placeholder="搜尋任務標題或描述..."
-          className="search-input"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <div className="filter-row">
-          <label>預算範圍（NT$）：</label>
-          <input
-            type="number"
-            placeholder="最低"
-            min="0"
-            className="budget-input"
-            value={budgetMin}
-            onChange={(e) => setBudgetMin(e.target.value)}
-          />
-          <span>～</span>
-          <input
-            type="number"
-            placeholder="最高"
-            min="0"
-            className="budget-input"
-            value={budgetMax}
-            onChange={(e) => setBudgetMax(e.target.value)}
-          />
-        </div>
-        <div className="filter-row filter-row-field">
-          <label htmlFor="task-list-field">學術領域：</label>
-          <select
-            id="task-list-field"
-            className="task-list-field-select"
-            value={selectedField}
-            onChange={(e) => setSelectedField(e.target.value)}
-          >
-            <option value="">全部領域</option>
-            {academicFields.map((f) => (
-              <option key={f.value} value={f.value}>
-                {f.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="category-filters">
-          <button
-            className={`filter-btn ${!selectedCategory ? 'active' : ''}`}
-            onClick={() => setSelectedCategory('')}
-          >
-            全部類型
-          </button>
-          {categories.map((cat) => (
-            <button
-              key={cat.value}
-              className={`filter-btn ${selectedCategory === cat.value ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(cat.value)}
+      <div className="task-list-body">
+        <aside className="filters">
+          <div className="filters-title">篩選條件</div>
+
+          <div className="filter-group">
+            <label className="filter-group-label" htmlFor="task-list-search">關鍵字搜尋</label>
+            <input
+              id="task-list-search"
+              type="text"
+              placeholder="搜尋任務標題或描述..."
+              className="search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          <div className="filter-group">
+            <div className="filter-row">
+              <label>預算範圍（NT$）</label>
+              <input
+                type="number"
+                placeholder="最低"
+                min="0"
+                className="budget-input"
+                value={budgetMin}
+                onChange={(e) => setBudgetMin(e.target.value)}
+              />
+              <input
+                type="number"
+                placeholder="最高"
+                min="0"
+                className="budget-input"
+                value={budgetMax}
+                onChange={(e) => setBudgetMax(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="filter-group filter-row-field">
+            <label className="filter-group-label" htmlFor="task-list-field">學術領域</label>
+            <select
+              id="task-list-field"
+              className="task-list-field-select"
+              value={selectedField}
+              onChange={(e) => setSelectedField(e.target.value)}
             >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-      </div>
+              <option value="">全部領域</option>
+              {academicFields.map((f) => (
+                <option key={f.value} value={f.value}>
+                  {f.label}
+                </option>
+              ))}
+            </select>
+          </div>
 
-      <div className="task-list">
-        {loading && <p className="no-results">載入中…</p>}
-        {error && !loading && <p className="no-results">{error}</p>}
-        {!loading && !error && (
-          <>
-            {tasks.length > 0 ? (
-              tasks.map((task) => (
-                <TaskCard
-                  key={task.id}
-                  task={task}
-                  currentUser={currentUser}
-                  onToggleFavorite={handleToggleFavorite}
-                />
-              ))
-            ) : (
-              <p className="no-results">目前沒有符合條件的任務</p>
+          <div className="filter-group">
+            <span className="filter-group-label">任務類型</span>
+            <div className="category-filters">
+              <button
+                className={`filter-btn ${!selectedCategory ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('')}
+              >
+                全部
+              </button>
+              {categories.map((cat) => (
+                <button
+                  key={cat.value}
+                  className={`filter-btn ${selectedCategory === cat.value ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory(cat.value)}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        <section className="task-list-results">
+          <div className="task-list-results-header">
+            <div className="task-list-count">
+              共 <strong>{tasks.length}</strong> 個任務
+              {selectedCategory && categories.find((c) => c.value === selectedCategory)
+                ? ` · ${categories.find((c) => c.value === selectedCategory).label}`
+                : ''}
+            </div>
+          </div>
+
+          <div className="task-list">
+            {loading && <p className="no-results">載入中…</p>}
+            {error && !loading && <p className="no-results">{error}</p>}
+            {!loading && !error && (
+              <>
+                {tasks.length > 0 ? (
+                  tasks.map((task) => (
+                    <TaskCard
+                      key={task.id}
+                      task={task}
+                      currentUser={currentUser}
+                      onToggleFavorite={handleToggleFavorite}
+                    />
+                  ))
+                ) : (
+                  <p className="no-results">目前沒有符合條件的任務</p>
+                )}
+              </>
             )}
-          </>
-        )}
+          </div>
+        </section>
       </div>
     </div>
   )

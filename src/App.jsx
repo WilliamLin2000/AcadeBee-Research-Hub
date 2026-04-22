@@ -11,6 +11,8 @@ import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
 import VerifyEmailPage from './pages/VerifyEmailPage'
 import AboutPage from './pages/AboutPage'
+import ArticleListPage from './pages/ArticleListPage'
+import ArticleDetailPage from './pages/ArticleDetailPage'
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/articles" element={<ArticleListPage />} />
+        <Route path="/articles/:id" element={<ArticleDetailPage />} />
       </Route>
     </Routes>
   )

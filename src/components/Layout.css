@@ -4,10 +4,21 @@
   flex-direction: column;
 }
 
+/* 主內容：預設給一般頁面使用（有容器寬度與內距） */
 .layout-main {
   flex: 1;
-  max-width: 1200px;
   width: 100%;
+}
+
+/* 一般頁面的內部 wrapper — 在頁面 JSX 裡使用 */
+.page-container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.page-container-narrow {
+  max-width: var(--container-narrow);
   margin: 0 auto;
   padding: 2rem 1.5rem;
 }

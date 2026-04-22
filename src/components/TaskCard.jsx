@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { Heart } from 'lucide-react'
 import './TaskCard.css'
 
 export default function TaskCard({ task, currentUser, onToggleFavorite }) {
@@ -37,7 +38,12 @@ export default function TaskCard({ task, currentUser, onToggleFavorite }) {
               title={currentUser ? (task.isFavorite ? '取消收藏' : '加入收藏清單') : '請先登入後才能收藏任務'}
               onClick={handleFavoriteClick}
             >
-              {task.isFavorite ? '♥' : '♡'}
+              <Heart
+                size={18}
+                strokeWidth={task.isFavorite ? 0 : 2}
+                fill={task.isFavorite ? 'currentColor' : 'none'}
+                aria-hidden
+              />
             </button>
           )}
           <span className="task-card-budget">NT$ {task.budget?.toLocaleString()}</span>

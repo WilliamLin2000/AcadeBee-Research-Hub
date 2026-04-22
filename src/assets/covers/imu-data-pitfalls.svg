@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="IRB 申請重點更新與查核">
+  <defs>
+    <linearGradient id="bg-irb" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0fa19d"/>
+      <stop offset="1" stop-color="#07243d"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg-irb)"/>
+
+  <g stroke="#ffffff" opacity="0.08">
+    <line x1="0" y1="95" x2="800" y2="95"/>
+    <line x1="0" y1="190" x2="800" y2="190"/>
+    <line x1="0" y1="285" x2="800" y2="285"/>
+    <line x1="0" y1="380" x2="800" y2="380"/>
+  </g>
+
+  <!-- Clipboard document -->
+  <g transform="translate(165 72)">
+    <rect x="0" y="0" width="260" height="305" rx="20" fill="#f4efe6" opacity="0.96"/>
+    <rect x="84" y="-14" width="92" height="28" rx="10" fill="#d4a434"/>
+    <rect x="34" y="58" width="190" height="12" rx="6" fill="#0b3558" opacity="0.3"/>
+    <rect x="34" y="84" width="170" height="10" rx="5" fill="#0b3558" opacity="0.25"/>
+    <rect x="34" y="122" width="190" height="12" rx="6" fill="#0b3558" opacity="0.3"/>
+    <rect x="34" y="148" width="170" height="10" rx="5" fill="#0b3558" opacity="0.25"/>
+    <rect x="34" y="186" width="190" height="12" rx="6" fill="#0b3558" opacity="0.3"/>
+    <rect x="34" y="212" width="150" height="10" rx="5" fill="#0b3558" opacity="0.25"/>
+    <g fill="#0fa19d">
+      <circle cx="42" cy="64" r="6"/><circle cx="42" cy="128" r="6"/><circle cx="42" cy="192" r="6"/>
+    </g>
+    <path d="M 43 64 L 47 68 L 55 58" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 43 128 L 47 132 L 55 122" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 43 192 L 47 196 L 55 186" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Shield + magnifier -->
+  <g transform="translate(570 198)">
+    <path d="M 0 -92 L 68 -62 L 68 -5 C 68 54 25 90 0 102 C -25 90 -68 54 -68 -5 L -68 -62 Z" fill="#d4a434" stroke="#f4efe6" stroke-width="3"/>
+    <circle cx="0" cy="-14" r="26" fill="#07243d"/>
+    <circle cx="0" cy="-14" r="12" fill="none" stroke="#f4efe6" stroke-width="3"/>
+    <line x1="9" y1="-5" x2="21" y2="7" stroke="#f4efe6" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Timeline / effective period -->
+  <g transform="translate(490 324)">
+    <rect x="0" y="0" width="200" height="64" rx="12" fill="#0b3558" stroke="#f4efe6" stroke-opacity="0.3"/>
+    <line x1="22" y1="40" x2="176" y2="40" stroke="#f4efe6" stroke-width="2" opacity="0.75"/>
+    <circle cx="44" cy="40" r="6" fill="#0fa19d"/>
+    <circle cx="102" cy="40" r="6" fill="#d4a434"/>
+    <circle cx="160" cy="40" r="6" fill="#e85d4f"/>
+    <text x="100" y="22" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#f4efe6">VALIDITY · FOLLOW-UP · RISK</text>
+  </g>
+
+  <text x="60" y="58" font-family="Arial, sans-serif" font-size="11" fill="#d4a434" letter-spacing="2" font-weight="700">IRB UPDATE · TAIWAN</text>
+  <text x="60" y="410" font-family="Arial, sans-serif" font-size="11" fill="#fff" opacity="0.72" letter-spacing="1.4">AUDIT LIST · TRACKING REVIEW · COMPLIANCE</text>
+</svg>

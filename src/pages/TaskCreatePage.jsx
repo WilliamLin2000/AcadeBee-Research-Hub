@@ -247,7 +247,7 @@ export default function TaskCreatePage() {
           <label>平台聲明書 *</label>
           <p className="form-hint">
             我已了解本平台宗旨為學術任務媒合，平台僅提供資訊刊登與雙方媒合服務。任務履約、付款安排、
-            溝通爭議與其他衍生風險，均由合作雙方自行協調並負責，與平台無涉。
+            溝通爭議與其他衍生風險，均由合作雙方自行協調並負責，平台不承擔相關責任。
           </p>
           <label className="terms-check">
             <input

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="跨域合作與資料分析三個重點">
+  <defs>
+    <linearGradient id="bg-collab" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b88928"/>
+      <stop offset="1" stop-color="#0b2545"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg-collab)"/>
+
+  <g fill="#fff" opacity="0.07">
+    <circle cx="70" cy="70" r="2"/><circle cx="140" cy="70" r="2"/><circle cx="210" cy="70" r="2"/><circle cx="280" cy="70" r="2"/>
+    <circle cx="70" cy="380" r="2"/><circle cx="140" cy="380" r="2"/><circle cx="210" cy="380" r="2"/><circle cx="280" cy="380" r="2"/>
+  </g>
+
+  <!-- Left card: clinical team -->
+  <g transform="translate(95 105)">
+    <rect x="0" y="0" width="220" height="240" rx="16" fill="#0b3558" stroke="#f4efe6" stroke-opacity="0.35"/>
+    <rect x="18" y="24" width="184" height="34" rx="8" fill="#f4efe6" opacity="0.9"/>
+    <circle cx="48" cy="112" r="22" fill="#f4efe6"/>
+    <circle cx="48" cy="103" r="7" fill="#0b3558"/>
+    <path d="M 31 124 Q 48 110 65 124 L 65 131 L 31 131 Z" fill="#0b3558"/>
+    <rect x="82" y="93" width="104" height="10" rx="5" fill="#f4efe6" opacity="0.82"/>
+    <rect x="82" y="110" width="86" height="8" rx="4" fill="#f4efe6" opacity="0.65"/>
+    <rect x="82" y="124" width="74" height="8" rx="4" fill="#f4efe6" opacity="0.5"/>
+    <path d="M 24 194 L 70 194 L 84 172 L 100 220 L 116 165 L 132 194 L 196 194" stroke="#d4a537" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Right card: data analysis -->
+  <g transform="translate(485 105)">
+    <rect x="0" y="0" width="220" height="240" rx="16" fill="#07243d" stroke="#f4efe6" stroke-opacity="0.35"/>
+    <rect x="18" y="24" width="184" height="34" rx="8" fill="#f4efe6" opacity="0.9"/>
+    <rect x="28" y="88" width="22" height="116" rx="4" fill="#0fa19d"/>
+    <rect x="58" y="116" width="22" height="88" rx="4" fill="#d4a537"/>
+    <rect x="88" y="100" width="22" height="104" rx="4" fill="#f4efe6" opacity="0.9"/>
+    <rect x="118" y="128" width="22" height="76" rx="4" fill="#0fa19d"/>
+    <rect x="148" y="80" width="22" height="124" rx="4" fill="#d4a537"/>
+    <path d="M 24 218 Q 74 170 114 186 T 196 118" stroke="#f4efe6" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Center bridge -->
+  <g transform="translate(400 225)">
+    <circle cx="0" cy="0" r="44" fill="#d4a537" stroke="#f4efe6" stroke-width="3"/>
+    <path d="M -22 7 Q -8 -14 6 7" stroke="#07243d" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M -8 7 Q 6 -14 20 7" stroke="#07243d" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <circle cx="-10" cy="7" r="5" fill="#07243d"/>
+    <circle cx="8" cy="7" r="5" fill="#07243d"/>
+  </g>
+
+  <!-- Three lessons -->
+  <g font-family="Arial, sans-serif" font-weight="700" text-anchor="middle">
+    <line x1="325" y1="124" x2="475" y2="124" stroke="#f4efe6" stroke-width="1.5" opacity="0.5"/>
+    <circle cx="350" cy="124" r="14" fill="#e85d4f"/><text x="350" y="129" font-size="12" fill="#07243d">1</text>
+    <circle cx="400" cy="124" r="14" fill="#0fa19d"/><text x="400" y="129" font-size="12" fill="#07243d">2</text>
+    <circle cx="450" cy="124" r="14" fill="#e85d4f"/><text x="450" y="129" font-size="12" fill="#07243d">3</text>
+  </g>
+
+  <text x="60" y="58" font-family="Arial, sans-serif" font-size="11" fill="#d4a537" letter-spacing="2" font-weight="700">CROSS-DOMAIN COLLAB</text>
+  <text x="60" y="410" font-family="Arial, sans-serif" font-size="11" fill="#fff" opacity="0.72" letter-spacing="1.4">PROBLEM ALIGNMENT · PROJECT FOCUS · TEAM RHYTHM</text>
+</svg>

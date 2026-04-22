@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
+import { Heart } from 'lucide-react'
 import { categories } from '../data/mockTasks'
 import { apiFetch } from '../apiClient'
 import './TaskDetailPage.css'
@@ -241,7 +242,12 @@ export default function TaskDetailPage() {
               aria-label={isFavorite ? '取消收藏此任務' : '收藏此任務'}
               title={currentUser ? (isFavorite ? '取消收藏' : '加入收藏清單') : '請先登入後才能收藏任務'}
             >
-              {isFavorite ? '♥' : '♡'}
+              <Heart
+                size={20}
+                strokeWidth={isFavorite ? 0 : 2}
+                fill={isFavorite ? 'currentColor' : 'none'}
+                aria-hidden
+              />
             </button>
             <span className="task-detail-budget">NT$ {task.budget?.toLocaleString()}</span>
           </div>
