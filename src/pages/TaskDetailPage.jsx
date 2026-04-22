@@ -31,6 +31,23 @@ export default function TaskDetailPage() {
   const [bidderTermsAccepted, setBidderTermsAccepted] = useState(false)
   const [publisherTermsAccepted, setPublisherTermsAccepted] = useState(false)
 
+  const readJsonResponse = async (res, fallbackErrorMessage) => {
+    const contentType = res.headers.get('content-type') || ''
+    if (contentType.includes('application/json')) {
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data?.error || fallbackErrorMessage)
+      }
+      return data
+    }
+
+    const text = await res.text()
+    const hint = text.trim().startsWith('<!DOCTYPE')
+      ? 'API 端點回傳了 HTML，請確認後端已重啟且前端環境變數 VITE_API_BASE_URL 指向正確後端。'
+      : `伺服器回應格式異常（HTTP ${res.status}）`
+    throw new Error(hint)
+  }
+
   const loadTask = async (userId) => {
     const q = userId ? `?userId=${userId}` : ''
     const res = await apiFetch(`/api/tasks/${id}${q}`)
@@ -60,8 +77,7 @@ export default function TaskDetailPage() {
   const loadMessages = async (userId) => {
     if (!userId) return []
     const res = await apiFetch(`/api/tasks/${id}/messages?userId=${userId}`)
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.error || '取得對話失敗')
+    const data = await readJsonResponse(res, '取得對話失敗')
     return Array.isArray(data) ? data : []
   }
 
@@ -108,6 +124,23 @@ export default function TaskDetailPage() {
 
     fetch()
   }, [id])
+
+  useEffect(() => {
+    if (!canChat || !currentUser?.id) return
+
+    const refreshMessages = async () => {
+      try {
+        const latest = await loadMessages(currentUser.id)
+        setMessages(latest)
+        notifyMessagesUpdated()
+      } catch {
+        // 輪詢失敗不覆蓋現有內容，避免對話區反覆閃錯誤
+      }
+    }
+
+    const timer = window.setInterval(refreshMessages, 10000)
+    return () => window.clearInterval(timer)
+  }, [canChat, currentUser?.id, id])
 
   const canEditOrDelete = currentUser && task && currentUser.id === task.publisherId
   const isPublisher = canEditOrDelete
@@ -280,8 +313,7 @@ export default function TaskDetailPage() {
           content,
         }),
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || '送出訊息失敗')
+      await readJsonResponse(res, '送出訊息失敗')
       setChatInput('')
       const updatedMessages = await loadMessages(currentUser.id)
       setMessages(updatedMessages)

@@ -873,8 +873,9 @@ app.get('/api/my-tasks', async (req, res) => {
 })
 
 // 使用者承接中的任務清單（接案者視角）
-app.get('/api/my-assigned-tasks', async (req, res) => {
-  const { workerId } = req.query
+// 同時支援 query 與 path 參數，避免前端在不同環境組 URL 時發生格式問題
+app.get('/api/my-assigned-tasks/:workerId?', async (req, res) => {
+  const workerId = req.params.workerId || req.query.workerId
 
   if (!workerId) {
     return res.status(400).json({ error: '缺少 workerId' })

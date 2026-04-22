@@ -77,7 +77,8 @@ export default function DashboardPage() {
       setAssignedLoading(true)
       setAssignedError('')
       try {
-        const res = await apiFetch(`/api/my-assigned-tasks?workerId=${user.id}`)
+        const encodedUserId = encodeURIComponent(user.id)
+        const res = await apiFetch(`/api/my-assigned-tasks/${encodedUserId}`)
         const data = await res.json()
         if (!res.ok) {
           throw new Error(data.error || '取得承接任務失敗')
