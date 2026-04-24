@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="生物力學 XAI 封面：步態分析人體姿態與關節特徵重要性視覺化">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1a2e"/>
+      <stop offset="1" stop-color="#061025"/>
+    </linearGradient>
+    <linearGradient id="gd" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d4a537"/>
+      <stop offset="1" stop-color="#f0c86a"/>
+    </linearGradient>
+    <linearGradient id="tl" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0fa19d"/>
+      <stop offset="1" stop-color="#25c9c5"/>
+    </linearGradient>
+    <radialGradient id="fg" cx="0.28" cy="0.5" r="0.38">
+      <stop offset="0" stop-color="#0fa19d" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#0fa19d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#fg)"/>
+
+  <g fill="#ffffff" opacity="0.07">
+    <circle cx="80" cy="55" r="1.5"/><circle cx="160" cy="55" r="1.5"/><circle cx="240" cy="55" r="1.5"/><circle cx="320" cy="55" r="1.5"/><circle cx="400" cy="55" r="1.5"/><circle cx="480" cy="55" r="1.5"/><circle cx="560" cy="55" r="1.5"/><circle cx="640" cy="55" r="1.5"/><circle cx="720" cy="55" r="1.5"/>
+    <circle cx="80" cy="130" r="1.5"/><circle cx="160" cy="130" r="1.5"/><circle cx="240" cy="130" r="1.5"/><circle cx="320" cy="130" r="1.5"/><circle cx="400" cy="130" r="1.5"/><circle cx="480" cy="130" r="1.5"/><circle cx="560" cy="130" r="1.5"/><circle cx="640" cy="130" r="1.5"/><circle cx="720" cy="130" r="1.5"/>
+    <circle cx="80" cy="400" r="1.5"/><circle cx="160" cy="400" r="1.5"/><circle cx="240" cy="400" r="1.5"/><circle cx="320" cy="400" r="1.5"/><circle cx="400" cy="400" r="1.5"/><circle cx="480" cy="400" r="1.5"/><circle cx="560" cy="400" r="1.5"/><circle cx="640" cy="400" r="1.5"/><circle cx="720" cy="400" r="1.5"/>
+  </g>
+
+  <line x1="75" y1="385" x2="370" y2="385" stroke="#ffffff" stroke-width="0.8" opacity="0.18"/>
+
+  <g stroke="#ffffff" stroke-width="0.7" opacity="0.12" fill="none" stroke-dasharray="3 3">
+    <path d="M 215 275 C 195 285 175 292 160 302"/>
+    <path d="M 248 348 C 218 360 185 370 155 378"/>
+  </g>
+
+  <g stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" fill="none" opacity="0.86">
+    <line x1="200" y1="92" x2="200" y2="118"/>
+    <line x1="162" y1="122" x2="238" y2="122"/>
+    <line x1="200" y1="122" x2="200" y2="210"/>
+    <line x1="175" y1="210" x2="225" y2="210"/>
+    <line x1="162" y1="122" x2="138" y2="166"/>
+    <line x1="138" y1="166" x2="126" y2="202"/>
+    <line x1="238" y1="122" x2="265" y2="158"/>
+    <line x1="265" y1="158" x2="278" y2="186"/>
+    <line x1="175" y1="210" x2="160" y2="302"/>
+    <line x1="160" y1="302" x2="153" y2="378"/>
+    <line x1="153" y1="378" x2="135" y2="385"/>
+    <line x1="225" y1="210" x2="245" y2="284"/>
+    <line x1="245" y1="284" x2="258" y2="358"/>
+    <line x1="258" y1="358" x2="270" y2="365"/>
+  </g>
+
+  <circle cx="200" cy="72" r="20" fill="none" stroke="#ffffff" stroke-width="2.8" opacity="0.86"/>
+
+  <path d="M 164 288 A 16 16 0 0 1 153 315" stroke="#d4a537" stroke-width="1.5" fill="none" opacity="0.85"/>
+  <path d="M 178 196 A 14 14 0 0 1 190 196" stroke="#0fa19d" stroke-width="1.3" fill="none" opacity="0.75"/>
+
+  <circle cx="200" cy="210" r="11" fill="#0fa19d" stroke="#ffffff" stroke-width="2"/>
+  <circle cx="160" cy="302" r="13" fill="#d4a537" stroke="#ffffff" stroke-width="2.2"/>
+  <circle cx="153" cy="378" r="9" fill="#0fa19d" stroke="#ffffff" stroke-width="1.8"/>
+  <circle cx="245" cy="284" r="8" fill="#1a4060" stroke="#0fa19d" stroke-width="1.4"/>
+
+  <line x1="135" y1="383" x2="106" y2="312" stroke="#d4a537" stroke-width="1.8" opacity="0.72" fill="none"/>
+  <polygon points="106,312 100,322 114,320" fill="#d4a537" opacity="0.72"/>
+  <text x="88" y="302" font-family="Arial, sans-serif" font-size="9" fill="#d4a537" opacity="0.72" letter-spacing="0.5">GRF</text>
+
+  <g opacity="0.38" fill="none">
+    <line x1="135" y1="393" x2="270" y2="393" stroke="#ffffff" stroke-width="1"/>
+    <polygon points="135,389 127,393 135,397" fill="#ffffff"/>
+    <polygon points="270,389 278,393 270,397" fill="#ffffff"/>
+  </g>
+  <text x="202" y="410" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.38" letter-spacing="1.2">STRIDE LENGTH</text>
+
+  <line x1="415" y1="48" x2="415" y2="408" stroke="#ffffff" stroke-width="0.8" opacity="0.12" stroke-dasharray="5 4"/>
+
+  <text x="432" y="66" font-family="Arial, sans-serif" font-size="9" fill="#d4a537" letter-spacing="2.5" font-weight="700" opacity="0.84">FEATURE IMPORTANCE (SHAP)</text>
+  <line x1="432" y1="72" x2="432" y2="342" stroke="#ffffff" stroke-width="0.6" opacity="0.18"/>
+
+  <text x="440" y="96" font-family="Arial, sans-serif" font-size="10.5" fill="#ffffff" opacity="0.84">stride length</text>
+  <rect x="432" y="100" width="172" height="11" rx="3" fill="url(#gd)" opacity="0.92"/>
+
+  <text x="440" y="132" font-family="Arial, sans-serif" font-size="10.5" fill="#ffffff" opacity="0.84">knee flexion angle</text>
+  <rect x="432" y="136" width="140" height="11" rx="3" fill="url(#gd)" opacity="0.78"/>
+
+  <text x="440" y="168" font-family="Arial, sans-serif" font-size="10.5" fill="#ffffff" opacity="0.84">hip flexion</text>
+  <rect x="432" y="172" width="104" height="11" rx="3" fill="url(#tl)" opacity="0.85"/>
+
+  <text x="440" y="204" font-family="Arial, sans-serif" font-size="10.5" fill="#ffffff" opacity="0.84">ankle ROM</text>
+  <rect x="432" y="208" width="78" height="11" rx="3" fill="url(#tl)" opacity="0.70"/>
+
+  <text x="440" y="240" font-family="Arial, sans-serif" font-size="10.5" fill="#ffffff" opacity="0.84">GRF peak</text>
+  <rect x="432" y="244" width="56" height="11" rx="3" fill="url(#tl)" opacity="0.56"/>
+
+  <text x="440" y="276" font-family="Arial, sans-serif" font-size="10.5" fill="#ffffff" opacity="0.84">cadence</text>
+  <rect x="432" y="280" width="38" height="11" rx="3" fill="#4a7a9b" opacity="0.58"/>
+
+  <g stroke="#ffffff" stroke-width="0.7" stroke-dasharray="3 3" opacity="0.22" fill="none">
+    <line x1="173" y1="302" x2="415" y2="142"/>
+    <line x1="211" y1="210" x2="415" y2="178"/>
+    <line x1="162" y1="371" x2="415" y2="214"/>
+  </g>
+
+  <text x="42" y="52" font-family="Georgia, serif" font-size="40" font-weight="700" fill="#d4a537" letter-spacing="6">XAI</text>
+  <text x="44" y="78" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" opacity="0.72" letter-spacing="1.2">可解釋人工智慧 × 生物力學</text>
+  <line x1="44" y1="86" x2="196" y2="86" stroke="#d4a537" stroke-width="1" opacity="0.35"/>
+
+  <text x="42" y="428" font-family="Arial, sans-serif" font-size="10" fill="#d4a537" letter-spacing="2.5" font-weight="700">BIOMECHANICS × AI</text>
+  <text x="42" y="443" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" opacity="0.38" letter-spacing="1.5">METHOD NOTE · 2026</text>
+</svg>
