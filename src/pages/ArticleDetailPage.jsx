@@ -44,6 +44,9 @@ export default function ArticleDetailPage() {
           </span>
 
           <h1>{article.title}</h1>
+          {article.excerpt ? (
+            <p className="article-detail-excerpt">{article.excerpt}</p>
+          ) : null}
 
           <div className="article-detail-meta">
             <div className="article-detail-author">
