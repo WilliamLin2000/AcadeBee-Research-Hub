@@ -40,6 +40,7 @@
 ## 已寫入草稿（自動更新）
 
 - [x] 為什麼生醫論文審稿人總是問「你的模型可解釋嗎」：從 XAI 文獻回應這個問題 → `2026-04-24-xai-biomechanics-reviewer.md`
+- [x] 眼動訓練對運動員表現提升的證據與方法 → `published/2026-04-27-eye-movement-training-athletes.md`（已發布）
 
 ---
 
