@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="小資料集 + 深度學習封面：從 N=30 到擴增資料的五個策略視覺化">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1a2e"/>
+      <stop offset="1" stop-color="#061025"/>
+    </linearGradient>
+    <linearGradient id="gd" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d4a537"/>
+      <stop offset="1" stop-color="#f0c86a"/>
+    </linearGradient>
+    <linearGradient id="tl" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0fa19d"/>
+      <stop offset="1" stop-color="#25c9c5"/>
+    </linearGradient>
+    <radialGradient id="fg" cx="0.32" cy="0.5" r="0.42">
+      <stop offset="0" stop-color="#0fa19d" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#0fa19d" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bigCloud" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#d4a537" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#d4a537" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <rect width="800" height="450" fill="url(#fg)"/>
+
+  <g fill="#ffffff" opacity="0.06">
+    <circle cx="80" cy="55" r="1.5"/><circle cx="180" cy="55" r="1.5"/><circle cx="280" cy="55" r="1.5"/><circle cx="380" cy="55" r="1.5"/><circle cx="480" cy="55" r="1.5"/><circle cx="580" cy="55" r="1.5"/><circle cx="680" cy="55" r="1.5"/>
+    <circle cx="80" cy="400" r="1.5"/><circle cx="180" cy="400" r="1.5"/><circle cx="280" cy="400" r="1.5"/><circle cx="380" cy="400" r="1.5"/><circle cx="480" cy="400" r="1.5"/><circle cx="580" cy="400" r="1.5"/><circle cx="680" cy="400" r="1.5"/>
+  </g>
+
+  <text x="42" y="52" font-family="Georgia, serif" font-size="32" font-weight="700" fill="#d4a537" letter-spacing="3">N=30</text>
+  <text x="44" y="78" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" opacity="0.72" letter-spacing="1.2">小資料集 × 深度學習</text>
+  <line x1="44" y1="86" x2="220" y2="86" stroke="#d4a537" stroke-width="1" opacity="0.35"/>
+
+  <text x="76" y="118" font-family="Arial, sans-serif" font-size="9" fill="#d4a537" letter-spacing="2" font-weight="700" opacity="0.75">RAW DATA</text>
+  <circle cx="100" cy="180" r="68" fill="none" stroke="#d4a537" stroke-width="1" stroke-dasharray="4 4" opacity="0.55"/>
+  <g fill="#d4a537" opacity="0.92">
+    <circle cx="86" cy="158" r="3"/>
+    <circle cx="108" cy="146" r="3"/>
+    <circle cx="124" cy="166" r="3"/>
+    <circle cx="80" cy="178" r="3"/>
+    <circle cx="100" cy="180" r="3"/>
+    <circle cx="120" cy="190" r="3"/>
+    <circle cx="92" cy="202" r="3"/>
+    <circle cx="112" cy="216" r="3"/>
+    <circle cx="74" cy="196" r="3"/>
+    <circle cx="132" cy="200" r="3"/>
+    <circle cx="68" cy="166" r="3"/>
+    <circle cx="138" cy="180" r="3"/>
+  </g>
+  <text x="100" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" opacity="0.55" letter-spacing="0.5">N≈30 受試者</text>
+
+  <g stroke="#0fa19d" stroke-width="1.4" fill="none" opacity="0.82">
+    <path d="M 175 180 C 220 156, 240 156, 280 154"/>
+    <path d="M 175 180 C 220 168, 240 168, 280 188"/>
+    <path d="M 175 180 C 220 180, 240 180, 280 222"/>
+    <path d="M 175 180 C 220 196, 240 200, 280 256"/>
+    <path d="M 175 180 C 220 212, 240 220, 280 290"/>
+  </g>
+  <g fill="#25c9c5">
+    <polygon points="278,150 286,154 278,158"/>
+    <polygon points="278,184 286,188 278,192"/>
+    <polygon points="278,218 286,222 278,226"/>
+    <polygon points="278,252 286,256 278,260"/>
+    <polygon points="278,286 286,290 278,294"/>
+  </g>
+
+  <g font-family="Arial, sans-serif" font-size="11" fill="#ffffff" opacity="0.88">
+    <text x="294" y="158">① 合成資料 (synthetic IMU)</text>
+    <text x="294" y="192">② 遷移學習 (transfer + fine-tune)</text>
+    <text x="294" y="226">③ 自監督預訓練 (SSL)</text>
+    <text x="294" y="260">④ LOSOCV / cross-dataset 驗證</text>
+    <text x="294" y="294">⑤ 輕量化模型 (TCN, cascaded)</text>
+  </g>
+
+  <g font-family="Arial, sans-serif" font-size="9" fill="#0fa19d" opacity="0.62">
+    <text x="294" y="170">RMSE 4.5° → 1.9°</text>
+    <text x="294" y="204">1–2 步態週期可 fine-tune</text>
+    <text x="294" y="238">F1 +24.4% (中位數)</text>
+    <text x="294" y="272">MAE 0.88° (N=9 LOSO)</text>
+    <text x="294" y="306">DSC 95.0% (N=40)</text>
+  </g>
+
+  <line x1="280" y1="328" x2="600" y2="328" stroke="#ffffff" stroke-width="0.5" opacity="0.18" stroke-dasharray="4 3"/>
+
+  <circle cx="660" cy="200" r="92" fill="url(#bigCloud)"/>
+  <circle cx="660" cy="200" r="78" fill="none" stroke="#d4a537" stroke-width="1.2" opacity="0.78"/>
+  <g fill="#f0c86a" opacity="0.95">
+    <circle cx="620" cy="160" r="2.2"/><circle cx="640" cy="148" r="2.2"/><circle cx="660" cy="142" r="2.2"/><circle cx="680" cy="148" r="2.2"/><circle cx="700" cy="160" r="2.2"/>
+    <circle cx="608" cy="180" r="2.2"/><circle cx="630" cy="170" r="2.2"/><circle cx="650" cy="166" r="2.2"/><circle cx="670" cy="166" r="2.2"/><circle cx="690" cy="170" r="2.2"/><circle cx="712" cy="180" r="2.2"/>
+    <circle cx="600" cy="200" r="2.2"/><circle cx="624" cy="194" r="2.2"/><circle cx="644" cy="190" r="2.2"/><circle cx="664" cy="188" r="2.2"/><circle cx="684" cy="190" r="2.2"/><circle cx="704" cy="194" r="2.2"/><circle cx="720" cy="200" r="2.2"/>
+    <circle cx="608" cy="220" r="2.2"/><circle cx="630" cy="220" r="2.2"/><circle cx="650" cy="216" r="2.2"/><circle cx="670" cy="218" r="2.2"/><circle cx="690" cy="220" r="2.2"/><circle cx="712" cy="220" r="2.2"/>
+    <circle cx="620" cy="240" r="2.2"/><circle cx="640" cy="248" r="2.2"/><circle cx="660" cy="252" r="2.2"/><circle cx="680" cy="248" r="2.2"/><circle cx="700" cy="240" r="2.2"/>
+  </g>
+  <g fill="#0fa19d" opacity="0.95">
+    <circle cx="650" cy="200" r="3"/>
+    <circle cx="670" cy="206" r="3"/>
+    <circle cx="660" cy="190" r="3"/>
+    <circle cx="640" cy="204" r="3"/>
+    <circle cx="678" cy="186" r="3"/>
+  </g>
+
+  <text x="660" y="118" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#d4a537" letter-spacing="2" font-weight="700" opacity="0.85">EFFECTIVE TRAINING SET</text>
+  <text x="660" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" opacity="0.62" letter-spacing="0.5">real (teal) + augmented (gold)</text>
+
+  <g stroke="#ffffff" stroke-width="0.5" opacity="0.22" fill="none" stroke-dasharray="3 3">
+    <line x1="660" y1="295" x2="660" y2="345"/>
+  </g>
+  <text x="660" y="362" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#0fa19d" letter-spacing="1.5" opacity="0.82">DOWNSTREAM MODEL</text>
+  <rect x="600" y="368" width="120" height="22" rx="4" fill="none" stroke="#0fa19d" stroke-width="1" opacity="0.85"/>
+  <text x="660" y="383" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" opacity="0.88" letter-spacing="0.5">TCN / 1D-CNN / cascaded U-Net</text>
+
+  <text x="42" y="428" font-family="Arial, sans-serif" font-size="10" fill="#d4a537" letter-spacing="2.5" font-weight="700">BIOMECHANICS × AI</text>
+  <text x="42" y="443" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" opacity="0.38" letter-spacing="1.5">METHOD NOTE · 2026</text>
+</svg>
