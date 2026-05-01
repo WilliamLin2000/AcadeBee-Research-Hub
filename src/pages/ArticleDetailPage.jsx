@@ -11,6 +11,18 @@ import {
 import williamPhoto from '../assets/square img3.png'
 import './ArticleDetailPage.css'
 
+/** Bold through the first fullwidth colon（：）— labels like「角色 (Role)：」 */
+function LeadingColonBold({ text }) {
+  const i = text.indexOf('：')
+  if (i === -1) return text
+  return (
+    <>
+      <strong>{text.slice(0, i + 1)}</strong>
+      {text.slice(i + 1)}
+    </>
+  )
+}
+
 export default function ArticleDetailPage() {
   const { id } = useParams()
   const article = findArticle(id)
@@ -108,7 +120,23 @@ export default function ArticleDetailPage() {
               return <h3 key={idx}>{block.text}</h3>
             }
             if (block.type === 'p') {
-              return <p key={idx}>{block.text}</p>
+              const isStepLine = /^Step \d+：/.test(block.text)
+              return (
+                <p key={idx}>
+                  {isStepLine ? <LeadingColonBold text={block.text} /> : block.text}
+                </p>
+              )
+            }
+            if (block.type === 'list' && Array.isArray(block.items)) {
+              return (
+                <ul key={idx} className="article-detail-list">
+                  {block.items.map((item, li) => (
+                    <li key={li}>
+                      <LeadingColonBold text={item} />
+                    </li>
+                  ))}
+                </ul>
+              )
             }
             if (block.type === 'quote') {
               return (

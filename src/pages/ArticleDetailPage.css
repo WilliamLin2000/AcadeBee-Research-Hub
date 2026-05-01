@@ -313,6 +313,21 @@
   margin-bottom: 1.35rem;
 }
 
+.article-detail-list {
+  margin: 0 0 1.35rem;
+  padding-left: 1.35rem;
+  list-style: disc;
+}
+
+.article-detail-list li {
+  margin-bottom: 0.65rem;
+  padding-left: 0.35rem;
+}
+
+.article-detail-list li::marker {
+  color: var(--color-teal-600);
+}
+
 .article-detail-content blockquote {
   margin: 2rem 0;
   padding: 0.5rem 0 0.5rem 1.5rem;
