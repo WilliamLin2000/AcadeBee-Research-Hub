@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="給 AI 寫精準指令的六要素 + 四步驟工作流程封面">
+  <defs>
+    <linearGradient id="bg-prompt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1a2e"/>
+      <stop offset="1" stop-color="#061025"/>
+    </linearGradient>
+    <linearGradient id="gold-prompt" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d4a537"/>
+      <stop offset="1" stop-color="#f0c86a"/>
+    </linearGradient>
+    <radialGradient id="glow-prompt" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#0fa19d" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#0fa19d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg-prompt)"/>
+  <rect width="800" height="450" fill="url(#glow-prompt)"/>
+
+  <text x="42" y="52" font-family="Georgia, serif" font-size="30" font-weight="700" fill="#d4a537" letter-spacing="2">6 + 4</text>
+  <text x="44" y="76" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" opacity="0.72" letter-spacing="1.2">Prompt 六要素 × 四步驟工作流程</text>
+  <line x1="44" y1="86" x2="260" y2="86" stroke="#d4a537" stroke-width="1" opacity="0.35"/>
+
+  <text x="100" y="120" font-family="Arial, sans-serif" font-size="9" fill="#d4a537" letter-spacing="2" font-weight="700" opacity="0.78">SIX ELEMENTS</text>
+  <g font-family="Arial, sans-serif" font-size="11" fill="#ffffff" opacity="0.92">
+    <rect x="80" y="138" width="220" height="32" rx="4" fill="none" stroke="#d4a537" stroke-width="1" opacity="0.55"/>
+    <text x="92" y="158">① Role 角色</text>
+    <rect x="80" y="178" width="220" height="32" rx="4" fill="none" stroke="#d4a537" stroke-width="1" opacity="0.55"/>
+    <text x="92" y="198">② Context 背景</text>
+    <rect x="80" y="218" width="220" height="32" rx="4" fill="none" stroke="#d4a537" stroke-width="1" opacity="0.55"/>
+    <text x="92" y="238">③ Task 任務</text>
+    <rect x="80" y="258" width="220" height="32" rx="4" fill="none" stroke="#d4a537" stroke-width="1" opacity="0.55"/>
+    <text x="92" y="278">④ Format 輸出格式</text>
+    <rect x="80" y="298" width="220" height="32" rx="4" fill="none" stroke="#d4a537" stroke-width="1" opacity="0.55"/>
+    <text x="92" y="318">⑤ Examples 範例</text>
+    <rect x="80" y="338" width="220" height="32" rx="4" fill="none" stroke="#d4a537" stroke-width="1" opacity="0.55"/>
+    <text x="92" y="358">⑥ Constraints 約束</text>
+  </g>
+
+  <g stroke="#0fa19d" stroke-width="1.4" fill="none" opacity="0.78">
+    <path d="M 308 256 C 360 240, 400 240, 440 200"/>
+    <path d="M 308 256 C 360 256, 400 256, 440 256"/>
+    <path d="M 308 256 C 360 272, 400 272, 440 312"/>
+  </g>
+
+  <text x="540" y="120" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#0fa19d" letter-spacing="2" font-weight="700" opacity="0.85">FOUR-STEP WORKFLOW</text>
+
+  <g font-family="Arial, sans-serif" font-size="11" fill="#ffffff" opacity="0.92">
+    <rect x="440" y="148" width="280" height="48" rx="6" fill="none" stroke="#0fa19d" stroke-width="1.2" opacity="0.78"/>
+    <text x="456" y="172" font-weight="700" fill="#0fa19d">Step 1</text>
+    <text x="456" y="188" opacity="0.85">定義可驗收的輸出</text>
+
+    <rect x="440" y="208" width="280" height="48" rx="6" fill="none" stroke="#0fa19d" stroke-width="1.2" opacity="0.78"/>
+    <text x="456" y="232" font-weight="700" fill="#0fa19d">Step 2</text>
+    <text x="456" y="248" opacity="0.85">草擬 prompt（六要素填一遍）</text>
+
+    <rect x="440" y="268" width="280" height="48" rx="6" fill="none" stroke="#0fa19d" stroke-width="1.2" opacity="0.78"/>
+    <text x="456" y="292" font-weight="700" fill="#0fa19d">Step 3</text>
+    <text x="456" y="308" opacity="0.85">小樣本測試 + 比對驗收標準</text>
+
+    <rect x="440" y="328" width="280" height="48" rx="6" fill="none" stroke="#0fa19d" stroke-width="1.2" opacity="0.78"/>
+    <text x="456" y="352" font-weight="700" fill="#0fa19d">Step 4</text>
+    <text x="456" y="368" opacity="0.85">紀錄能用的 prompt + 條件</text>
+  </g>
+
+  <g stroke="#d4a537" stroke-width="0.8" fill="none" opacity="0.45" stroke-dasharray="3 3">
+    <path d="M 580 196 L 580 208"/>
+    <path d="M 580 256 L 580 268"/>
+    <path d="M 580 316 L 580 328"/>
+  </g>
+
+  <text x="42" y="428" font-family="Arial, sans-serif" font-size="10" fill="#d4a537" letter-spacing="2.5" font-weight="700">AI WORKFLOW × COMMUNITY</text>
+  <text x="42" y="443" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" opacity="0.38" letter-spacing="1.5">COMMUNITY NOTE · 2026</text>
+</svg>

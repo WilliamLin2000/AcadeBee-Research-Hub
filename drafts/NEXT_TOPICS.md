@@ -5,7 +5,7 @@
 ## 高優先（已與 William 對齊方向，可直接動工）
 
 ### 方法論筆記 (method)
-- [ ] IMU 資料的三個同步誤差陷阱：以臨床步態研究為例
+- [ ] IMU 資料的三個同步誤差陷阱：以臨床步態研究為例（之前產過草稿，被改寫成 AI prompting 主題；待重新撰寫）
 - [ ] 從力板到 ground reaction force 的座標系校正：新手最常踩的三個坑
 - [ ] 生醫工程博士生必讀的五種統計檢定：從 t-test 到 mixed model
 
@@ -41,6 +41,8 @@
 - [x] 為什麼生醫論文審稿人總是問「你的模型可解釋嗎」：從 XAI 文獻回應這個問題 → `2026-04-24-xai-biomechanics-reviewer.md`
 - [x] 眼動訓練對運動員表現提升的證據與方法 → `published/2026-04-27-eye-movement-training-athletes.md`（已發布）
 - [x] 小資料集 + 深度學習：生物力學研究的五個方向（一起聊聊） → `published/2026-04-29-small-dataset-deep-learning-biomechanics.md`（已發布）
+- [x] Illustrae 試用筆記：AI 學術插畫平台 → `2026-05-01-illustrae-intro.md`（草稿，待 William 審稿；William 指定主題、Claude 撰寫初稿）
+- [x] 給 AI 寫精準指令的六個要素 + 一套可重複執行的工作流程 → `2026-05-01-ai-prompting-workflow.md`（William 指定改寫，原 IMU 同步主題已退回待寫）
 
 ---
 

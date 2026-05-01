@@ -11,6 +11,7 @@ import communityPicksAprilCover from '../assets/covers/community-picks-april.svg
 import imuDataPitfallsCover from '../assets/covers/imu-data-pitfalls.svg'
 import phdTopicPivotsCover from '../assets/covers/phd-topic-pivots.svg'
 import smallDatasetDLBiomechanicsCover from '../assets/covers/small-dataset-deep-learning-biomechanics.svg'
+import aiPromptingWorkflowCover from '../assets/covers/ai-prompting-workflow.svg'
 
 export const articleCategories = [
   { value: 'method', label: '方法論筆記', color: 'teal' },
@@ -20,6 +21,107 @@ export const articleCategories = [
 ]
 
 export const articles = [
+  {
+    id: 'ai-prompting-workflow',
+    category: 'community',
+    title: '給 AI 寫精準指令的六個要素 + 一套可重複執行的工作流程',
+    excerpt:
+      '同樣一個任務，給 AI 不同寫法的 prompt 結果差很多，這幾乎是現在每個研究生都會遇到的情況。希望能給正在把 AI 放進日常工作的朋友一個可以馬上複製、再依自己領域微調的起手式。',
+    publishedAt: '2026-05-01',
+    readingTime: '6 分鐘',
+    featured: false,
+    coverImage: aiPromptingWorkflowCover,
+    tableOfContents: [
+      { id: 'why-this-topic', title: '一、為什麼想聊這個' },
+      { id: 'six-elements', title: '二、六個要素：一個精準 prompt 通常包含什麼' },
+      { id: 'four-step-workflow', title: '三、四步驟工作流程' },
+      { id: 'common-failures', title: '四、幾個常見的 prompt 失敗模式' },
+      { id: 'open-questions', title: '五、想跟大家討論的幾個問題' },
+    ],
+    content: [
+      { type: 'h2', id: 'why-this-topic', text: '一、為什麼想聊這個' },
+      {
+        type: 'p',
+        text: 'AI 工具進實驗室之後，有一個常見現象是同一個任務、不同人寫的 prompt 拿到的結果差很遠。有時候不是模型不夠強，而是指令本身就模糊。這篇想跟大家分享一個我自己看完文獻後常用的「六要素 + 四步驟」框架，比較簡單、可重複，也方便依自己的研究領域再加細節。',
+      },
+      {
+        type: 'p',
+        text: '文獻裡關於 prompt 設計對結果影響有多大，已經有一些蠻具體的數字。Kojima 等人 2022 年的 arXiv preprint 報告了一個經典例子，對 LLM 加上「Let\'s think step by step」這一句話，MultiArith 的 zero-shot accuracy 從 17.7% 提升到 78.7%、GSM8K 從 10.4% 提升到 40.7%。Wei 等人 2022 年的 chain-of-thought paper 也在 540B 模型上以 8 個 few-shot 推理範例達到 GSM8K SOTA。換句話說，prompt 的形狀對結果的影響量級，跟換更大模型有時候是同等級的。',
+      },
+      {
+        type: 'callout',
+        text: 'Kojima et al. (2022), Large Language Models are Zero-Shot Reasoners. arXiv:2205.11916（preprint, 尚未同儕審查；後收於 NeurIPS 2022）。https://arxiv.org/abs/2205.11916',
+      },
+      {
+        type: 'callout',
+        text: 'Wei et al. (2022), Chain-of-Thought Prompting Elicits Reasoning in Large Language Models. arXiv:2201.11903（preprint, 尚未同儕審查；後收於 NeurIPS 2022）。https://arxiv.org/abs/2201.11903',
+      },
+      { type: 'h2', id: 'six-elements', text: '二、六個要素：一個精準 prompt 通常包含什麼' },
+      {
+        type: 'p',
+        text: '我自己會把一個 prompt 拆成下面六塊。不是每塊都一定要寫，但缺哪一塊通常就是後面要重 prompt 的原因。',
+      },
+      {
+        type: 'list',
+        items: [
+          '角色 (Role)：讓 AI 知道用什麼視角回答。例：「你是一位熟悉生物力學步態分析的審稿人」。',
+          '背景 (Context)：手上的素材、限制、已知條件。例：「我手上有 N=18 的步態資料，採樣率 100 Hz，受試者為健康成人」。',
+          '任務 (Task)：要 AI 做的具體動作，動詞清楚。例：「列出三個適合的統計檢定，並說明各自前提假設」。',
+          '輸出格式 (Format)：表格、條列、Markdown、JSON、字數上限。例：「請用 Markdown 表格，欄位包含『方法』『前提假設』『不適用情境』」。',
+          '範例 (Examples)：1 到 3 個 few-shot 示範，特別是輸出格式不易用文字描述時。CoT 文獻顯示加幾個推理範例可以顯著拉高複雜任務表現。',
+          '約束與失敗條件 (Constraints)：不要做什麼、找不到答案時怎麼回答。例：「找不到 peer-reviewed 文獻支持時請寫『資料不足』，不要編造引用」。',
+        ],
+      },
+      {
+        type: 'p',
+        text: '我自己看到比較容易被省略的是第 4（格式）和第 6（約束）。少了格式會讓我每次都要手動整理輸出，少了約束則容易讓 AI 在不確定時硬補引用或數字，這在學術場景上比較不好處理。',
+      },
+      { type: 'h2', id: 'four-step-workflow', text: '三、四步驟工作流程' },
+      {
+        type: 'p',
+        text: '把上面六要素拼成一次性 prompt 通常還不夠。我自己看到比較穩的做法是把它包進一個小型迭代流程：',
+      },
+      {
+        type: 'p',
+        text: 'Step 1：定義可驗收的輸出。先用一句話寫下「我會接受什麼樣的結果」。例如：「一份 Markdown 表格、3 列、每列含方法 + 前提假設 + 一個適用情境，且每個方法都附 PubMed DOI」。這一步的目的是幫自己想清楚什麼算成功，避免後面看到輸出才模糊地說「不太對」。',
+      },
+      {
+        type: 'p',
+        text: 'Step 2：草擬 prompt（六要素填一遍）。把上一段六要素過一遍，缺什麼補什麼。寫完先自己讀一次，看 Task 跟 Format 是否一致、Constraints 有沒有涵蓋自己最擔心 AI 出錯的點。',
+      },
+      {
+        type: 'p',
+        text: 'Step 3：小樣本測試 + 比對驗收標準。我自己會傾向不要一次跑全資料。先丟一個小範例（一筆資料、一段文字），看輸出能不能對上 Step 1 的驗收標準。如果對不上，回到 Step 2 修 prompt，通常修的是 Format 或 Constraints，不是 Task。',
+      },
+      {
+        type: 'p',
+        text: 'Step 4：紀錄能用的 prompt + 條件。這一步最常被跳過，但長期最有用。能用的 prompt 存下來、註明「在哪個模型、哪一版」「適用在什麼樣的輸入」。下一次同類任務直接套，不用每次重想。我自己會建一個 prompts/ 資料夾，每個檔案頂端寫三行：用途、適用輸入、輸出格式。',
+      },
+      { type: 'h2', id: 'common-failures', text: '四、幾個常見的 prompt 失敗模式' },
+      {
+        type: 'p',
+        text: '從文獻加上我自己看到大家分享的經驗整理出來的：',
+      },
+      {
+        type: 'list',
+        items: [
+          '任務太大顆：例如「幫我寫一篇文獻回顧」，AI 會給一個鬆散結構。改成「列出 5 篇 2023 年後的 IMU 步態 paper，每篇 50 字摘要 + DOI」我自己拿到的結果通常會穩很多。',
+          '角色與任務不匹配：把角色寫成「資深教授」但任務是「幫我修語法」，AI 容易在小任務上加上不必要的批判語氣。我自己會傾向把角色設定跟任務複雜度對齊。',
+          '沒設失敗條件：AI 在不確定時容易硬補（特別是引用、統計數字）。明確寫「找不到就回答『資料不足』」可以擋掉很大一部分幻覺。',
+          '一次堆太多要求：六要素都寫滿、加上五個範例、再加三層條件，AI 反而會抓重點抓錯。我自己會傾向先寫精簡版，不夠再補。',
+        ],
+      },
+      { type: 'h2', id: 'open-questions', text: '五、想跟大家討論的幾個問題' },
+      {
+        type: 'p',
+        text: '寫到這裡有幾個我也還在摸索的：prompt 該寫多長（有人主張越精簡越好、有人覺得寫長一點 AI 比較不會誤會，文獻在不同任務上看到的結論不太一致）；要不要每次都加 CoT（對推理型任務 CoT 顯著有用，但對「請翻譯這段」這種任務反而會讓回答變囉嗦）；prompt 版本管理（把 prompt 當作 code 來 git 管理是不是過度，還是其實這樣做才比較長久）。',
+      },
+      {
+        type: 'quote',
+        text: '如果這幾個問題大家有自己的做法，蠻歡迎在社群裡分享。AI prompting 是「每個人都在做、但很少寫成方法論」的那種題目，多交流可能會比閉門摸索快一些。',
+      },
+    ],
+  },
   {
     id: 'small-dataset-deep-learning-biomechanics',
     category: 'method',
