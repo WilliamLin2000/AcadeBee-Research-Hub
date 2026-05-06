@@ -6,7 +6,6 @@
 
 ### 方法論筆記 (method)
 - [ ] IMU 資料的三個同步誤差陷阱：以臨床步態研究為例（之前產過草稿，被改寫成 AI prompting 主題；待重新撰寫）
-- [ ] 從力板到 ground reaction force 的座標系校正：新手最常踩的三個坑
 - [ ] 生醫工程博士生必讀的五種統計檢定：從 t-test 到 mixed model
 
 ### 專案經驗 (case) — **William 自寫，排程不處理**
@@ -26,7 +25,6 @@
 - [ ] 從 CES 2026 看穿戴式裝置三個趨勢
 
 ### 社群精選 (community)
-- [ ] 這週 FB 社群熱門：三個 AI + 醫學影像的新 paper 解讀
 - [ ] 研究生最常問我的 10 個工具問題（整理版）
 - [ ] 本月社群活動回顧 + 下月預告
 
@@ -43,6 +41,9 @@
 - [x] 小資料集 + 深度學習：生物力學研究的五個方向（一起聊聊） → `published/2026-04-29-small-dataset-deep-learning-biomechanics.md`（已發布）
 - [x] Illustrae 試用筆記：AI 學術插畫平台 → `2026-05-01-illustrae-intro.md`（草稿，待 William 審稿；William 指定主題、Claude 撰寫初稿）
 - [x] 給 AI 寫精準指令的六個要素 + 一套可重複執行的工作流程 → `2026-05-01-ai-prompting-workflow.md`（William 指定改寫，原 IMU 同步主題已退回待寫）
+- [x] 這週社群熱門：三個 2026 AI × 醫學影像新 paper（Medical SAM3、RDBCycleGAN-CBAM、VascFlexMap）解讀 → `published/2026-05-04-ai-medical-imaging-2026-papers.md`（已發布）
+- [x] 從力板到 ground reaction force 的座標系校正：新手最常踩的三個坑 → `2026-05-06-force-plate-grf-calibration.md`（草稿，待 William 審稿）
+- [x] Event camera 是什麼、能解決動作分析的哪些痛點：給生物力學研究者的入門整理 → `published/2026-05-06-event-camera-motion-analysis.md`（已發布）
 
 ---
 

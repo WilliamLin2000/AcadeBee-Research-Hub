@@ -12,6 +12,8 @@ import imuDataPitfallsCover from '../assets/covers/imu-data-pitfalls.svg'
 import phdTopicPivotsCover from '../assets/covers/phd-topic-pivots.svg'
 import smallDatasetDLBiomechanicsCover from '../assets/covers/small-dataset-deep-learning-biomechanics.svg'
 import aiPromptingWorkflowCover from '../assets/covers/ai-prompting-workflow.svg'
+import aiMedicalImaging2026PapersCover from '../assets/covers/ai-medical-imaging-2026-papers.svg'
+import eventCameraMotionAnalysisCover from '../assets/covers/event-camera-motion-analysis.svg'
 
 export const articleCategories = [
   { value: 'method', label: '方法論筆記', color: 'teal' },
@@ -21,6 +23,298 @@ export const articleCategories = [
 ]
 
 export const articles = [
+  {
+    id: 'event-camera-motion-analysis',
+    category: 'method',
+    title: 'Event Camera 是什麼、能解決動作分析的哪些痛點：給生物力學研究者的入門整理',
+    excerpt:
+      'Event camera（事件相機 / DVS）跟一般 RGB 相機在感測機制上根本不同，不是固定 frame rate 拍照，而是每個 pixel 各自非同步回報亮度變化。這篇用 IEEE TPAMI 兩篇 survey 與幾篇 peer-reviewed 應用論文，整理它的技術特性與動作分析切入點。',
+    publishedAt: '2026-05-06',
+    readingTime: '13 分鐘',
+    featured: false,
+    coverImage: eventCameraMotionAnalysisCover,
+    tableOfContents: [
+      { id: 'why-this-topic', title: '一、為什麼想寫這一篇' },
+      { id: 'what-is-event-camera', title: '二、Event camera 是什麼：感測機制的根本差異' },
+      { id: 'four-key-numbers', title: '三、四個常被引用的關鍵技術數字' },
+      { id: 'three-entry-points', title: '四、動作分析 / 生物力學的三個切入點' },
+      { id: 'practical-reminders', title: '五、評估事件相機適不適合你的研究時，可以注意的幾件事' },
+      { id: 'when-to-use', title: '六、總結：什麼樣的研究題目適合用 event camera' },
+    ],
+    content: [
+      { type: 'h2', id: 'why-this-topic', text: '一、為什麼想寫這一篇' },
+      {
+        type: 'p',
+        text: '生物力學實驗室裡每個人都熟悉 Vicon / Qualisys 那種光學動作分析、IMU、力板、EMG，但 event camera（事件相機）這個器材在台灣的 lab 還不算普及，一方面是設備價格 / 取得管道的問題，一方面是它的訊號型態跟一般相機差太多，要重新學一套處理邏輯。我自己這陣子讀了一些相關論文，覺得它有幾個特性對「動作分析 / 運動相關研究」確實有意義，特別是高速動作的瞬態量測（一般相機 fps 不夠）、低光 / 高動態對比場景（一般相機 over-/under-expose）、低功耗的長期居家或穿戴監測。',
+      },
+      {
+        type: 'p',
+        text: '這篇要做四件事：把 event camera 的感測機制講清楚；整理四個最常被引用的技術數字，每個都附 IEEE Xplore / PubMed primary 引用；列三個動作分析與生物力學的可能應用方向，並對應到具體的論文；最後給打算試用前的研究者一些務實提醒。',
+      },
+      {
+        type: 'callout',
+        text: '先說限制：我自己沒實際操作過 event camera 跑下肢生物力學實驗，這篇是「整理現有文獻 + 標出可能切入點」，不是「使用心得」。實際採購 / 使用前請以官方文件與你親自測試結果為準。',
+      },
+      { type: 'h2', id: 'what-is-event-camera', text: '二、Event camera 是什麼：感測機制的根本差異' },
+      {
+        type: 'p',
+        text: '一般 RGB / monochrome 相機（frame-based camera）的工作方式是：以固定 frame rate（30 / 60 / 240 fps）對整個感光元件「同步曝光」一次，輸出一張完整 image。Event camera 完全不是這個模式。用 Gallego 等人在 IEEE TPAMI（2022）survey 裡的講法摘要一下：事件相機是 bio-inspired 感測器，不以固定 frame rate 拍照，而是讓每個 pixel 非同步地測量亮度變化，輸出一串事件流，每筆事件編碼時間、座標、變化正負號。',
+      },
+      {
+        type: 'p',
+        text: '翻成生物力學研究者比較熟悉的講法：每個 pixel 是獨立、非同步的感測元件，類似獨立的微小亮度變化偵測器；當某個 pixel 偵測到亮度（log intensity）變化超過一個閾值，才會輸出一筆 event，事件包含時間戳 t、座標 (x, y)、極性 ±1（亮 / 暗變化）；沒動作的場景就完全沒輸出，動作越快 / 對比越強，輸出 event 密度越高。',
+      },
+      {
+        type: 'p',
+        text: '這跟你習慣的 video 完全不一樣，它輸出的不是「圖」，而是「事件流（event stream）」。下游演算法（深度學習、optic flow、SLAM 等）都需要重新設計才能消化這種訊號。',
+      },
+      {
+        type: 'callout',
+        text: 'Gallego G, Delbrück T, Orchard G, Bartolozzi C, et al. Event-Based Vision: A Survey. IEEE Trans Pattern Anal Mach Intell, 2022;44(1):154–180. https://doi.org/10.1109/TPAMI.2020.3008413',
+      },
+      {
+        type: 'callout',
+        text: 'Cimarelli C, Millan-Romera JA, Voos H, Sanchez-Lopez JL. Hardware, Algorithms, and Applications of the Neuromorphic Vision Sensor: A Review. Sensors, 2025;25(19):6208. https://doi.org/10.3390/s25196208',
+      },
+      { type: 'h2', id: 'four-key-numbers', text: '三、四個常被引用的關鍵技術數字' },
+      {
+        type: 'p',
+        text: '下面四個是讀任何 event camera 相關論文必會看到的特性，以下數字主要來自 Gallego 等人 2022 IEEE TPAMI survey。',
+      },
+      {
+        type: 'p',
+        text: '(1) 微秒級時間解析度：Event 的時間戳精度為微秒（μs）等級。一般高速相機要做到等效時間解析度（μs 級單一事件偵測），需要極高 fps（>10 kHz）才能逼近，但這在傳統相機面臨儲存、計算、頻寬全面 bottleneck。',
+      },
+      {
+        type: 'p',
+        text: '(2) 動態範圍 140 dB：Event camera 的動態範圍可達 140 dB，相比之下傳統相機通常為 60 dB。在日光直射跟陰影同時出現的場景（例如戶外田徑場、復健治療室裡的 sun spot、半開窗的居家環境）一般相機會局部過曝或過暗，而 event camera 仍能輸出有效訊號。',
+      },
+      {
+        type: 'p',
+        text: '(3) 低功耗、kHz 級 pixel bandwidth：Gallego 等人 2022 survey 描述事件相機具備低功耗、kHz 量級的 pixel bandwidth，因此 motion blur 大幅減少。實際意義是適合做穿戴式 / 邊緣裝置，特別是長期居家或運動場域監測，不需要傳大量 frame 回伺服器，只需要傳事件流，頻寬與電力預算都比 frame-based 低很多。',
+      },
+      {
+        type: 'p',
+        text: '(4) 稀疏訊號適合 spiking neural network 處理：Event camera 輸出的稀疏、非同步訊號型態，與 spiking neural network（SNN）與 neuromorphic processor（如 Intel Loihi、IBM TrueNorth）天生匹配。具體實證：Ceolini 等人（2020，Frontiers in Neuroscience）做了一個 DVS + EMG 感測融合做手勢辨識的 benchmark，在 Loihi、ODIN+MorphIC 等 neuromorphic 平台上跑出與 GPU baseline 相當的分類精度，但 energy-delay product 是 GPU 系統的 30× 到 600× 更省電（推論時間慢 20–40%）。',
+      },
+      {
+        type: 'callout',
+        text: 'Ceolini E, Frenkel C, Shrestha SB, Taverni G, Khacef L, Payvand M, Donati E. Hand-Gesture Recognition Based on EMG and Event-Based Camera Sensor Fusion: A Benchmark in Neuromorphic Computing. Front Neurosci, 2020;14:637. https://doi.org/10.3389/fnins.2020.00637',
+      },
+      {
+        type: 'callout',
+        text: 'Tenzin S, Rassau A, Chai D. Application of Event Cameras and Neuromorphic Computing to VSLAM: A Survey. Biomimetics, 2024;9(7):444. https://doi.org/10.3390/biomimetics9070444',
+      },
+      {
+        type: 'quote',
+        text: '一句話總結這節：Event camera 不是「更快的一般相機」，而是「一種訊號型態完全不同的感測器」。它不會取代 Vicon / GoPro / IMU，但在「一般相機做不到」的窄場景裡有獨特價值。',
+      },
+      { type: 'h2', id: 'three-entry-points', text: '四、動作分析 / 生物力學的三個切入點' },
+      {
+        type: 'p',
+        text: '這節我把 event camera 對動作分析「比較有可能落地」的三個方向整理出來，每個都對應到具體論文。這不是研究題目建議，只是「這個技術能解的痛點」清單。',
+      },
+      {
+        type: 'p',
+        text: '切入點 (a) 高速、瞬態動作的精確時間量測：棒球揮棒、衝刺起步、跳躍著地、跑步腳跟著地的瞬間（< 50 ms），這些是運動生物力學最關心的瞬態事件，但用 240 fps GoPro / 1000 fps 高速相機要付出儲存與後製代價，且需要精確光源同步。μs 級時間解析度 + 高動態範圍，理論上能精確標定瞬態事件的時間點，且不會因為快速移動而 motion blur。Sehara 等人（2019，eNeuro）的 DVS 系統就是一個實際示範：他們追蹤小鼠以約 25 Hz 揮動的觸鬚，用 event-driven 系統做到 2 ms 內的位置反饋觸發，傳統 frame-based 影像處理 pipeline 很難達到這個延遲。',
+      },
+      {
+        type: 'p',
+        text: '把這個概念搬到人類運動：人體 pose 估計與動作辨識在過去六年已經有一系列 peer-reviewed 工作。代表性的有 DHP19（Calabrese 等人 2019，IEEE/CVF CVPRW），首個公開的 DVS 人體 3D pose 資料集，用 4 台同步 DVS 攝影機收 17 位受試者的 33 種動作，paper 中報告的 3D pose error 約為 8 cm；以及 EV-ACT（IEEE TPAMI）的事件相機動作辨識 benchmark、Du 等人 2025 年在 Sensors 提出的 JGLTM 方法。把這條 pose 估計的精度進一步推進、並整合到下肢生物力學流程裡，是後續可以延伸的研究方向。',
+      },
+      {
+        type: 'callout',
+        text: 'Sehara K, Bahr V, Mitchinson B, Pearson MJ, Larkum ME, Sachdev RNS. Fast, Flexible Closed-Loop Feedback: Tracking Movement in "Real-Millisecond-Time". eNeuro, 2019;6(6):ENEURO.0147-19.2019. https://doi.org/10.1523/ENEURO.0147-19.2019',
+      },
+      {
+        type: 'callout',
+        text: 'Calabrese E, Taverni G, Awai Easthope C, Skriabine S, Corradi F, Longinotti L, Eng K, Delbruck T. DHP19: Dynamic Vision Sensor 3D Human Pose Dataset. CVPRW (IEEE/CVF), 2019. https://ieeexplore.ieee.org/document/9025364/',
+      },
+      {
+        type: 'p',
+        text: '切入點 (b) 低光 / HDR 環境的居家監測：老人居家跌倒、夜間意外、半開窗陽光斜射的客廳，一般 RGB 相機在這些場景下訊號常常不可用，但研究社群長期關心這些情境。140 dB 動態範圍意味著可以在「同一個畫面同時有強光與陰影」的情況下還能輸出有效事件。再加上稀疏輸出特性，事件流相較於 RGB frame 不直接呈現顏色與紋理細節，在「看到動作輪廓、但臉部紋理不清晰」的應用情境上有概念性的優勢，這對居家監測這種介意被錄影的場景是個方向。',
+      },
+      {
+        type: 'p',
+        text: '切入點 (c) 穿戴 / 邊緣裝置的低功耗動作感測：穿戴式動作分析裝置最大限制是電池，加上 frame-based camera 模組功耗高，多數做不到全天 always-on。低功耗 + kHz 級 bandwidth + 稀疏輸出，特別適合穿戴 / 嵌入式場景。Ceolini 等人 2020 的工作就是把 DVS 跟 EMG 整合，做手勢辨識；他們的 30×–600× energy-delay product 改善是這個切入點的具體量化證據。把這個概念搬到生醫工程的研究題目：可以是 prosthetic hand 控制、rehab exercise 計次、運動表現監測手環，任何「需要動作偵測但不能背一塊大電池」的應用都是候選。',
+      },
+      {
+        type: 'p',
+        text: '補一個尚未成熟但值得追的方向 — 3D 動作分析：事件相機的 stereo / 3D depth 估計在過去五年是熱門研究主題，2025 年 IEEE TPAMI 上 Ghosh & Gallego 做了一篇 survey。但 stereo event 演算法的精度與穩定度還沒到能取代光學 motion capture 的程度，這篇 survey 自己也明確指出 accuracy 與 efficiency 都還有 gap。如果你的研究需要替代 Vicon，現在還早；但如果是「補充訊號 + 用其他特性彌補光學系統的弱點」，就有空間。',
+      },
+      {
+        type: 'callout',
+        text: 'Ghosh S, Gallego G. Event-Based Stereo Depth Estimation: A Survey. IEEE Trans Pattern Anal Mach Intell, 2025;47(10):9130–9149. https://doi.org/10.1109/TPAMI.2025.3586559',
+      },
+      {
+        type: 'callout',
+        text: 'Du F, Shao Z, Wang X, Yang J, Dai J. A Joint Global and Local Temporal Modeling for Human Pose Estimation with Event Cameras (JGLTM). Sensors, 2025;25(9):2868. https://doi.org/10.3390/s25092868',
+      },
+      {
+        type: 'callout',
+        text: 'Wang Y, et al. Action Recognition and Benchmark Using Event Cameras. IEEE Trans Pattern Anal Mach Intell, 2023. https://ieeexplore.ieee.org/document/10198747/',
+      },
+      { type: 'h2', id: 'practical-reminders', text: '五、評估事件相機適不適合你的研究時，可以注意的幾件事' },
+      {
+        type: 'p',
+        text: '這節不是 open problem 清單，而是給打算試用事件相機的研究者一些務實的提醒。',
+      },
+      {
+        type: 'list',
+        items: [
+          '公開人體事件相機資料集偏通用 daily action：DHP19（17 受試者、33 動作、4 台 DVS）跟 EV-ACT 等動作辨識 benchmark 是目前最常用的公開資源，但動作集合並不是專為 gait / running / 復健動作設計，所以如果你的應用題目偏臨床或運動科學，多數情況可能要自己錄資料。',
+          'pose 估計精度跟光學 motion capture 還有差距：DHP19 自報的 3D pose error 約 8 cm，Du 等人 2025 的 JGLTM 雖在 event-based 資料集上推進了精度，但還在 image-domain pose error 等級，跟 Vicon 的 sub-mm 仍差一個量級。所以目前定位上比較像「補時間解析度」、不是「取代光學 motion capture 主訊號」。',
+          '採購可及性：DVS / Prophesee / iniLabs 的硬體取得管道、價格、技術支援，相較 IMU / GoPro 沒那麼普及；這部分屬於現實限制，採購前直接問代理商比看文獻更有效。',
+        ],
+      },
+      { type: 'h2', id: 'when-to-use', text: '六、總結：什麼樣的研究題目適合用 event camera' },
+      {
+        type: 'p',
+        text: '下面這幾個 checklist 可以幫你判斷 event camera 是不是合適工具。',
+      },
+      {
+        type: 'list',
+        items: [
+          '你關心的物理量是「亮度有變化的瞬態事件」（heel-strike、揮棒接觸點、肌肉抽搐）→ event camera 強項。',
+          '你的場景是「一般相機會 over/under expose」（戶外、半逆光、夜間）→ event camera 強項。',
+          '你需要「長期、低功耗、不收完整 RGB 紋理」的居家或穿戴監測 → event camera 強項。',
+        ],
+      },
+      {
+        type: 'quote',
+        text: '跟你現有的 toolchain 搭著用，例如「光學 mocap 主訊號 + event camera 補捕快速瞬態」，比「全套換成 event camera」現實得多。',
+      },
+    ],
+  },
+  {
+    id: 'ai-medical-imaging-2026-papers',
+    category: 'community',
+    title: '這週社群熱門：三個 2026 AI × 醫學影像新 paper 解讀',
+    excerpt:
+      '五月初社群熱度最高的三篇：Medical SAM3（通用醫學影像分割）、RDBCycleGAN-CBAM（低劑量 CT 去噪）、VascFlexMap（稀疏微血管超音波重建）。',
+    publishedAt: '2026-05-04',
+    readingTime: '12 分鐘',
+    featured: false,
+    coverImage: aiMedicalImaging2026PapersCover,
+    tableOfContents: [
+      { id: 'why-these-three', title: '一、為什麼挑這三篇' },
+      { id: 'medical-sam3', title: '二、Medical SAM3：把 SAM3 變成「能聽懂醫學名詞的通用分割器」' },
+      { id: 'rdbcyclegan-cbam', title: '三、RDBCycleGAN-CBAM：低劑量 CT 去噪的「組合拳」' },
+      { id: 'vascflexmap', title: '四、VascFlexMap：把超音波 microvascular imaging 的資料量門檻降下來' },
+      { id: 'three-trends', title: '五、三篇放在一起，看到的三個 2026 趨勢' },
+    ],
+    content: [
+      { type: 'h2', id: 'why-these-three', text: '一、為什麼挑這三篇' },
+      {
+        type: 'p',
+        text: '最近兩週社群裡看到不少朋友在轉貼 2026 開年的幾篇 AI × 醫學影像 preprint，我自己花了點時間把連結點開來看。下面挑三篇我覺得「方向不一樣，但值得討論的論文」：Medical SAM3（arXiv 2601.10880）從 SAM3 微調到醫學影像通用分割，是 foundation model 路線的最新 instance；RDBCycleGAN-CBAM（bioRxiv 2026.02.17.706311）做低劑量 CT 去噪，方向比較傳統但有具體 PSNR/SSIM 數字；VascFlexMap（bioRxiv 2026.02.27.708398）用 transformer-decoder 從稀疏 contrast-enhanced ultrasound（CEUS）資料重建微血管圖。',
+      },
+      {
+        type: 'callout',
+        text: '先講重要前提：三篇都還在 arXiv / bioRxiv 階段，尚未通過同儕審查。下面看到的所有 Dice、PSNR、SSIM、加速倍數都是作者自陳，還沒有第三方驗證。我們在自己論文裡轉引這些數字的時候，至少要等到正式期刊版本出來再說。',
+      },
+      {
+        type: 'p',
+        text: '我自己讀的時候會問三個問題：(a) 它解決了哪個臨床或工程上具體的痛點；(b) 指標進步有多大；(c) 我們在做小資料生醫工程題目時，有什麼地方可以借鏡。下面就照這個框架走。',
+      },
+      { type: 'h2', id: 'medical-sam3', text: '二、Medical SAM3：把 SAM3 變成「能聽懂醫學名詞的通用分割器」' },
+      {
+        type: 'p',
+        text: '痛點：SAM（Segment Anything Model）系列的 promptable segmentation 在自然影像很強，但搬到醫學影像時泛化通常會掉。原因是醫學影像跟自然影像的視覺先驗差太多，CT、MRI、retinal fundus、超音波，每一種模態的對比度、雜訊分布都不一樣，SAM 從未在這些分布上見過足夠的樣本。',
+      },
+      {
+        type: 'p',
+        text: 'Medical SAM3 的策略是全參數微調，不是 PEFT、不是 adapter，而是直接拿 SAM3 在 33 個資料集、橫跨 10 個醫學影像模態的資料上做完整 fine-tuning，搭配分割 mask + 文字 prompt 的配對訓練。論文強調這樣能「強化醫學領域視覺先驗、改善 text-to-mask 對齊」，讓使用者只給類別名稱（例如 "retinal vessel"）也能拿到合理 mask。',
+      },
+      {
+        type: 'p',
+        text: '在數字方面：內部驗證的平均 Dice 從 SAM3 原版的 54.0% 提升到 77.0%（+23 百分點）；平均 IoU 從 43.3% 提升到 67.3%（+24 百分點）。外部測試（跨資料集泛化）的平均 Dice 從 11.9% 跳到 73.9%；平均 IoU 從 8.0% 跳到 64.4%。retinal vessel 的 DRIVE 資料集 Dice 從 24.8% 提升到 55.8%；COph100 從 34.1% 提升到 63.1%。',
+      },
+      {
+        type: 'callout',
+        text: 'Medical SAM3: A Foundation Model for Universal Prompt-Driven Medical Image Segmentation. arXiv:2601.10880（preprint, 尚未同儕審查；2026 年 1 月）。https://arxiv.org/abs/2601.10880',
+      },
+      {
+        type: 'p',
+        text: '第一，「foundation model 微調 + 領域內資料」目前看起來是 2025–2026 年生醫影像分割的主流路徑，但全參數微調的算力門檻不低，這對沒有大型 GPU cluster 的實驗室是個現實限制。如果原文釋出 LoRA / adapter 版本的對照實驗，會比現在的「全參數 vs. zero-shot」更有實務意義。第二，DRIVE 在 retinal vessel 領域是被研究透徹的 benchmark，55.8% Dice 在這個資料集上其實不算特別高，傳統 U-Net + 領域特化技巧的 SOTA 多年來都在 80%+ 區間。所以我傾向把這個結果讀成「通用 prompt-driven 模型在窄領域 benchmark 上仍輸給專用模型，但通用性是賣點」，不是「Medical SAM3 在 retinal vessel 上贏過 SOTA」。社群裡看到有些朋友把這個數字直接寫成「打敗 SOTA」，我覺得是過度解讀。',
+      },
+      {
+        type: 'p',
+        text: '另外，「外部 Dice 11.9% → 73.9%」這個數字看起來很驚人，但因為原本 11.9% 接近隨機水準，提升空間本來就很大；「外部」具體是哪些資料集、跟訓練分布的距離有多遠，要看正式版才能下判斷。',
+      },
+      {
+        type: 'quote',
+        text: '小結：方向值得追，但等正式版（peer review）+ 第三方獨立 benchmark 之後再放進自己的 related work，會比較穩。',
+      },
+      { type: 'h2', id: 'rdbcyclegan-cbam', text: '三、RDBCycleGAN-CBAM：低劑量 CT 去噪的「組合拳」' },
+      {
+        type: 'p',
+        text: '痛點：低劑量 CT（low-dose CT, LDCT）是輻射劑量的折衷產物：劑量降到四分之一（quarter-dose）對病人較友善，但雜訊提高、會掩蓋細節（小結節、微鈣化），影響診斷。深度學習去噪的目標是把 LDCT 還原到接近 normal-dose CT 的影像品質。',
+      },
+      {
+        type: 'p',
+        text: 'RDBCycleGAN-CBAM 把三個既有元件組合在一起：CycleGAN 提供 unpaired 訓練（不需要配對的 LDCT/NDCT），這對臨床資料的取得是個重要優勢；Residual Dense Block (RDB) 強化特徵重用，是影像超解析領域常用元件；Convolutional Block Attention Module (CBAM) 是通道 + 空間注意力，幫模型抓細節。',
+      },
+      {
+        type: 'p',
+        text: '在數字方面，相對於 quarter-dose 輸入，平均 PSNR +3.97 dB、平均 SSIM +0.053。論文還補了 Wilcoxon signed-rank test、報告 rank-biserial correlation 接近 1.0、bootstrap CI 也很窄，這些統計細節比起「我們 PSNR 比較高」這種單一數字更可信。',
+      },
+      {
+        type: 'callout',
+        text: 'A NOVEL DEEP LEARNING MODEL, RDBCYCYLEGAN-CBAM FOR LOW-DOSE CT IMAGE DENOISING. bioRxiv 10.64898/2026.02.17.706311v1（preprint, 尚未同儕審查；2026 年 2 月）。https://www.biorxiv.org/content/10.64898/2026.02.17.706311v1',
+      },
+      {
+        type: 'p',
+        text: '第一，+3.97 dB PSNR 在 LDCT 去噪文獻裡是中段表現，不是 SOTA。這幾年低劑量 CT 去噪的論文很多，PSNR 提升 4–7 dB 的方法也有人做出來。原文也誠實寫到「outperforms most existing deep learning-based methods」而不是「SOTA」，這句話的措辭值得學習，我自己讀同類題目時，看到「outperforms most」這種用詞會比看到「SOTA」更願意往下讀。第二，CycleGAN 路線的 unpaired 訓練在臨床很實用：要拿到完美配對的 LDCT/NDCT 影像幾乎不可能（同一病人不會被掃兩次劑量），所以 unpaired 是必要設計，不是研究花樣。這是個值得借鏡的「題目選擇邏輯」，把臨床取得限制當成方法設計的起點。',
+      },
+      {
+        type: 'p',
+        text: '第三，這篇 preprint 的價值不在 SOTA 數字，而在它把 RDB、CBAM、CycleGAN 這幾個既有 building block 組合起來、做完整的對照與統計檢定。我自己讀類似題目時也比較喜歡這種「老元件、新組合、完整實驗」的論文，比堆 transformer 但實驗只跑一遍的論文有資訊量。',
+      },
+      {
+        type: 'quote',
+        text: '小結：方法不算最新潮，但實驗扎實。可以拿來當做去噪題目 baseline 比較對象，不用當成必引 SOTA。',
+      },
+      { type: 'h2', id: 'vascflexmap', text: '四、VascFlexMap：把超音波 microvascular imaging 的資料量門檻降下來' },
+      {
+        type: 'p',
+        text: '痛點：Super-Resolution Ultrasound（SR-US）/ Ultrasound Localization Microscopy（ULM）這幾年發展快，可以看到傳統超音波看不到的微血管結構。但這類技術通常需要極高的 frame rate（kHz 級）+ 數萬 frame 累積，才能定位足夠的微氣泡，重建血管圖。對臨床部署是個門檻：要特殊硬體、長掃描時間、儲存成本高。',
+      },
+      {
+        type: 'p',
+        text: 'VascFlexMap 用一個 transformer-decoder 網路（單頭 self-attention），在稀疏採樣的 CEUS 序列上重建血管 probability map，跳過顯式的微氣泡定位與追蹤步驟。後處理階段再做空間細化，輸出最終血管圖。',
+      },
+      {
+        type: 'p',
+        text: '在數字方面：重建時間在 NVIDIA H100 GPU 上 28–133 秒完成端到端重建，依使用的 frame 數而定；解析度折衷上，相對於 reference SR-US，apparent vessel width 平均寬約 3 倍，主分支與較高階微血管仍可見；在原本 conventional ULM pipeline 在同樣稀疏資料下無法產生連續血管網絡的條件下，VascFlexMap 仍能恢復連貫的微血管拓撲。',
+      },
+      {
+        type: 'callout',
+        text: 'VascFlexMap: Microvascular Ultrasound Imaging at Low Frame Rates Using Sparse Data and a Transformer-Decoder Network. bioRxiv 10.64898/2026.02.27.708398v1（preprint, 尚未同儕審查；2026 年 2 月）。https://www.biorxiv.org/content/10.64898/2026.02.27.708398v1',
+      },
+      {
+        type: 'p',
+        text: '第一，這篇是「方法 + trade-off」的典型例子。作者明白自陳「以解析度換速度與資料量」，沒有假裝它是 SR-US 的全面替代。這種誠實的 trade-off 描述對博士生來說是好示範，你做的方法不一定要全面贏對照組，明確指出你贏在哪個 axis、輸在哪個 axis，論文會更可信。第二，vessel width 變寬約 3 倍這個代價要不要付，看臨床問題：如果是看「腫瘤血管化整體拓撲」，3 倍寬度可能還是有用；如果是看「血管直徑量化」，那這個方法不適合。生醫工程研究者選工具時，從臨床問題的容忍度反推技術規格比「比較指標誰大」重要很多。第三，算力部分，H100 是高階卡，論文沒明確報告在中階 GPU（A100 / 4090 / 3090）上的延遲。對台灣多數實驗室部署來說，這是個會影響 reproducibility 的細節，等正式版希望作者能補上。',
+      },
+      {
+        type: 'quote',
+        text: '小結：方向（少 frame、低硬體門檻 SR-US）很有臨床轉譯潛力，但解析度退化的代價要看具體應用評估，且 H100 依賴值得追問。',
+      },
+      { type: 'h2', id: 'three-trends', text: '五、三篇放在一起，看到的三個 2026 趨勢' },
+      {
+        type: 'p',
+        text: '把這三篇對照看，浮現幾個我從這三篇 + 最近社群討論得出的觀察(不是嚴謹的 systematic review)：',
+      },
+      {
+        type: 'list',
+        items: [
+          'Foundation model + 醫學特化微調仍是熱題，但社群開始更謹慎地比較「通用」與「專用」模型的 trade-off，而不是直接宣稱通用模型贏。Medical SAM3 在 DRIVE 上 55.8% Dice 不到傳統 SOTA 就是個例子。',
+          'CycleGAN / unpaired 訓練在 2026 並沒有被 diffusion model 取代，反而在臨床資料配對困難的場景（CT 去噪、MRI 跨序列轉換）依然有人在優化既有架構。這樣的啟示是：不是新就一定好，舊方法 + 領域知識的組合有時更實用。',
+          'Trade-off explicit 的論文寫作風格越來越受歡迎：VascFlexMap 與 RDBCycleGAN-CBAM 都明確寫出自己輸在哪、為什麼這個 trade-off 對特定臨床問題可接受。從這幾年生醫期刊的 review guideline 趨勢看，主動承認限制看起來比刻意藏起來更有利於通過審稿，這部分等大家在自己的投稿經驗裡再驗證。',
+        ],
+      },
+    ],
+  },
   {
     id: 'ai-prompting-workflow',
     category: 'community',
@@ -136,10 +430,10 @@ export const articles = [
       { id: 'why-small-data', title: '一、為什麼小資料是我們的常態，不是例外' },
       { id: 'synthetic-data', title: '二、方向 1：用肌肉骨骼模型生成合成資料' },
       { id: 'transfer-learning', title: '三、方向 2：遷移學習 + 個體化 fine-tune' },
-      { id: 'ssl-pretraining', title: '四、方向 3：自監督預訓練（SSL）—— 用沒標註的資料先學表徵' },
+      { id: 'ssl-pretraining', title: '四、方向 3：自監督預訓練（SSL），用沒標註的資料先學表徵' },
       { id: 'validation', title: '五、方向 4：嚴格一點的跨受試者 / 跨資料集驗證' },
       { id: 'lightweight-models', title: '六、方向 5：模型先輕量化，再談深度學習' },
-      { id: 'decision-tree', title: '七、五個方向能怎麼搭配 —— 一個草稿級的決策邏輯' },
+      { id: 'decision-tree', title: '七、五個方向能怎麼搭配，一個草稿級的決策邏輯' },
       { id: 'open-questions', title: '八、想跟大家一起討論的幾個問題' },
     ],
     content: [
@@ -202,7 +496,7 @@ export const articles = [
         type: 'callout',
         text: 'Alammar et al. (2023), Deep Transfer Learning with Enhanced Feature Fusion for Detection of Abnormalities in X-ray Images. Cancers. https://doi.org/10.3390/cancers15154007',
       },
-      { type: 'h2', id: 'ssl-pretraining', text: '四、方向 3：自監督預訓練（SSL）—— 用沒標註的資料先學表徵' },
+      { type: 'h2', id: 'ssl-pretraining', text: '四、方向 3：自監督預訓練（SSL），用沒標註的資料先學表徵' },
       {
         type: 'p',
         text: '如果連標註都做不出來、但手上有大量未標註資料，自監督學習（SSL）是 2023–2025 年文獻裡很值得參考的解法。代表作是 Yuan 等人 2024 年在《NPJ Digital Medicine》的工作：他們用 UK Biobank 加速度計資料（70 萬人日，未標註）做自監督預訓練，再轉到 8 個下游 benchmark 做活動辨識，相對 F1 提升 2.5–130.9%（中位數 24.4%），而且跨資料集、跨受試族群、跨感測器都能維持優勢。這個模型已經開源，作為 baseline 來比較自己手上的方法挺方便的。',
@@ -234,7 +528,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '更嚴格的標準是跨資料集驗證（cross-dataset validation）。Benchekroun 等人 2023 年在《Sensors》用兩個不同協議、不同感測器、不同壓力源設計的 HRV 資料集做交叉驗證——一個訓練、另一個測試。Logistic Regression 在 LOSO 內表現好，但跨資料集表現大幅退化；Random Forest 跨資料集穩定維持 F1 = 61%。這個結果其實蠻打臉「同資料集 cross-validation 看似好的模型」這種直覺，給了我們一個具體的經驗證據。',
+        text: '更嚴格的標準是跨資料集驗證（cross-dataset validation）。Benchekroun 等人 2023 年在《Sensors》用兩個不同協議、不同感測器、不同壓力源設計的 HRV 資料集做交叉驗證，一個訓練、另一個測試。Logistic Regression 在 LOSO 內表現好，但跨資料集表現大幅退化；Random Forest 跨資料集穩定維持 F1 = 61%。這個結果其實蠻打臉「同資料集 cross-validation 看似好的模型」這種直覺，給了我們一個具體的經驗證據。',
       },
       {
         type: 'callout',
@@ -242,7 +536,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '兒童發展研究中，Mutersbaugh 等人 2025 年在《JMIR Medical Informatics》用 41 位兒童 IMU 手部追蹤資料訓練自閉症分類器，CAE+LSTM 在傳統 k-fold 上 accuracy 90.21% / F1 90.02%；切換到 patient-separated 切分（保證測試集的人從沒出現在訓練集）後，accuracy 反而提升到 91.87% / F1 93.66%。這個案例很有趣的地方是：patient-separated 不一定退化，前提是模型架構足夠泛化。我自己想知道的是，如果換成更小的樣本（< 20 人），這個結論還站得住嗎——如果有朋友試過類似切分，蠻想交流一下。',
+        text: '兒童發展研究中，Mutersbaugh 等人 2025 年在《JMIR Medical Informatics》用 41 位兒童 IMU 手部追蹤資料訓練自閉症分類器，CAE+LSTM 在傳統 k-fold 上 accuracy 90.21% / F1 90.02%；切換到 patient-separated 切分（保證測試集的人從沒出現在訓練集）後，accuracy 反而提升到 91.87% / F1 93.66%。這個案例很有趣的地方是：patient-separated 不一定退化，前提是模型架構足夠泛化。我自己想知道的是，如果換成更小的樣本（< 20 人），這個結論還站得住嗎，如果有朋友試過類似切分，蠻想交流一下。',
       },
       {
         type: 'callout',
@@ -275,9 +569,9 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '我自己會傾向先試 1D-CNN / TCN / 小型 LSTM，把這當成 baseline 看資料夠不夠支持任務複雜度；再考慮 transformer。如果一開始就上大型架構，把它列為比較對象就好——但我會把更多時間花在 cascaded、multi-task、multi-stage 這些設計上，這往往才是 paper 真正的核心貢獻。',
+        text: '我自己會傾向先試 1D-CNN / TCN / 小型 LSTM，把這當成 baseline 看資料夠不夠支持任務複雜度；再考慮 transformer。如果一開始就上大型架構，把它列為比較對象就好，但我會把更多時間花在 cascaded、multi-task、multi-stage 這些設計上，這往往才是 paper 真正的核心貢獻。',
       },
-      { type: 'h2', id: 'decision-tree', text: '七、五個方向能怎麼搭配 —— 一個草稿級的決策邏輯' },
+      { type: 'h2', id: 'decision-tree', text: '七、五個方向能怎麼搭配，一個草稿級的決策邏輯' },
       {
         type: 'p',
         text: '把五個方向放在一起，可以整理成這樣的思路（純粹是我自己看完文獻後的整理，蠻歡迎大家補充或挑戰）：第一，手上有沒有大量未標註的同類型資料？有就走方向 3（SSL 預訓練）。第二，領域內有沒有開源的預訓練模型 / 大型公開資料集？有就走方向 2（轉移學習 fine-tune）。第三，問題能不能用肌肉骨骼模型 / 物理模擬產生合成資料？能就走方向 1（合成資料 + fine-tune）。第四，不論走哪條路，驗證都加做 LOSOCV，臨床題目再加 cross-dataset（方向 4）。第五，不論走哪條路，從輕量化模型開始建立 baseline，再增加複雜度（方向 5）。',
@@ -289,7 +583,7 @@ export const articles = [
       { type: 'h2', id: 'open-questions', text: '八、想跟大家一起討論的幾個問題' },
       {
         type: 'p',
-        text: '寫到這裡，我自己腦中還有幾個沒想清楚的問題，蠻想跟同樣在做小資料 + 深度學習的朋友交換意見：在 N < 20 的極小樣本下，patient-separated cross-validation 是否還能維持上面引用的結論？文獻裡的例子大多 N ≥ 30。合成資料 + fine-tune 的「最少真實樣本」到底是多少？Bicer et al. 用 3 位就能把 RMSE 拉回，但這是健康成人——病人組需要多少？跨資料集驗證的 F1 退化如果超過 30%，論文還能發嗎？或者該怎麼把它寫成「未來工作」而不是「致命缺陷」？',
+        text: '寫到這裡，我自己腦中還有幾個沒想清楚的問題，蠻想跟同樣在做小資料 + 深度學習的朋友交換意見：在 N < 20 的極小樣本下，patient-separated cross-validation 是否還能維持上面引用的結論？文獻裡的例子大多 N ≥ 30。合成資料 + fine-tune 的「最少真實樣本」到底是多少？Bicer et al. 用 3 位就能把 RMSE 拉回，但這是健康成人，病人組需要多少？跨資料集驗證的 F1 退化如果超過 30%，論文還能發嗎？或者該怎麼把它寫成「未來工作」而不是「致命缺陷」？',
       },
       {
         type: 'quote',
@@ -302,7 +596,7 @@ export const articles = [
     category: 'method',
     title: '眼動訓練對運動員表現有效嗎：從 2024–2025 文獻看「該不該做」與「怎麼做」',
     excerpt:
-      '眼動訓練、Quiet Eye、Strobe glasses、Sports Vision Training——名詞愈來愈多，廠商也愈來愈會行銷。這篇從近兩年的 meta-analysis、RCT 與系統性回顧，整理眼動訓練對運動員表現實際上有多大效果、適用什麼運動類型，以及生醫工程介入的切入點。',
+      '眼動訓練、Quiet Eye、Strobe glasses、Sports Vision Training，名詞愈來愈多，廠商也愈來愈會行銷。這篇從近兩年的 meta-analysis、RCT 與系統性回顧，整理眼動訓練對運動員表現實際上有多大效果、適用什麼運動類型，以及生醫工程介入的切入點。',
     publishedAt: '2026-04-27',
     readingTime: '12 分鐘',
     featured: false,
@@ -337,7 +631,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '主要結果有兩個：決策反應時間（decision-making response time）的標準化平均差 SMD = 0.85，95% CI [0.45, 1.24]，I² = 30%，p < 0.01——這是一個大效果量（large effect size，Cohen 約定 SMD > 0.8）；運動專項表現（sport-specific performance）SMD = 0.49，95% CI [0.13, 0.85]，I² = 61%，p = 0.01——中等效果量，但 I² 偏高顯示研究間異質性明顯。',
+        text: '主要結果有兩個：決策反應時間（decision-making response time）的標準化平均差 SMD = 0.85，95% CI [0.45, 1.24]，I² = 30%，p < 0.01，這是一個大效果量（large effect size，Cohen 約定 SMD > 0.8）；運動專項表現（sport-specific performance）SMD = 0.49，95% CI [0.13, 0.85]，I² = 61%，p = 0.01，中等效果量，但 I² 偏高顯示研究間異質性明顯。',
       },
       {
         type: 'callout',
@@ -345,7 +639,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '這份 meta-analysis 的子群分析顯示，無論受試者特性（菁英 / 業餘）或訓練方案（時長、頻率），組間差異未達統計顯著——換言之，在現有證據量下，「該怎麼做」還沒有高解析度的答案，只能說「做了比沒做好」。實務上的解讀：對反應時間敏感的運動（拳擊、桌球、電競、守門員），證據傾向支持有實質提升；對專項表現的提升存在但效果量較小，且因運動類型差異大。',
+        text: '這份 meta-analysis 的子群分析顯示，無論受試者特性（菁英 / 業餘）或訓練方案（時長、頻率），組間差異未達統計顯著。換言之，在現有證據量下，「該怎麼做」還沒有高解析度的答案，只能說「做了比沒做好」。實務上的解讀：對反應時間敏感的運動（拳擊、桌球、電競、守門員），證據傾向支持有實質提升；對專項表現的提升存在但效果量較小，且因運動類型差異大。',
       },
       { type: 'h2', id: 'four-paradigms', text: '三、訓練範式的四大類' },
       {
@@ -378,7 +672,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '第四類，Multisensory / Anticipation Training（多感官整合）。不只看，還要聽，且通常要結合動作回饋。Wang 等人（2025）將羽球新手分為純視覺、視聽整合、模糊視聽、對照四組，進行兩週共六次訓練。結果顯示：訓練組在預判準確率上顯著提升、且效果可保留兩週；在高認知負荷與模擬動作任務下，純視覺訓練組的提升幅度最大，其次是視聽整合組——這個結果反直覺地提示：多感官不一定總是優於單感官，要看任務本身的感官依賴性。',
+        text: '第四類，Multisensory / Anticipation Training（多感官整合）。不只看，還要聽，且通常要結合動作回饋。Wang 等人（2025）將羽球新手分為純視覺、視聽整合、模糊視聽、對照四組，進行兩週共六次訓練。結果顯示：訓練組在預判準確率上顯著提升、且效果可保留兩週；在高認知負荷與模擬動作任務下，純視覺訓練組的提升幅度最大，其次是視聽整合組，這個結果反直覺地提示：多感官不一定總是優於單感官，要看任務本身的感官依賴性。',
       },
       {
         type: 'callout',
@@ -387,11 +681,11 @@ export const articles = [
       { type: 'h2', id: 'closed-vs-open', text: '四、項目差異：定點瞄準 vs 開放技能' },
       {
         type: 'p',
-        text: '這是文獻裡最一致的分裂——眼動訓練在閉鎖技能（closed skill）運動上的效果比開放技能（open skill）顯著。閉鎖技能（高爾夫推桿、射擊、射箭、撞球）的動作模式固定、環境變動小，QE / fixation 時間長度與成績的因果關係相對清楚。開放技能（球類對抗、守門員、團隊運動）的 gaze behavior 跟成績的關係比較複雜，既要看 anticipation（預判），又要看在快速變化的場景中是否抓對 cue。',
+        text: '這是文獻裡最一致的分裂，眼動訓練在閉鎖技能（closed skill）運動上的效果比開放技能（open skill）顯著。閉鎖技能（高爾夫推桿、射擊、射箭、撞球）的動作模式固定、環境變動小，QE / fixation 時間長度與成績的因果關係相對清楚。開放技能（球類對抗、守門員、團隊運動）的 gaze behavior 跟成績的關係比較複雜，既要看 anticipation（預判），又要看在快速變化的場景中是否抓對 cue。',
       },
       {
         type: 'p',
-        text: 'Huesmann 等人（2025）在《Journal of Sports Sciences》發表的兩篇 scoping review 整理了：第一篇納入 20 篇研究，發現菁英守門員的 anticipation 表現整體優於低技術等級者，cue utilisation 更有效率；第二篇納入 13 篇訓練研究，提示顯式（explicit）、引導發現式（guided discovery）、與隱式（implicit）三種訓練取向都可能有效，但各有不同的應用情境。作者也明確指出，現有研究男性成人為主，且多在實驗室標準化罰球情境下進行——對女性與真實比賽情境的證據缺口仍大。',
+        text: 'Huesmann 等人（2025）在《Journal of Sports Sciences》發表的兩篇 scoping review 整理了：第一篇納入 20 篇研究，發現菁英守門員的 anticipation 表現整體優於低技術等級者，cue utilisation 更有效率；第二篇納入 13 篇訓練研究，提示顯式（explicit）、引導發現式（guided discovery）、與隱式（implicit）三種訓練取向都可能有效，但各有不同的應用情境。作者也明確指出，現有研究男性成人為主，且多在實驗室標準化罰球情境下進行，對女性與真實比賽情境的證據缺口仍大。',
       },
       {
         type: 'callout',
@@ -399,7 +693,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '性別差異有專門證據。Jedziniak 等人（2025）以 40 位菁英手球守門員（20 男 + 20 女）測量罰球攔截時的眼動行為。男性守門員主要凝視擲球者的擲球臂與球本身，女性守門員主要凝視軀幹與頭部 AOI；且兩性在 quiet eye duration 對「成功攔截 vs 失敗」上都有顯著差異（女性 MD = 92.26 ms，p = 0.005；男性 MD = 122.83 ms，p < 0.001）。這項結果直接挑戰了「眼動訓練 protocol 男女通用」的常見假設——訓練設計可能需要按性別調整。',
+        text: '性別差異有專門證據。Jedziniak 等人（2025）以 40 位菁英手球守門員（20 男 + 20 女）測量罰球攔截時的眼動行為。男性守門員主要凝視擲球者的擲球臂與球本身，女性守門員主要凝視軀幹與頭部 AOI；且兩性在 quiet eye duration 對「成功攔截 vs 失敗」上都有顯著差異（女性 MD = 92.26 ms，p = 0.005；男性 MD = 122.83 ms，p < 0.001）。這項結果直接挑戰了「眼動訓練 protocol 男女通用」的常見假設，訓練設計可能需要按性別調整。',
       },
       {
         type: 'callout',
@@ -420,7 +714,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '三個重要結果：(1) 接受 QET 的受試者，真實世界推桿表現提升（命中數、徑向誤差均顯著），且這個提升在「練習在 VR 中」與「練習在真實場上」兩種條件下都有發生。(2) 但若測試環境改成 VR，那麼「在真實場上練習的人」進步、「在 VR 中練習的人」沒進步——真實場上技能可以遷移到 VR 環境，反向遷移較差。(3) 這對生醫工程介入的啟示是：VR 作為「訓練眼動策略本身」是有效的（因為眼動策略是可移植的認知技能），但 VR 作為「動作技能練習場」目前還無法取代真實環境。',
+        text: '三個重要結果：(1) 接受 QET 的受試者，真實世界推桿表現提升（命中數、徑向誤差均顯著），且這個提升在「練習在 VR 中」與「練習在真實場上」兩種條件下都有發生。(2) 但若測試環境改成 VR，那麼「在真實場上練習的人」進步、「在 VR 中練習的人」沒進步，真實場上技能可以遷移到 VR 環境，反向遷移較差。(3) 這對生醫工程介入的啟示是：VR 作為「訓練眼動策略本身」是有效的（因為眼動策略是可移植的認知技能），但 VR 作為「動作技能練習場」目前還無法取代真實環境。',
       },
       {
         type: 'callout',
@@ -429,7 +723,7 @@ export const articles = [
       { type: 'h2', id: 'practical-tips', text: '六、給研究者 / 教練的務實建議' },
       {
         type: 'p',
-        text: '對研究者（含碩博生）：訓練介入研究務必設標準對照組，且對照組要做等量、相關但無目標訓練的工作——Guo 2024、He 2024 都這樣設計，這也是目前 meta-analysis 收得進來的研究的共同特徵。「做了 vs 完全不做」的設計只能證明「有人介入比沒人介入好」，不能證明眼動訓練本身的效果。',
+        text: '對研究者（含碩博生）：訓練介入研究務必設標準對照組，且對照組要做等量、相關但無目標訓練的工作，Guo 2024、He 2024 都這樣設計，這也是目前 meta-analysis 收得進來的研究的共同特徵。「做了 vs 完全不做」的設計只能證明「有人介入比沒人介入好」，不能證明眼動訓練本身的效果。',
       },
       {
         type: 'p',
@@ -437,12 +731,12 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '對想做相關工程介入研究的生醫工程領域，可以切入的工程議題包括：(1) eye-tracker 在場上情境（汗、強光、大幅頭部運動）下的訊號穩定性；(2) gaze behavior 自動分析的演算法（saccade / fixation / smooth pursuit 分類器，配合 ML 模型對照專家標記）；(3) 結合 IMU 的 head-eye coordination 量測，特別是開放技能項目；(4) AI 驅動的個人化訓練 protocol——Alemanno 2025 與 Huesmann 2025 的回顧都明確指出，「整合 AI 進行 gaze-based 訓練個人化」是下一階段的重點研究方向。',
+        text: '對想做相關工程介入研究的生醫工程領域，可以切入的工程議題包括：(1) eye-tracker 在場上情境（汗、強光、大幅頭部運動）下的訊號穩定性；(2) gaze behavior 自動分析的演算法（saccade / fixation / smooth pursuit 分類器，配合 ML 模型對照專家標記）；(3) 結合 IMU 的 head-eye coordination 量測，特別是開放技能項目；(4) AI 驅動的個人化訓練 protocol，Alemanno 2025 與 Huesmann 2025 的回顧都明確指出，「整合 AI 進行 gaze-based 訓練個人化」是下一階段的重點研究方向。',
       },
       { type: 'h2', id: 'summary', text: '七、小結' },
       {
         type: 'p',
-        text: 'Guo 2025 的 meta-analysis 提供了目前最高等級的證據：對反應時間有大效果量、對運動專項表現有中等效果量。閉鎖技能項目的證據比開放技能更扎實，多感官訓練不一定總優於單感官，男女守門員的 gaze 策略可能本質就不同——這些細節都意味著訓練設計必須客製化，而客製化正是工程介入可以發揮的地方。',
+        text: 'Guo 2025 的 meta-analysis 提供了目前最高等級的證據：對反應時間有大效果量、對運動專項表現有中等效果量。閉鎖技能項目的證據比開放技能更扎實，多感官訓練不一定總優於單感官，男女守門員的 gaze 策略可能本質就不同，這些細節都意味著訓練設計必須客製化，而客製化正是工程介入可以發揮的地方。',
       },
     ],
   },
@@ -472,7 +766,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '這不是審稿人的個人口味，而是近年來生醫 AI 領域的共識性轉變。根據 Malinverno et al.（2023）對 PubMed 資料庫中 1,603 篇相關論文的大規模分析，生醫 XAI（Explainable Artificial Intelligence）的發表量在 2020 年之後明顯加速——COVID-19 的臨床壓力放大了「模型不可信任」的代價，使整個社群意識到「高準確度」和「臨床可部署」之間還差了一個解釋性的門檻。',
+        text: '這不是審稿人的個人口味，而是近年來生醫 AI 領域的共識性轉變。根據 Malinverno et al.（2023）對 PubMed 資料庫中 1,603 篇相關論文的大規模分析，生醫 XAI（Explainable Artificial Intelligence）的發表量在 2020 年之後明顯加速，COVID-19 的臨床壓力放大了「模型不可信任」的代價，使整個社群意識到「高準確度」和「臨床可部署」之間還差了一個解釋性的門檻。',
       },
       {
         type: 'callout',
@@ -485,7 +779,7 @@ export const articles = [
       { type: 'h2', id: 'xai-status', text: '二、XAI 在生物力學領域的現況' },
       {
         type: 'p',
-        text: 'Xiang et al.（2025）發表了迄今最完整的步態分析 XAI 系統性回顧。他們從 3,676 篇文獻中篩選出 31 篇符合標準的研究，清楚描繪了這個領域的方法全貌。應用的臨床族群包括帕金森氏症患者、中風後步態異常者、肌少症、腦性麻痺，以及一般肌骨系統障礙——這些族群共同特徵是步態資料個體間差異大、標記數量少，正是「小資料 + 黑盒模型」的高風險情境。',
+        text: 'Xiang et al.（2025）發表了迄今最完整的步態分析 XAI 系統性回顧。他們從 3,676 篇文獻中篩選出 31 篇符合標準的研究，清楚描繪了這個領域的方法全貌。應用的臨床族群包括帕金森氏症患者、中風後步態異常者、肌少症、腦性麻痺，以及一般肌骨系統障礙，這些族群共同特徵是步態資料個體間差異大、標記數量少，正是「小資料 + 黑盒模型」的高風險情境。',
       },
       {
         type: 'p',
@@ -493,7 +787,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '這篇系統性回顧進一步指出，在生物力學語境下，XAI 方法確認的關鍵辨別特徵包括步幅長度（stride length）與關節角度（joint angles）——這些本來就有臨床意義的指標，被 XAI 方法「重新確認」，反過來增加了模型預測結果的臨床公信力。',
+        text: '這篇系統性回顧進一步指出，在生物力學語境下，XAI 方法確認的關鍵辨別特徵包括步幅長度（stride length）與關節角度（joint angles），這些本來就有臨床意義的指標，被 XAI 方法「重新確認」，反過來增加了模型預測結果的臨床公信力。',
       },
       {
         type: 'callout',
@@ -523,7 +817,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '第二，你的解釋結果有沒有生物力學或臨床意義？純粹說「特徵 A 的 SHAP 值最大」並不夠——你需要連結到既有的生物力學知識。第三，模型解釋在不同受試者或不同採集日的穩定性如何？這是 Xiang et al. 系統性回顧點名的主要研究缺口之一，現有論文少有對 XAI 輸出的穩定性進行驗證。第四，你有沒有讓臨床或領域專家確認解釋的合理性？即使只是一位物理治療師確認「這個特徵的貢獻方向符合臨床直覺」，都能大幅提升審稿人的接受度。',
+        text: '第二，你的解釋結果有沒有生物力學或臨床意義？純粹說「特徵 A 的 SHAP 值最大」並不夠，你需要連結到既有的生物力學知識。第三，模型解釋在不同受試者或不同採集日的穩定性如何？這是 Xiang et al. 系統性回顧點名的主要研究缺口之一，現有論文少有對 XAI 輸出的穩定性進行驗證。第四，你有沒有讓臨床或領域專家確認解釋的合理性？即使只是一位物理治療師確認「這個特徵的貢獻方向符合臨床直覺」，都能大幅提升審稿人的接受度。',
       },
       { type: 'h2', id: 'practical-tips', text: '五、給生物力學研究者的務實建議' },
       {
