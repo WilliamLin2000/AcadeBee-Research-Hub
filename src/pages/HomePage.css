@@ -38,6 +38,13 @@
   gap: 1rem;
 }
 
+.home-page .section-header-inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .home-page .section-title {
   margin-top: 0.5rem;
 }

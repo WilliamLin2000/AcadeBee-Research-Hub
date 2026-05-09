@@ -14,6 +14,7 @@ import smallDatasetDLBiomechanicsCover from '../assets/covers/small-dataset-deep
 import aiPromptingWorkflowCover from '../assets/covers/ai-prompting-workflow.svg'
 import aiMedicalImaging2026PapersCover from '../assets/covers/ai-medical-imaging-2026-papers.svg'
 import eventCameraMotionAnalysisCover from '../assets/covers/event-camera-motion-analysis.svg'
+import dapoRlvrFourTechniquesCover from '../assets/covers/dapo-rlvr-four-techniques.svg'
 
 export const articleCategories = [
   { value: 'method', label: '方法論筆記', color: 'teal' },
@@ -23,6 +24,147 @@ export const articleCategories = [
 ]
 
 export const articles = [
+  {
+    id: 'dapo-rlvr-four-techniques',
+    category: 'community',
+    title: 'DAPO 拆解：填補 DeepSeek-R1 技術黑盒的四個關鍵設計',
+    excerpt:
+      '透過 DeepSeek-R1 把這篇 DAPO 的四項技術逐一拆開，說清楚它們各自對應 GRPO 的哪個問題、設計直覺是什麼。',
+    publishedAt: '2026-05-09',
+    readingTime: '14 分鐘',
+    featured: false,
+    coverImage: dapoRlvrFourTechniquesCover,
+    tableOfContents: [
+      { id: 'why-dapo', title: '一、為什麼 DAPO 值得讀' },
+      { id: 'grpo-review', title: '二、GRPO 複習：DAPO 繼承的起點' },
+      { id: 'clip-higher', title: '三、技術一：Clip-Higher（非對稱 Clip）' },
+      { id: 'dynamic-sampling', title: '四、技術二：Dynamic Sampling' },
+      { id: 'token-level-pg', title: '五、技術三：Token-Level Policy Gradient Loss' },
+      { id: 'entropy-bonus', title: '六、技術四：Entropy Bonus + Overlong Reward Shaping' },
+      { id: 'integration', title: '七、整合：四項技術的系統效果' },
+      { id: 'after-dapo', title: '八、DAPO 之後：這個領域還在快速演進' },
+    ],
+    content: [
+      {
+        type: 'callout',
+        text: '本文所有技術描述以 DAPO 論文 arXiv:2503.14476 為 primary 來源（preprint，尚未同儕審查）。部分 GRPO 演算法細節為社群廣為引用的通識背景知識。標有「待補引用」的細節為目前尚未有 primary 文件明確記載但對技術理解有幫助的說明。',
+      },
+      { type: 'h2', id: 'why-dapo', text: '一、為什麼 DAPO 值得讀' },
+      {
+        type: 'p',
+        text: '2025 年一月，DeepSeek-AI 發布 DeepSeek-R1（arXiv:2501.12948）。論文宣稱：只靠大規模強化學習（RL），不用 Supervised Fine-Tuning（SFT）作為前置步驟，模型就能自然湧現出長鏈推理、自我反省、「啊哈時刻」等行為，最終在數學推理任務上達到與 OpenAI o1-1217 相當的水準。這個結果震驚了整個 AI 社群，也引發了一波復現潮。',
+      },
+      {
+        type: 'p',
+        text: '問題來了：論文發布的時候，訓練細節幾乎是黑盒。用什麼 clip 係數？怎麼處理「全部答對」或「全部答錯」的 batch？怎麼防止模型在訓練過程中輸出越來越長的廢話（length hacking）？怎麼防止策略分佈在幾千步之後 entropy 崩潰？這些問題，DeepSeek-R1 技術報告沒有完整說清楚。社群花了兩個月試圖填補這個空白，大多數人的復現結果都差得遠。',
+      },
+      {
+        type: 'p',
+        text: '三月，ByteDance 發表 DAPO（arXiv:2503.14476）。DAPO 的目標很明確：不是做一個新的大模型，而是做一個可以被完整復現的 RLVR 訓練系統，解釋清楚大規模 LLM 強化學習為什麼能成功——並且把程式碼、訓練框架（verl）、資料集全部開源。結果：Qwen2.5-32B base model，在 AIME 2024 上跑出 50 分，在當時的開源系統中達到頂尖水準。論文提出四項核心技術，每一項都對應 GRPO 一個已知的失效模式。',
+      },
+      { type: 'h2', id: 'grpo-review', text: '二、GRPO 複習：DAPO 繼承的起點' },
+      {
+        type: 'p',
+        text: '在進入四項技術之前，先確認 GRPO（Group Relative Policy Optimization）的基本架構，因為 DAPO 是在它上面修改的。GRPO 的運作邏輯是：對每個 prompt，從當前模型 π_θ 採樣 G 條完整回應（例如 G = 8）；用驗證器（verifiable reward，例如數學解題答案是否正確）對每條回應給 0 或 1 的 reward；計算群組相對優勢（把每條回應的 reward 減去群組均值、除以群組標準差）；再用 PPO 風格的 clipped surrogate objective 更新模型。GRPO 的優雅之處是不需要訓練獨立的 value/critic network，DeepSeek-R1-Zero 就是基於這個架構。',
+      },
+      {
+        type: 'p',
+        text: '但 GRPO 在大規模 RLVR 訓練中有幾個已知問題：Entropy 崩潰（訓練到一定程度，輸出機率過於集中，停止探索）；Response length 膨脹（模型學到靠延長輸出增加踩中正確 token 的機率，尤其在錯誤回應上更明顯——Liu 等人 arXiv:2503.20783 用受控實驗量化了這個偏差）；全對 / 全錯 batch 浪費計算資源（群組優勢等於零，這批資料完全沒有梯度訊號）；以及 clip 機制的不對稱問題（下面細講）。DAPO 的四項技術，每一項對應其中一個問題。',
+      },
+      { type: 'h2', id: 'clip-higher', text: '三、技術一：Clip-Higher（非對稱 Clip）' },
+      {
+        type: 'callout',
+        text: '對應問題：標準 PPO clip 機制限制了模型在「好回應」上的學習速率。',
+      },
+      {
+        type: 'p',
+        text: 'PPO 的 clipped surrogate objective 把概率比值 r(θ) = π_θ(a) / π_old(a) 限制在 [1 − ε, 1 + ε] 之間（ε 通常設為 0.2）。背後的直覺是防止策略更新步伐過大（trust region 概念）。問題在於這個對稱 clip 同等地限制了「機率增加的上限」和「機率降低的下限」。對高 advantage 的好回應，clip 上限 (1 + ε) 經常被觸及——梯度被截斷，模型想學但被 clip 擋住。',
+      },
+      {
+        type: 'p',
+        text: 'DAPO 的解法是引入非對稱 clip：低端 clip（clip_low）保持與 PPO 相同，防止模型在負向更新時走太遠；高端 clip（clip_high）放寬上限，允許模型在正向 advantage 回應上更積極地增加機率。這樣，對「好回應」模型可以學得更快；對「壞回應」仍保有保守性。設計哲學是：探索（向好回應移動）應該比保守（離壞回應）更自由一點。在 RLVR 訓練的早中期，加快對正確推理模式的強化，對最終的推理能力提升有顯著幫助（具體 clip 數值請見 arXiv:2503.14476 原論文）。',
+      },
+      { type: 'h2', id: 'dynamic-sampling', text: '四、技術二：Dynamic Sampling（動態採樣過濾）' },
+      {
+        type: 'callout',
+        text: '對應問題：全對 / 全錯的 batch 沒有學習訊號，浪費計算資源。',
+      },
+      {
+        type: 'p',
+        text: '在 GRPO 框架裡，advantage 是群組相對值。如果 G 條回應的 reward 完全相同（全 0 或全 1），所有回應的 advantage 都是 0，這個 batch 完全沒有梯度訊號。有兩種情況：prompt 太難，模型完全不會做，G 條都答錯，沒有正向訊號；或 prompt 太簡單，模型已掌握，G 條都答對，沒有訊號告訴它如何改進。兩種都在浪費這個 batch 的計算。',
+      },
+      {
+        type: 'p',
+        text: 'DAPO 的解法是在每個訓練步驟動態過濾這類 prompt：在採樣 G 條回應後，如果所有回應 reward 相同，直接跳過，不計入梯度更新；同時從更大的候選集補充新的「有效 prompt」，確保每個訓練步驟的有效 batch size 維持在目標大小。好處是每個 gradient step 都對應有訊號的資料、隱式地執行課程學習（訓練初期太難的 prompt 被過濾，隨著模型能力提升這些 prompt 逐漸變為有效訊號），以及消除 advantage 分母接近零的數值不穩定邊界情況。',
+      },
+      { type: 'h2', id: 'token-level-pg', text: '五、技術三：Token-Level Policy Gradient Loss' },
+      {
+        type: 'callout',
+        text: '對應問題：Sequence-level 的 loss 歸一化方式引入隱性的長度偏差。',
+      },
+      {
+        type: 'p',
+        text: 'GRPO 的 loss 計算方式，是把一條回應裡所有 token 的 log-prob loss 加總後，除以這條回應的 token 數（sequence-level 歸一化）。這製造了一個問題：相同的 reward，短回應的每個 token 得到更強的梯度訊號，長回應的每個 token 得到更弱的訊號。在 RLVR 設置（0/1 reward）下，短的正確回應每個 token 梯度很強；長的錯誤回應每個 token 懲罰梯度很弱。結果：模型在訓練中逐漸傾向對錯誤回應產生更長的輸出，因為這樣每個 token 的懲罰更小。這正是 Liu 等人（arXiv:2503.20783, Dr. GRPO）用實驗量化的 GRPO 長度偏差現象。',
+      },
+      {
+        type: 'p',
+        text: 'DAPO 改用 Token-Level Policy Gradient Loss：把整個 batch 的 loss 計算從「每條 sequence 歸一化後求和」改成「對所有 token 平等對待」——用 token 數而非 sequence 數作為歸一化分母。這樣不管回應有多長，每個 token 的梯度貢獻量是可比較的，長度偏差被消除。從工程實作角度看，這個修改只需幾行 code，但對訓練穩定性和最終效果的影響是可觀的（arXiv:2503.14476）。',
+      },
+      { type: 'h2', id: 'entropy-bonus', text: '六、技術四：Entropy Bonus + Overlong Reward Shaping' },
+      {
+        type: 'callout',
+        text: '對應問題：entropy 崩潰（過度利用）+ length hacking（無意義延長輸出）。',
+      },
+      {
+        type: 'p',
+        text: 'RLVR 訓練的中後期，常見失效模式是：模型的輸出分佈變得越來越尖銳（entropy 持續下降），最終某些 token 的輸出機率接近 1，模型停止探索其他可能的推理路徑。Xi 等人（BAPO，arXiv:2510.18927）在理論上說明，固定 clip 機制在 off-policy 設置下會系統性地阻止 entropy 上升的更新，把策略推向過度利用（over-exploitation）——這個現象在 on-policy GRPO 訓練中也類似地出現。',
+      },
+      {
+        type: 'p',
+        text: 'DAPO 在 reward 函數裡加入 Entropy Bonus 項，直接鼓勵輸出分佈的多樣性：reward_total = reward_verifiable + λ × H(π_θ)，其中 H(π_θ) 是當前策略的 Shannon entropy，λ 是權重係數。這讓模型在最大化推理準確度的同時，保持輸出分佈的探索性，防止過早收斂。',
+      },
+      {
+        type: 'p',
+        text: 'Length hacking 的另一面是：模型在拿不到推理 reward 時，可能轉向靠「輸出更長的回應」刷機率，最終輸出大量無意義填充文字。DAPO 的 Overlong Reward Shaping 對超過設定最大長度的回應施加軟性懲罰，懲罰力度與超出長度成正比（而非硬截斷）。硬截斷在訓練訊號上造成突然的不連續性；軟性懲罰提供平滑的梯度，讓模型學會「寫到夠長就好，不要無限延伸」（具體懲罰函數形式見 arXiv:2503.14476 原論文）。',
+      },
+      { type: 'h2', id: 'integration', text: '七、整合：四項技術的系統效果' },
+      {
+        type: 'p',
+        text: '把這四項技術放在一起看，DAPO 做的事情是在訓練流程的四個不同環節各修一個洞，互相補強。DAPO 論文做了完整的 ablation study，說明每一項的獨立貢獻（詳見 arXiv:2503.14476 原論文 ablation tables）。最終結果：以 Qwen2.5-32B base model 為起點，DAPO 在 AIME 2024 上達到 50 分，在當時的開源系統中達到頂尖水準。',
+      },
+      {
+        type: 'list',
+        items: [
+          'Clip-Higher（非對稱 clip）→ 優化目標層：正向更新被對稱 clip 壓制的問題',
+          'Dynamic Sampling → 資料效率層：無效 batch 浪費算力的問題',
+          'Token-Level PG Loss → 梯度計算層：長度偏差誘導廢話輸出的問題',
+          'Entropy Bonus + Overlong Shaping → 獎勵設計層：Entropy 崩潰 + length hacking 的問題',
+        ],
+      },
+      { type: 'h2', id: 'after-dapo', text: '八、DAPO 之後：這個領域還在快速演進' },
+      {
+        type: 'p',
+        text: 'DAPO 在三月發布之後，整個 RLVR 方法論領域噴發了大量後續工作，每一篇都在 DAPO 的基礎上做一個特定問題的修補。核心問題始終是同樣那幾個：clip 機制的設計、採樣策略的效率、reward shaping 的穩定性，以及梯度計算層的偏差。',
+      },
+      {
+        type: 'list',
+        items: [
+          'Understanding R1-Zero / Dr. GRPO（arXiv:2503.20783）：用受控實驗量化 GRPO 的長度偏差，提出更無偏的梯度估計方法，以 7B base model 達到 AIME 2024 的 43.3% 準確率。',
+          'BAPO（arXiv:2510.18927，HuggingFace Papers 85 upvotes）：針對 off-policy 設置下的 entropy 崩潰問題，理論推導出 Entropy-Clip Rule，提出自適應 clip 邊界。其 32B 模型宣稱超越 o3-mini 和 Gemini-2.5-Flash-Thinking（注意：preprint 結果，待同儕審查確認）。',
+          'GTPO（arXiv:2508.03772）：分析「衝突 token」問題——同一 token 在正確回應和錯誤回應裡都出現，導致梯度方向互相衝突——提出 trajectory-level 的梯度保護機制。',
+          'DHPO（arXiv:2601.05607）：在 token-level 和 sequence-level importance ratio 之間做動態混合，試圖同時保留兩者的優勢，在 Qwen3 系列 dense 和 MoE 模型上均超越 GRPO。',
+        ],
+      },
+      {
+        type: 'callout',
+        text: '讀 DAPO，是進入這個領域的最好起點，因為它把問題分析得最完整、最系統，而且完全開源（程式碼 + verl 框架 + 資料集全部釋出）。之後再讀 Dr. GRPO、BAPO、GTPO，會清楚知道每一篇在解決什麼，不會迷失。',
+      },
+      {
+        type: 'callout',
+        text: '所有引用來源均為 arXiv preprint，尚未同儕審查。Benchmark 數字以各論文發表當下為準，此後可能有更新結果。',
+      },
+    ],
+  },
   {
     id: 'event-camera-motion-analysis',
     category: 'method',

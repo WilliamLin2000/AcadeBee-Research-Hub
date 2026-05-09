@@ -8,6 +8,7 @@ import {
   getCategoryColor,
   formatArticleDate,
 } from '../data/articles'
+import { getStoredUser } from '../authStorage'
 import williamPhoto from '../assets/square img3.png'
 import './ArticleDetailPage.css'
 
@@ -33,6 +34,10 @@ export default function ArticleDetailPage() {
       .filter((a) => a.id !== article.id && a.category === article.category)
       .slice(0, 3)
   }, [article])
+
+  if (!getStoredUser()) {
+    return <Navigate to="/login" replace />
+  }
 
   if (!article) {
     return <Navigate to="/articles" replace />

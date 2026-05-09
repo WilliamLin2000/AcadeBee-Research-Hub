@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="DAPO RLVR 四項技術解讀封面">
+  <defs>
+    <linearGradient id="bg-dapo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f1a2e"/>
+      <stop offset="1" stop-color="#1a0a2e"/>
+    </linearGradient>
+    <linearGradient id="curve-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e85d4f" stop-opacity="0.3"/>
+      <stop offset="0.5" stop-color="#e85d4f" stop-opacity="1"/>
+      <stop offset="1" stop-color="#f4a261" stop-opacity="1"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#bg-dapo)"/>
+
+  <!-- Grid lines (subtle) -->
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <line x1="0" y1="90" x2="800" y2="90"/>
+    <line x1="0" y1="180" x2="800" y2="180"/>
+    <line x1="0" y1="270" x2="800" y2="270"/>
+    <line x1="0" y1="360" x2="800" y2="360"/>
+    <line x1="160" y1="0" x2="160" y2="450"/>
+    <line x1="320" y1="0" x2="320" y2="450"/>
+    <line x1="480" y1="0" x2="480" y2="450"/>
+    <line x1="640" y1="0" x2="640" y2="450"/>
+  </g>
+
+  <!-- RL training curve (right side visual) -->
+  <g transform="translate(370, 40)">
+    <!-- Axes -->
+    <line x1="30" y1="320" x2="400" y2="320" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.5"/>
+    <line x1="30" y1="20" x2="30" y2="320" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.5"/>
+    <text x="215" y="345" font-family="Arial" font-size="11" fill="#ffffff" fill-opacity="0.45" text-anchor="middle">Training Steps</text>
+    <text x="12" y="175" font-family="Arial" font-size="11" fill="#ffffff" fill-opacity="0.45" text-anchor="middle" transform="rotate(-90 12 175)">AIME Score</text>
+
+    <!-- Baseline GRPO curve (dashed, muted) -->
+    <path d="M 30 310 Q 80 290 130 275 Q 200 250 260 240 Q 330 232 380 230"
+          fill="none" stroke="#8899aa" stroke-width="2" stroke-dasharray="5 4" stroke-opacity="0.6"/>
+    <text x="300" y="224" font-family="Arial" font-size="10" fill="#8899aa" fill-opacity="0.8">GRPO baseline</text>
+
+    <!-- DAPO curve (bright, glowing) -->
+    <path d="M 30 305 Q 90 270 150 240 Q 220 200 290 160 Q 350 130 380 105"
+          fill="none" stroke="url(#curve-grad)" stroke-width="3" filter="url(#glow)"/>
+    <!-- AIME 50pt marker -->
+    <circle cx="380" cy="105" r="6" fill="#f4a261" filter="url(#glow)"/>
+    <text x="320" y="98" font-family="Arial" font-size="12" fill="#f4a261" font-weight="700">50 pts ↑</text>
+    <text x="308" y="112" font-family="Arial" font-size="10" fill="#f4a261" fill-opacity="0.85">AIME 2024</text>
+
+    <!-- Tick labels -->
+    <text x="30" y="335" font-family="Arial" font-size="10" fill="#ffffff" fill-opacity="0.35" text-anchor="middle">0</text>
+    <text x="380" y="335" font-family="Arial" font-size="10" fill="#ffffff" fill-opacity="0.35" text-anchor="middle">∞</text>
+  </g>
+
+  <!-- Left side: Title + 4 technique badges -->
+  <!-- Title block -->
+  <text x="48" y="58" font-family="Arial, sans-serif" font-size="11" fill="#e85d4f" letter-spacing="2.5" font-weight="700">COMMUNITY PICKS · AI/ML METHOD</text>
+  <text x="48" y="95" font-family="Arial, sans-serif" font-size="28" fill="#ffffff" font-weight="700">DAPO</text>
+  <text x="48" y="122" font-family="Arial, sans-serif" font-size="14" fill="#f4efe6" fill-opacity="0.85">填補 DeepSeek-R1 技術黑盒的</text>
+  <text x="48" y="142" font-family="Arial, sans-serif" font-size="14" fill="#f4efe6" fill-opacity="0.85">四個關鍵設計</text>
+
+  <!-- Technique badge 1: Clip-Higher -->
+  <g transform="translate(48, 168)">
+    <rect width="278" height="52" rx="8" fill="#e85d4f" fill-opacity="0.18" stroke="#e85d4f" stroke-opacity="0.6" stroke-width="1.2"/>
+    <rect x="0" y="0" width="4" height="52" rx="2" fill="#e85d4f"/>
+    <text x="16" y="20" font-family="Arial, sans-serif" font-size="11" fill="#e85d4f" font-weight="700" letter-spacing="1">01 · CLIP-HIGHER</text>
+    <text x="16" y="38" font-family="Arial, sans-serif" font-size="12" fill="#f4efe6" fill-opacity="0.9">非對稱 clip 放寬正向更新上限</text>
+  </g>
+
+  <!-- Technique badge 2: Dynamic Sampling -->
+  <g transform="translate(48, 230)">
+    <rect width="278" height="52" rx="8" fill="#f4a261" fill-opacity="0.15" stroke="#f4a261" stroke-opacity="0.55" stroke-width="1.2"/>
+    <rect x="0" y="0" width="4" height="52" rx="2" fill="#f4a261"/>
+    <text x="16" y="20" font-family="Arial, sans-serif" font-size="11" fill="#f4a261" font-weight="700" letter-spacing="1">02 · DYNAMIC SAMPLING</text>
+    <text x="16" y="38" font-family="Arial, sans-serif" font-size="12" fill="#f4efe6" fill-opacity="0.9">過濾全對 / 全錯 prompt，每步有訊號</text>
+  </g>
+
+  <!-- Technique badge 3: Token-Level PG -->
+  <g transform="translate(48, 292)">
+    <rect width="278" height="52" rx="8" fill="#0fa19d" fill-opacity="0.18" stroke="#0fa19d" stroke-opacity="0.6" stroke-width="1.2"/>
+    <rect x="0" y="0" width="4" height="52" rx="2" fill="#0fa19d"/>
+    <text x="16" y="20" font-family="Arial, sans-serif" font-size="11" fill="#0fa19d" font-weight="700" letter-spacing="1">03 · TOKEN-LEVEL PG LOSS</text>
+    <text x="16" y="38" font-family="Arial, sans-serif" font-size="12" fill="#f4efe6" fill-opacity="0.9">消除 sequence 歸一化的長度偏差</text>
+  </g>
+
+  <!-- Technique badge 4: Entropy Bonus -->
+  <g transform="translate(48, 354)">
+    <rect width="278" height="52" rx="8" fill="#a78bfa" fill-opacity="0.15" stroke="#a78bfa" stroke-opacity="0.55" stroke-width="1.2"/>
+    <rect x="0" y="0" width="4" height="52" rx="2" fill="#a78bfa"/>
+    <text x="16" y="20" font-family="Arial, sans-serif" font-size="11" fill="#a78bfa" font-weight="700" letter-spacing="1">04 · ENTROPY BONUS + OVERLONG</text>
+    <text x="16" y="38" font-family="Arial, sans-serif" font-size="12" fill="#f4efe6" fill-opacity="0.9">防 entropy 崩潰，截斷 length hacking</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="48" y="428" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" fill-opacity="0.45" letter-spacing="1.2">arXiv:2503.14476 · ByteDance · PREPRINT，尚未同儕審查</text>
+</svg>

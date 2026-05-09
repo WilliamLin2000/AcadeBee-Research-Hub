@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { Bell, Menu, X } from 'lucide-react'
 import logo from '../assets/square img0.png'
 import { apiFetch } from '../apiClient'
+import { getStoredUser } from '../authStorage'
 import './Header.css'
 
 export default function Header() {
@@ -17,12 +18,7 @@ export default function Header() {
 
   useEffect(() => {
     const loadUser = () => {
-      try {
-        const raw = window.localStorage.getItem('currentUser')
-        setUser(raw ? JSON.parse(raw) : null)
-      } catch {
-        setUser(null)
-      }
+      setUser(getStoredUser())
     }
 
     loadUser()
@@ -85,8 +81,8 @@ export default function Header() {
         <div className="header-top-bar-inner">
           <span>學術合作 · 媒合研究任務與專業接案者</span>
           <span className="header-top-bar-links">
-            <Link to="/articles">研究文章</Link>
-            <span className="sep">·</span>
+            {user && <Link to="/articles">研究文章</Link>}
+            {user && <span className="sep">·</span>}
             <a href="https://www.facebook.com/share/g/18HqkiYdnu/" target="_blank" rel="noreferrer">FB 社群</a>
             <span className="sep">·</span>
             <a href="https://www.instagram.com/morepublicationsinphd/?hl=zh-tw" target="_blank" rel="noreferrer">其他（IG）</a>
@@ -126,9 +122,11 @@ export default function Header() {
           <Link to="/tasks/new" onClick={closeMenu}>
             刊登任務
           </Link>
-          <Link to="/articles" onClick={closeMenu}>
-            研究文章
-          </Link>
+          {user && (
+            <Link to="/articles" onClick={closeMenu}>
+              研究文章
+            </Link>
+          )}
           <Link to="/dashboard" onClick={closeMenu}>
             我的任務
             {unreadCount > 0 && (

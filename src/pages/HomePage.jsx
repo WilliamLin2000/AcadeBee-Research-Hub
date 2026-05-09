@@ -5,6 +5,7 @@ import { categories } from '../data/mockTasks'
 import { academicFields } from '../data/academicFields'
 import { articles, formatArticleDate, getCategoryLabel, getCategoryColor } from '../data/articles'
 import { apiFetch } from '../apiClient'
+import { getStoredUser } from '../authStorage'
 import williamPhoto from '../assets/square img3.png'
 import {
   BarChart3,
@@ -81,13 +82,24 @@ export default function HomePage() {
   const [recentTasks, setRecentTasks] = useState([])
   const [tasksLoading, setTasksLoading] = useState(true)
   const [founderAvatarLoadError, setFounderAvatarLoadError] = useState(false)
+  const [hasUser, setHasUser] = useState(() => !!getStoredUser())
   const navigate = useNavigate()
 
   const [keyword, setKeyword] = useState('')
   const [selectedField, setSelectedField] = useState('')
 
-  const featuredArticle = articles.find((a) => a.featured) || articles[0]
-  const sideArticles = articles.filter((a) => a.id !== featuredArticle?.id).slice(0, 3)
+  const featuredArticle = hasUser ? (articles.find((a) => a.featured) || articles[0]) : null
+  const sideArticles =
+    hasUser && featuredArticle
+      ? articles.filter((a) => a.id !== featuredArticle.id).slice(0, 3)
+      : []
+
+  useEffect(() => {
+    const syncUser = () => setHasUser(!!getStoredUser())
+    syncUser()
+    window.addEventListener('user-changed', syncUser)
+    return () => window.removeEventListener('user-changed', syncUser)
+  }, [])
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -246,7 +258,11 @@ export default function HomePage() {
             </div>
           </div>
           <div className="founder-spacer" />
-          <Link to="/articles" className="founder-link">閱讀最新研究筆記 →</Link>
+          {hasUser ? (
+            <Link to="/articles" className="founder-link">閱讀最新研究筆記 →</Link>
+          ) : (
+            <Link to="/register" className="founder-link">註冊後閱讀研究筆記 →</Link>
+          )}
         </div>
       </section>
 
@@ -329,13 +345,22 @@ export default function HomePage() {
               <span className="section-eyebrow">Founder&apos;s Notes · 研究筆記</span>
               <h2 className="section-title">William 的研究筆記與產業觀察</h2>
               <p className="section-sub">
-                從生醫工程博士的視角，分享方法論、專案經驗、產業趨勢與 FB 社群精選討論。
+                {hasUser
+                  ? '從生醫工程博士的視角，分享方法論、專案經驗、產業趨勢與 FB 社群精選討論。'
+                  : '研究筆記僅開放給註冊會員閱讀；登入後即可瀏覽方法論、專案經驗與產業觀察全文。'}
               </p>
             </div>
-            <Link to="/articles" className="btn btn-outline btn-sm">瀏覽所有文章 →</Link>
+            {hasUser ? (
+              <Link to="/articles" className="btn btn-outline btn-sm">瀏覽所有文章 →</Link>
+            ) : (
+              <div className="section-header-inline-actions">
+                <Link to="/register" className="btn btn-primary btn-sm">免費註冊</Link>
+                <Link to="/login" className="btn btn-outline btn-sm">登入</Link>
+              </div>
+            )}
           </div>
 
-          {featuredArticle && (
+          {hasUser && featuredArticle && (
             <div className="articles-featured">
               <Link
                 to={`/articles/${featuredArticle.id}`}

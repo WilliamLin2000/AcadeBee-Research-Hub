@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, Navigate } from 'react-router-dom'
 import { BookOpen, Clock, Eye, ArrowRight } from 'lucide-react'
 import {
   articles,
@@ -8,6 +8,7 @@ import {
   getCategoryColor,
   formatArticleDate,
 } from '../data/articles'
+import { getStoredUser } from '../authStorage'
 import './ArticleListPage.css'
 
 export default function ArticleListPage() {
@@ -27,6 +28,10 @@ export default function ArticleListPage() {
     if (value) next.set('category', value)
     else next.delete('category')
     setSearchParams(next)
+  }
+
+  if (!getStoredUser()) {
+    return <Navigate to="/login" replace />
   }
 
   return (
