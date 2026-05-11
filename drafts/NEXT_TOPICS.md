@@ -5,7 +5,8 @@
 ## 高優先（已與 William 對齊方向，可直接動工）
 
 ### 方法論筆記 (method)
-- [ ] IMU 資料的三個同步誤差陷阱：以臨床步態研究為例（之前產過草稿，被改寫成 AI prompting 主題；待重新撰寫）
+
+（目前無待寫項目）
 
 ### 專案經驗 (case) — **William 自寫，排程不處理**
 
@@ -45,6 +46,8 @@
 - [x] Event camera 是什麼、能解決動作分析的哪些痛點：給生物力學研究者的入門整理 → `published/2026-05-06-event-camera-motion-analysis.md`（已發布）
 - [x] 生醫工程博士生必讀的五種統計檢定：從 t-test 到 mixed model → `2026-05-08-stats-five-methods-biomech.md`（草稿，待 William 審稿）
 - [x] DAPO 拆解：填補 DeepSeek-R1 技術黑盒的四個關鍵設計 → `published/2026-05-09-dapo-rlvr-four-techniques.md`（已發布）
+- [x] IMU 資料的三個同步誤差陷阱：以臨床步態研究為例 → `2026-05-11-imu-sync-errors-gait.md`（草稿，待 William 審稿）
+- [x] 把眼動研究從實驗室搬到馬路上：2024 年最新的 IMU + 眼動 + AI 整合範例 → `published/2026-05-11-imu-outdoor-gaze-tracking.md`（已發布；William 即時指定主題）
 
 ---
 

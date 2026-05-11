@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="IMU + 眼動 + AI：戶外 / 自由場域 gaze tracking 封面">
+  <defs>
+    <linearGradient id="bg-gaze" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1a2e"/>
+      <stop offset="1" stop-color="#061025"/>
+    </linearGradient>
+    <radialGradient id="halo-gaze" cx="0.65" cy="0.4" r="0.5">
+      <stop offset="0" stop-color="#0fa19d" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#0fa19d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ground-line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0fa19d" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#0fa19d" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#0fa19d" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg-gaze)"/>
+  <rect width="800" height="450" fill="url(#halo-gaze)"/>
+
+  <!-- Background grid dots -->
+  <g fill="#ffffff" opacity="0.06">
+    <circle cx="80" cy="60" r="1.5"/><circle cx="160" cy="60" r="1.5"/><circle cx="240" cy="60" r="1.5"/><circle cx="320" cy="60" r="1.5"/><circle cx="400" cy="60" r="1.5"/><circle cx="480" cy="60" r="1.5"/><circle cx="560" cy="60" r="1.5"/><circle cx="640" cy="60" r="1.5"/><circle cx="720" cy="60" r="1.5"/>
+    <circle cx="80" cy="385" r="1.5"/><circle cx="160" cy="385" r="1.5"/><circle cx="240" cy="385" r="1.5"/><circle cx="320" cy="385" r="1.5"/><circle cx="400" cy="385" r="1.5"/><circle cx="480" cy="385" r="1.5"/><circle cx="560" cy="385" r="1.5"/><circle cx="640" cy="385" r="1.5"/><circle cx="720" cy="385" r="1.5"/>
+  </g>
+
+  <!-- Ground line -->
+  <line x1="80" y1="370" x2="720" y2="370" stroke="url(#ground-line)" stroke-width="2"/>
+
+  <!-- Walking person silhouette (left side) -->
+  <g transform="translate(220 130)">
+    <!-- Head -->
+    <circle cx="0" cy="0" r="28" fill="#f4efe6" opacity="0.95"/>
+    <!-- Eye tracker glasses -->
+    <rect x="-26" y="-6" width="52" height="14" rx="3" fill="#07243d" stroke="#0fa19d" stroke-width="1.8"/>
+    <circle cx="-14" cy="1" r="4.5" fill="#0fa19d" opacity="0.85"/>
+    <circle cx="14" cy="1" r="4.5" fill="#0fa19d" opacity="0.85"/>
+    <!-- Bridge -->
+    <line x1="-4" y1="1" x2="4" y2="1" stroke="#0fa19d" stroke-width="1.5"/>
+    <!-- IMU on head (forehead) -->
+    <rect x="-7" y="-22" width="14" height="10" rx="2" fill="#d4a537" stroke="#fff" stroke-width="1"/>
+
+    <!-- Body -->
+    <path d="M 0 28 L -4 75 L -16 165 L -8 165 L 0 110 L 8 165 L 16 165 L 4 75 Z" fill="#f4efe6" opacity="0.92"/>
+    <!-- IMU on sternum -->
+    <rect x="-8" y="55" width="14" height="10" rx="2" fill="#d4a537" stroke="#fff" stroke-width="1"/>
+    <!-- IMU on lumbar -->
+    <rect x="-8" y="90" width="14" height="10" rx="2" fill="#d4a537" stroke="#fff" stroke-width="1"/>
+    <!-- Arms -->
+    <path d="M -12 36 L -32 78 L -28 100" stroke="#f4efe6" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.92"/>
+    <path d="M 12 36 L 30 70 L 24 96" stroke="#f4efe6" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.92"/>
+    <!-- IMU on wrist -->
+    <rect x="20" y="92" width="12" height="9" rx="2" fill="#d4a537" stroke="#fff" stroke-width="1"/>
+    <!-- Legs (walking pose) -->
+    <path d="M -8 165 L -28 210 L -32 240" stroke="#f4efe6" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.92"/>
+    <path d="M 8 165 L 18 210 L 32 238" stroke="#f4efe6" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.92"/>
+    <!-- IMU on feet -->
+    <rect x="-38" y="232" width="14" height="9" rx="2" fill="#d4a537" stroke="#fff" stroke-width="1"/>
+    <rect x="26" y="230" width="14" height="9" rx="2" fill="#d4a537" stroke="#fff" stroke-width="1"/>
+  </g>
+
+  <!-- Gaze trajectory dashed line -->
+  <g stroke="#d4a537" stroke-width="1.8" fill="none" opacity="0.85" stroke-dasharray="6 4">
+    <path d="M 244 124 Q 380 130 480 170 Q 540 195 590 215"/>
+  </g>
+
+  <!-- Object bounding box (YOLOv8 style) — environment obstacle -->
+  <g transform="translate(540 188)">
+    <rect x="0" y="0" width="120" height="80" fill="none" stroke="#0fa19d" stroke-width="2.4" stroke-dasharray="3 3"/>
+    <rect x="0" y="-22" width="68" height="20" fill="#0fa19d"/>
+    <text x="6" y="-7" font-family="Arial, sans-serif" font-size="11" fill="#061025" font-weight="700" letter-spacing="0.6">obstacle 0.93</text>
+    <!-- Obstacle silhouette inside -->
+    <path d="M 25 60 L 25 30 Q 25 18 40 18 L 80 18 Q 95 18 95 30 L 95 60 Z" fill="#f4efe6" opacity="0.55"/>
+    <rect x="36" y="32" width="48" height="22" rx="2" fill="#07243d" opacity="0.6"/>
+  </g>
+
+  <!-- Gaze endpoint marker -->
+  <circle cx="600" cy="228" r="7" fill="#d4a537" stroke="#ffffff" stroke-width="1.6"/>
+  <circle cx="600" cy="228" r="14" fill="none" stroke="#d4a537" stroke-width="1" opacity="0.45"/>
+
+  <!-- Title block (top-left) -->
+  <text x="42" y="56" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#d4a537" letter-spacing="4">GAZE × IMU</text>
+  <text x="44" y="80" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" opacity="0.72" letter-spacing="1.2">戶外 / 自由場域眼動研究</text>
+  <line x1="44" y1="88" x2="220" y2="88" stroke="#d4a537" stroke-width="1" opacity="0.35"/>
+  <text x="42" y="116" font-family="Arial, sans-serif" font-size="9" fill="#0fa19d" letter-spacing="1.8" font-weight="700" opacity="0.85">PARKINSON · YOLOv8 · IMU GAIT</text>
+
+  <!-- Top-right meta -->
+  <text x="758" y="52" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#d4a537" letter-spacing="2.5" font-weight="700">BIOMED ENG × AI</text>
+  <text x="758" y="68" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.4" letter-spacing="1.2">METHOD NOTE · 2026</text>
+
+  <!-- Bottom metrics -->
+  <line x1="76" y1="400" x2="724" y2="400" stroke="#ffffff" stroke-width="0.8" opacity="0.18"/>
+  <text x="76" y="420" font-family="Arial, sans-serif" font-size="9" fill="#0fa19d" letter-spacing="1.5" font-weight="700" opacity="0.86">mAP50 LAB</text>
+  <text x="76" y="436" font-family="Georgia, serif" font-size="18" fill="#ffffff" font-weight="700">0.93</text>
+
+  <text x="200" y="420" font-family="Arial, sans-serif" font-size="9" fill="#0fa19d" letter-spacing="1.5" font-weight="700" opacity="0.86">mAP50 REAL-WORLD</text>
+  <text x="200" y="436" font-family="Georgia, serif" font-size="18" fill="#ffffff" font-weight="700">0.81</text>
+
+  <text x="380" y="420" font-family="Arial, sans-serif" font-size="9" fill="#d4a537" letter-spacing="1.5" font-weight="700" opacity="0.86">PATH IoU</text>
+  <text x="380" y="436" font-family="Georgia, serif" font-size="18" fill="#ffffff" font-weight="700">0.82</text>
+
+  <text x="500" y="420" font-family="Arial, sans-serif" font-size="9" fill="#d4a537" letter-spacing="1.5" font-weight="700" opacity="0.86">LAB → RW DROP</text>
+  <text x="500" y="436" font-family="Georgia, serif" font-size="18" fill="#ffffff" font-weight="700">~13%</text>
+
+  <text x="724" y="420" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.55" letter-spacing="0.8">Moore et al. 2024 · J NER · Sensors</text>
+</svg>
