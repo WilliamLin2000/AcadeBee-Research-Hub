@@ -20,7 +20,6 @@
 
 ### 產業觀察 (industry)
 - [ ] 台灣醫材新創需要什麼樣的生醫工程人才（2026 版）
-- [ ] SaMD 分級認證拆解：AI 產品在台灣的上市門檻
 - [ ] 健保資料庫研究申請 2026 新規：研究生怎麼接觸
 - [ ] 從 CES 2026 看穿戴式裝置三個趨勢
 
@@ -48,6 +47,7 @@
 - [x] DAPO 拆解：填補 DeepSeek-R1 技術黑盒的四個關鍵設計 → `published/2026-05-09-dapo-rlvr-four-techniques.md`（已發布）
 - [x] IMU 資料的三個同步誤差陷阱：以臨床步態研究為例 → `2026-05-11-imu-sync-errors-gait.md`（草稿，待 William 審稿）
 - [x] 把眼動研究從實驗室搬到馬路上：2024 年最新的 IMU + 眼動 + AI 整合範例 → `published/2026-05-11-imu-outdoor-gaze-tracking.md`（已發布；William 即時指定主題）
+- [x] SaMD 分級認證拆解：AI 醫材在台灣的上市門檻怎麼看（對照歐盟 2025 兩篇新研究） → `published/2026-05-13-samd-ai-taiwan-classification.md`（已發布）
 
 ---
 

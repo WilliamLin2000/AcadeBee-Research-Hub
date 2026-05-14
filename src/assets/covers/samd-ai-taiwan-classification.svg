@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="SaMD 分級認證拆解：AI 醫材在台灣的上市門檻封面">
+  <defs>
+    <linearGradient id="bg-samd" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1a2e"/>
+      <stop offset="1" stop-color="#061025"/>
+    </linearGradient>
+    <radialGradient id="halo-samd" cx="0.7" cy="0.35" r="0.55">
+      <stop offset="0" stop-color="#0fa19d" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#0fa19d" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="tier-gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d4a537" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#d4a537" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#d4a537" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg-samd)"/>
+  <rect width="800" height="450" fill="url(#halo-samd)"/>
+
+  <!-- Background grid dots -->
+  <g fill="#ffffff" opacity="0.06">
+    <circle cx="80" cy="60" r="1.5"/><circle cx="160" cy="60" r="1.5"/><circle cx="240" cy="60" r="1.5"/><circle cx="320" cy="60" r="1.5"/><circle cx="400" cy="60" r="1.5"/><circle cx="480" cy="60" r="1.5"/><circle cx="560" cy="60" r="1.5"/><circle cx="640" cy="60" r="1.5"/><circle cx="720" cy="60" r="1.5"/>
+    <circle cx="80" cy="385" r="1.5"/><circle cx="160" cy="385" r="1.5"/><circle cx="240" cy="385" r="1.5"/><circle cx="320" cy="385" r="1.5"/><circle cx="400" cy="385" r="1.5"/><circle cx="480" cy="385" r="1.5"/><circle cx="560" cy="385" r="1.5"/><circle cx="640" cy="385" r="1.5"/><circle cx="720" cy="385" r="1.5"/>
+  </g>
+
+  <!-- Title block (top-left) -->
+  <text x="42" y="56" font-family="Georgia, serif" font-size="34" font-weight="700" fill="#d4a537" letter-spacing="4">SaMD × TFDA</text>
+  <text x="44" y="80" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" opacity="0.72" letter-spacing="1.2">AI 醫材在台灣的分級門檻</text>
+  <line x1="44" y1="88" x2="240" y2="88" stroke="#d4a537" stroke-width="1" opacity="0.35"/>
+  <text x="42" y="116" font-family="Arial, sans-serif" font-size="9" fill="#0fa19d" letter-spacing="1.8" font-weight="700" opacity="0.85">AI / ML · CADe · CADx · PACS</text>
+
+  <!-- Top-right meta -->
+  <text x="758" y="52" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#d4a537" letter-spacing="2.5" font-weight="700">BIOMED ENG × REGULATORY</text>
+  <text x="758" y="68" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.4" letter-spacing="1.2">INDUSTRY NOTE · 2026</text>
+
+  <!-- Central three-tier pyramid/stack -->
+  <g transform="translate(170 150)">
+    <!-- Class I (bottom, low risk) -->
+    <rect x="0" y="140" width="460" height="56" rx="4" fill="#0fa19d" opacity="0.18" stroke="#0fa19d" stroke-width="1.6"/>
+    <text x="22" y="166" font-family="Georgia, serif" font-size="20" fill="#0fa19d" font-weight="700">CLASS I</text>
+    <text x="22" y="186" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" opacity="0.78">第一等級 · 低風險</text>
+    <text x="448" y="168" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" opacity="0.6" letter-spacing="0.6">P.2010 影像儲存 / P.2020 影像傳輸</text>
+    <text x="448" y="185" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.4">純傳輸 · 儲存 · 顯示</text>
+
+    <!-- Class II (middle, medium risk) -->
+    <rect x="40" y="72" width="380" height="56" rx="4" fill="#d4a537" opacity="0.22" stroke="#d4a537" stroke-width="1.6"/>
+    <text x="62" y="98" font-family="Georgia, serif" font-size="20" fill="#d4a537" font-weight="700">CLASS II</text>
+    <text x="62" y="118" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" opacity="0.82">第二等級 · 中風險</text>
+    <text x="408" y="100" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" opacity="0.7" letter-spacing="0.6">PACS · CADe · 輔助 CADx · 手術導航</text>
+    <text x="408" y="117" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.5">影像加工 · 病灶輔助 · 生理監控</text>
+
+    <!-- Class III (top, high risk) -->
+    <rect x="100" y="4" width="260" height="56" rx="4" fill="#c14a4a" opacity="0.28" stroke="#e07a7a" stroke-width="1.8"/>
+    <text x="122" y="30" font-family="Georgia, serif" font-size="20" fill="#f4a8a8" font-weight="700">CLASS III</text>
+    <text x="122" y="50" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" opacity="0.85">第三等級 · 高風險</text>
+    <text x="348" y="32" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" opacity="0.78" letter-spacing="0.6">取代醫師決策的 CADx</text>
+    <text x="348" y="49" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.55">「宣稱」一變 · 分級就跳</text>
+  </g>
+
+  <!-- The "claim line" arrow between Class II and III -->
+  <g transform="translate(640 162)">
+    <line x1="0" y1="0" x2="0" y2="64" stroke="url(#tier-gold)" stroke-width="2"/>
+    <polygon points="-5,0 5,0 0,-9" fill="#d4a537" opacity="0.85"/>
+    <text x="10" y="22" font-family="Arial, sans-serif" font-size="9" fill="#d4a537" letter-spacing="0.6" font-weight="700">仿單宣稱</text>
+    <text x="10" y="36" font-family="Arial, sans-serif" font-size="9" fill="#d4a537" letter-spacing="0.6" font-weight="700">「取代」</text>
+    <text x="10" y="56" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.5" letter-spacing="0.4">推升分級的</text>
+    <text x="10" y="68" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.5" letter-spacing="0.4">關鍵兩字</text>
+  </g>
+
+  <!-- Bottom metrics strip -->
+  <line x1="76" y1="400" x2="724" y2="400" stroke="#ffffff" stroke-width="0.8" opacity="0.18"/>
+  <text x="76" y="420" font-family="Arial, sans-serif" font-size="9" fill="#0fa19d" letter-spacing="1.5" font-weight="700" opacity="0.86">TFDA 指引</text>
+  <text x="76" y="436" font-family="Georgia, serif" font-size="16" fill="#ffffff" font-weight="700">111.9.15 修正</text>
+
+  <text x="232" y="420" font-family="Arial, sans-serif" font-size="9" fill="#0fa19d" letter-spacing="1.5" font-weight="700" opacity="0.86">核准清單範圍</text>
+  <text x="232" y="436" font-family="Georgia, serif" font-size="16" fill="#ffffff" font-weight="700">109–114 年</text>
+
+  <text x="392" y="420" font-family="Arial, sans-serif" font-size="9" fill="#d4a537" letter-spacing="1.5" font-weight="700" opacity="0.86">歐盟 ESR 共識</text>
+  <text x="392" y="436" font-family="Georgia, serif" font-size="16" fill="#ffffff" font-weight="700">14 panelists</text>
+
+  <text x="552" y="420" font-family="Arial, sans-serif" font-size="9" fill="#d4a537" letter-spacing="1.5" font-weight="700" opacity="0.86">主流分級</text>
+  <text x="552" y="436" font-family="Georgia, serif" font-size="16" fill="#ffffff" font-weight="700">Class IIa / I</text>
+
+  <text x="724" y="436" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.55" letter-spacing="0.8">TFDA · Insights Imaging · Diagnostics 2025</text>
+</svg>

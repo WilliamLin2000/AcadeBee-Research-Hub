@@ -16,6 +16,7 @@ import aiMedicalImaging2026PapersCover from '../assets/covers/ai-medical-imaging
 import eventCameraMotionAnalysisCover from '../assets/covers/event-camera-motion-analysis.svg'
 import dapoRlvrFourTechniquesCover from '../assets/covers/dapo-rlvr-four-techniques.svg'
 import imuOutdoorGazeTrackingCover from '../assets/covers/imu-outdoor-gaze-tracking.svg'
+import samdAiTaiwanClassificationCover from '../assets/covers/samd-ai-taiwan-classification.svg'
 
 export const articleCategories = [
   { value: 'method', label: '方法論筆記', color: 'teal' },
@@ -25,6 +26,133 @@ export const articleCategories = [
 ]
 
 export const articles = [
+  {
+    id: 'samd-ai-taiwan-classification',
+    category: 'industry',
+    title: 'SaMD 分級認證拆解：AI 醫材在台灣的上市門檻怎麼看（對照歐盟 2025 兩篇新研究）',
+    excerpt:
+      'TFDA《醫用軟體分類分級參考指引》把 AI/ML SaMD 拆成第一到第三等級，分界線決定臨床試驗強度與上市時間。',
+    publishedAt: '2026-05-13',
+    readingTime: '9 分鐘',
+    featured: false,
+    coverImage: samdAiTaiwanClassificationCover,
+    tableOfContents: [
+      { id: 'why-this-topic', title: '一、為什麼這篇要寫' },
+      { id: 'tfda-classification', title: '二、台灣端：TFDA 怎麼分級 AI/ML SaMD' },
+      { id: 'tech-clinical', title: '三、技術 / 安全資料要準備什麼' },
+      { id: 'eu-distribution', title: '四、歐洲對照：AI 醫材實際長什麼樣' },
+      { id: 'post-market', title: '五、規範還沒補上的洞：post-market surveillance' },
+      { id: 'takeaway', title: '六、給研究者 / 創業團隊的 takeaway' },
+    ],
+    content: [
+      {
+        type: 'callout',
+        text: '本文圍繞 TFDA 公告指引與 2025 年兩篇歐洲 AIaMD peer-reviewed 研究展開：Cuocolo R, et al. Insights Imaging 2025;16(1):275（DOI: 10.1186/s13244-025-02146-8）；Obuchowicz R, et al. Diagnostics 2025;15(3):282（DOI: 10.3390/diagnostics15030282）。',
+      },
+      { type: 'h2', id: 'why-this-topic', text: '一、為什麼這篇要寫' },
+      {
+        type: 'p',
+        text: '相信很多人會有類似的疑問：「我做了一個 AI 模型，能輔助看影像或處理生理訊號，這在台灣到底要不要送 TFDA？要送的話是哪一級？」這個問題的答案直接決定後續兩件事：要花多少時間做臨床性能驗證、需要多嚴格的資訊安全要件。等級判斷錯了，最壞的情況是整套臨床試驗設計推翻重來。',
+      },
+      {
+        type: 'p',
+        text: '這篇圍繞兩個材料展開。一是 TFDA 現行《醫用軟體分類分級參考指引》（104 年制定、109 年與 111 年兩次修正），這份指引明確列出了影像、CAD、手術導航、生理監控等品項對應的等級。二是 2025 年兩篇歐洲視角的最新研究：歐洲放射學會 (ESR) 對 AIaMD post-market surveillance 的 Delphi 共識，以及《Diagnostics》期刊上對歐洲市場 AI 醫材分佈的回顧。兩邊對照可以看出：台灣的分級邏輯與歐美其實接軌，但 post-market 階段的責任歸屬，歐洲也還在補規則。',
+      },
+      { type: 'h2', id: 'tfda-classification', text: '二、台灣端：TFDA 怎麼分級 AI/ML SaMD' },
+      {
+        type: 'p',
+        text: 'TFDA 在 AI/ML SaMD 查驗登記送件問答集裡，把 AI/ML-Based SaMD 定義為「使用臨床資料（含量測數據、資料庫或影像等）為來源，透過人為設計軟體之學習模式或訓練方法來使程式模擬人類推論或自主學習，進而調適其效能之醫療器材軟體」。但「是不是 SaMD」與「是不是醫療器材」是兩個問題。《醫用軟體分類分級參考指引》第三節列出六個判定原則：是否符合醫療器材管理法第 3 條定義、是否符合醫療器材分類分級管理辦法附表所列品項、是否宣稱具診斷 / 治療功能、對疾病治療的重要性、對疾病診斷的貢獻度、對人類生命健康可能產生的危害程度。',
+      },
+      {
+        type: 'p',
+        text: '幾個常被誤判的例子，指引明確說「不是」醫療器材：醫院行政管理軟體（HIS、電子病歷、實驗室資訊系統）——只是把紙本電子化、不取代醫事人員臨床決策；健康促進軟體（飲食、運動、睡眠、減重 App）——即使宣稱可降低糖尿病風險，只要不是治療或改善「特定疾病或症狀」，不屬於醫療器材；用藥紀錄軟體（內容只是電子化既有藥品仿單、不直接取代醫事人員開立處方）。',
+      },
+      {
+        type: 'p',
+        text: '再來是大多數 AI 開發者真正關心的部分：分到哪一級。指引第五節把常見品類對應如下。第一等級（低風險）包含醫學影像儲存裝置（P.2010）、醫學影像傳輸裝置（P.2020）——條件是「單純」傳輸、儲存、顯示影像，不做加工或處理。第二等級（中風險）包含 PACS（P.2050）、醫學影像數位器（P.2030）（對影像做加工 / 處理 / 編輯 / 分析）、CADe 電腦輔助偵測軟體、CADx 電腦輔助診斷軟體（只要還是「輔助」醫事人員、由醫事人員做最終決策）、電腦輔助分流軟體、手術導航 / 手術計畫軟體、植牙計畫軟體、病人生理參數監控軟體，以及會「解釋資料或協助診斷 / 治療」的遠距醫療軟體。第三等級（高風險）則是 CADx 軟體宣稱「可取代專業醫事人員決策、直接進行疾病診斷或治療」。',
+      },
+      {
+        type: 'callout',
+        text: 'CADx 的「輔助」與「取代」這條線是台灣最容易被低估的分界。差別在於「宣稱」兩個字：同一套深度學習模型，仿單上寫「輔助放射科醫師判讀」與「自主進行影像診斷」，會把產品從第二等級推到第三等級，臨床試驗強度、QMS 要求、上市時程都會完全不同。',
+      },
+      { type: 'h2', id: 'tech-clinical', text: '三、技術 / 安全資料要準備什麼' },
+      {
+        type: 'p',
+        text: 'AI/ML SaMD 查驗登記送件問答集第三條明列要附的兩類資料。技術性資料包含：軟體概要、演算法架構、AI/ML 之資料限制、輸出結果、使用環境與人員限制。安全與效能評估資料包含：資訊安全、功能性驗證、臨床性能驗證。',
+      },
+      {
+        type: 'p',
+        text: '臨床性能驗證的撰寫架構，TFDA 直接引用 IMDRF 2017 年公告的《Software as a Medical Device: Clinical Evaluation》，三大流程是：證實臨床關聯（Valid Clinical Association）——模型輸出與目標臨床狀況之間有 well-established 的關係；分析性能驗證（Analytical Validation）——模型輸入到輸出的計算正確性；臨床性能驗證（Clinical Validation）——在 intended use population 中，模型輸出真的能達到宣稱的臨床效益。',
+      },
+      {
+        type: 'p',
+        text: '對研究者來說，這三個層次不能合併處理。常見的錯誤是把「在公開資料集上 AUC = 0.9」當成臨床性能驗證——但那其實只完成了 analytical validation 的一部分，連 valid clinical association 都沒寫清楚。',
+      },
+      { type: 'h2', id: 'eu-distribution', text: '四、歐洲對照：AI 醫材實際長什麼樣' },
+      {
+        type: 'p',
+        text: '2025 年《Diagnostics》上一篇大型回顧整理了歐洲市場 AI 影像產品的分佈，幾個對台灣團隊有用的觀察：大多數 AI 影像產品的 MDR / MDD 認證落在 Class IIa 或 Class I，也就是中低風險區間；神經影像 (neuroimaging) 與胸部影像是主要產品聚焦點；鎖定的疾病多是高盛行率（肺癌、中風、乳癌）；AI 醫材產品數量在 2017–2020 年快速成長、2020 年達到高峰、之後進入相對停滯。',
+      },
+      {
+        type: 'p',
+        text: '這個分佈與台灣的 TFDA 指引邏輯一致：CADe / CADx 輔助用、PACS、影像加工這類產品 → 第二等級（對應歐洲 Class IIa）；真正自主診斷、進到第三等級 / Class III 的產品仍是少數。換句話說，「AI 取代醫師」是新聞標題，「AI 輔助醫師」才是市場常態。',
+      },
+      { type: 'h2', id: 'post-market', text: '五、規範還沒補上的洞：post-market surveillance' },
+      {
+        type: 'p',
+        text: '如果說「上市前分級」是已經有指引的部分，那「上市後監測」就是規範仍在補的部分。2025 年 12 月歐洲放射學會 (ESR) 用 modified Delphi 程序找了 16 位專家、其中 14 人作為 panelist，整理出一套 AIaMD post-market surveillance 共識。',
+      },
+      {
+        type: 'list',
+        items: [
+          '歐盟的 MDR 與 AI Act 都沒有針對 AI 元件的明確條款，導致「high-risk AI」的分類與部署實務之間存在灰色地帶。',
+          'PMS 法律責任主要在軟體提供者，但放射科醫師（deployer）也被期待持續貢獻於安全與效能監測。',
+          'ESR 的共識把 PMS 與 post-market clinical feedback (PMCF) 視為 provider 與 deployer 共同負責的循環，不只是「賣完就算」。',
+        ],
+      },
+      {
+        type: 'p',
+        text: '對台灣團隊的對照意義：TFDA 端的 AI/ML 醫材清單從 109 年（2020）持續更新到 114 年（2025），上市後監測在台灣與歐盟都是現在進行式。提早把 PMCF 機制（資料收集、版本控管、re-training trigger）放進產品設計，比事後補救成本低很多。',
+      },
+      { type: 'h2', id: 'takeaway', text: '六、給研究者 / 創業團隊的 takeaway' },
+      {
+        type: 'p',
+        text: '如果你正在規劃一個 AI 醫材產品，TFDA 指引 + 兩篇 2025 年研究放在一起看，可以萃取出三件事：',
+      },
+      {
+        type: 'list',
+        items: [
+          '仿單裡的「宣稱」是分級槓桿。同一套模型，宣稱「輔助診斷」會落在第二等級，宣稱「取代醫師決策」會跳到第三等級。送件前先盤點 marketing 語言與技術文件的一致性。',
+          '臨床性能驗證 ≠ AUC。IMDRF 三層架構（valid clinical association、analytical validation、clinical validation）要分別交代。',
+          'PMS 機制要在產品設計階段就放進去。歐洲市場目前仍在補規則的階段，但這代表台灣團隊有機會以「PMS-ready」當差異化條件，而不是被動等規範補齊。',
+        ],
+      },
+      {
+        type: 'p',
+        text: '對多數人來說這條路看起來或許繁瑣，但其實指引給的等級對應比想像中清楚。比較難的是「把研究端的 model performance 翻譯成 regulatory grade evidence」這件事——而這正是生醫工程跨領域訓練的價值所在。',
+      },
+      {
+        type: 'callout',
+        text: 'TFDA《醫用軟體分類分級參考指引》(111.9.15 修正) https://www.fda.gov.tw/tc/includes/GetFile.ashx?id=f637988574332883487&type=1',
+      },
+      {
+        type: 'callout',
+        text: 'TFDA《人工智慧/機器學習技術之醫療器材軟體查驗登記送件常見問答集》(110.5.7) https://www.fda.gov.tw/tc/includes/GetFile.ashx?id=f637559984474447747&type=1',
+      },
+      {
+        type: 'callout',
+        text: 'TFDA「本署核准應用 AI/ML 技術之醫療器材清單（109 至 114 年）」https://www.fda.gov.tw/tc/siteListContent.aspx?sid=310&id=42528',
+      },
+      {
+        type: 'callout',
+        text: 'Cuocolo R, Bernardini D, Pinto Dos Santos D, et al. AI medical device post-market surveillance regulations: consensus recommendations by the European Society of Radiology. Insights Imaging. 2025;16(1):275. https://doi.org/10.1186/s13244-025-02146-8',
+      },
+      {
+        type: 'callout',
+        text: 'Obuchowicz R, Lasek J, Wodziński M, et al. Artificial Intelligence-Empowered Radiology—Current Status and Critical Review. Diagnostics. 2025;15(3):282. https://doi.org/10.3390/diagnostics15030282',
+      },
+    ],
+  },
   {
     id: 'imu-outdoor-gaze-tracking',
     category: 'method',
