@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Agent AI 技術背景整理封面">
+  <defs>
+    <linearGradient id="bg-agent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f1a2e"/>
+      <stop offset="1" stop-color="#0a2e2a"/>
+    </linearGradient>
+    <linearGradient id="timeline-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0fa19d" stop-opacity="0.3"/>
+      <stop offset="0.5" stop-color="#0fa19d" stop-opacity="1"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="1"/>
+    </linearGradient>
+    <filter id="glow-agent">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#bg-agent)"/>
+
+  <!-- Grid lines (subtle) -->
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <line x1="0" y1="90" x2="800" y2="90"/>
+    <line x1="0" y1="180" x2="800" y2="180"/>
+    <line x1="0" y1="270" x2="800" y2="270"/>
+    <line x1="0" y1="360" x2="800" y2="360"/>
+    <line x1="160" y1="0" x2="160" y2="450"/>
+    <line x1="320" y1="0" x2="320" y2="450"/>
+    <line x1="480" y1="0" x2="480" y2="450"/>
+    <line x1="640" y1="0" x2="640" y2="450"/>
+  </g>
+
+  <!-- Right side: Evolution timeline visual -->
+  <g transform="translate(370, 40)">
+    <!-- Timeline axis -->
+    <line x1="30" y1="200" x2="400" y2="200" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.5"/>
+    <text x="215" y="232" font-family="Arial" font-size="11" fill="#ffffff" fill-opacity="0.45" text-anchor="middle">Evolution Timeline</text>
+
+    <!-- Timeline curve -->
+    <path d="M 30 195 Q 110 180 165 150 Q 230 110 290 80 Q 350 55 380 40"
+          fill="none" stroke="url(#timeline-grad)" stroke-width="3" filter="url(#glow-agent)"/>
+
+    <!-- Timeline milestones -->
+    <circle cx="30" cy="195" r="5" fill="#5d8bb3"/>
+    <text x="30" y="218" font-family="Arial" font-size="10" fill="#5d8bb3" text-anchor="middle">~2022</text>
+    <text x="30" y="180" font-family="Arial" font-size="9" fill="#ffffff" fill-opacity="0.55" text-anchor="middle">LLM only</text>
+
+    <circle cx="115" cy="175" r="5" fill="#0fa19d" filter="url(#glow-agent)"/>
+    <text x="115" y="218" font-family="Arial" font-size="10" fill="#0fa19d" text-anchor="middle">2022-23</text>
+    <text x="115" y="160" font-family="Arial" font-size="9" fill="#ffffff" fill-opacity="0.7" text-anchor="middle">ReAct · Tool use</text>
+
+    <circle cx="230" cy="115" r="5" fill="#f4a261" filter="url(#glow-agent)"/>
+    <text x="230" y="135" font-family="Arial" font-size="10" fill="#f4a261" text-anchor="middle">2023-24</text>
+    <text x="230" y="100" font-family="Arial" font-size="9" fill="#ffffff" fill-opacity="0.7" text-anchor="middle">Multi-agent</text>
+
+    <circle cx="380" cy="40" r="6" fill="#a78bfa" filter="url(#glow-agent)"/>
+    <text x="380" y="60" font-family="Arial" font-size="10" fill="#a78bfa" text-anchor="middle">2025-26</text>
+    <text x="380" y="25" font-family="Arial" font-size="9" fill="#ffffff" fill-opacity="0.7" text-anchor="middle">MCP · A2A</text>
+  </g>
+
+  <!-- Left side: Title + 4 component badges -->
+  <text x="48" y="58" font-family="Arial, sans-serif" font-size="11" fill="#0fa19d" letter-spacing="2.5" font-weight="700">COMMUNITY PICKS · AI/ML METHOD</text>
+  <text x="48" y="95" font-family="Arial, sans-serif" font-size="28" fill="#ffffff" font-weight="700">Agent AI</text>
+  <text x="48" y="122" font-family="Arial, sans-serif" font-size="14" fill="#f4efe6" fill-opacity="0.85">技術背景、演進脈絡、</text>
+  <text x="48" y="142" font-family="Arial, sans-serif" font-size="14" fill="#f4efe6" fill-opacity="0.85">與相關新興技術</text>
+
+  <!-- Component badge 1: Planning -->
+  <g transform="translate(48, 168)">
+    <rect width="278" height="52" rx="8" fill="#5d8bb3" fill-opacity="0.18" stroke="#5d8bb3" stroke-opacity="0.6" stroke-width="1.2"/>
+    <rect x="0" y="0" width="4" height="52" rx="2" fill="#5d8bb3"/>
+    <text x="16" y="20" font-family="Arial, sans-serif" font-size="11" fill="#5d8bb3" font-weight="700" letter-spacing="1">01 · PLANNING</text>
+    <text x="16" y="38" font-family="Arial, sans-serif" font-size="12" fill="#f4efe6" fill-opacity="0.9">把任務拆解成可執行步驟</text>
+  </g>
+
+  <!-- Component badge 2: Action -->
+  <g transform="translate(48, 230)">
+    <rect width="278" height="52" rx="8" fill="#0fa19d" fill-opacity="0.18" stroke="#0fa19d" stroke-opacity="0.6" stroke-width="1.2"/>
+    <rect x="0" y="0" width="4" height="52" rx="2" fill="#0fa19d"/>
+    <text x="16" y="20" font-family="Arial, sans-serif" font-size="11" fill="#0fa19d" font-weight="700" letter-spacing="1">02 · ACTION</text>
+    <text x="16" y="38" font-family="Arial, sans-serif" font-size="12" fill="#f4efe6" fill-opacity="0.9">呼叫外部工具與 API（tool calling）</text>
+  </g>
+
+  <!-- Component badge 3: Reflection -->
+  <g transform="translate(48, 292)">
+    <rect width="278" height="52" rx="8" fill="#f4a261" fill-opacity="0.15" stroke="#f4a261" stroke-opacity="0.55" stroke-width="1.2"/>
+    <rect x="0" y="0" width="4" height="52" rx="2" fill="#f4a261"/>
+    <text x="16" y="20" font-family="Arial, sans-serif" font-size="11" fill="#f4a261" font-weight="700" letter-spacing="1">03 · REFLECTION</text>
+    <text x="16" y="38" font-family="Arial, sans-serif" font-size="12" fill="#f4efe6" fill-opacity="0.9">評估行動結果、自我修正</text>
+  </g>
+
+  <!-- Component badge 4: Memory -->
+  <g transform="translate(48, 354)">
+    <rect width="278" height="52" rx="8" fill="#a78bfa" fill-opacity="0.15" stroke="#a78bfa" stroke-opacity="0.55" stroke-width="1.2"/>
+    <rect x="0" y="0" width="4" height="52" rx="2" fill="#a78bfa"/>
+    <text x="16" y="20" font-family="Arial, sans-serif" font-size="11" fill="#a78bfa" font-weight="700" letter-spacing="1">04 · MEMORY</text>
+    <text x="16" y="38" font-family="Arial, sans-serif" font-size="12" fill="#f4efe6" fill-opacity="0.9">跨步驟維持上下文一致性</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="48" y="428" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" fill-opacity="0.45" letter-spacing="1.2">arXiv:2210.03629 · 2302.04761 · 2504.19678 · 2501.06322</text>
+</svg>

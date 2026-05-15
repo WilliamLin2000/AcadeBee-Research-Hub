@@ -17,6 +17,7 @@ import eventCameraMotionAnalysisCover from '../assets/covers/event-camera-motion
 import dapoRlvrFourTechniquesCover from '../assets/covers/dapo-rlvr-four-techniques.svg'
 import imuOutdoorGazeTrackingCover from '../assets/covers/imu-outdoor-gaze-tracking.svg'
 import samdAiTaiwanClassificationCover from '../assets/covers/samd-ai-taiwan-classification.svg'
+import llmAgentClinicalResearchWorkflowCover from '../assets/covers/llm-agent-clinical-research-workflow.svg'
 
 export const articleCategories = [
   { value: 'method', label: '方法論筆記', color: 'teal' },
@@ -26,6 +27,127 @@ export const articleCategories = [
 ]
 
 export const articles = [
+  {
+    id: 'llm-agent-clinical-research-workflow',
+    category: 'community',
+    title: 'Agent AI 是什麼？整體基礎背景整理',
+    excerpt:
+      'Agent AI 這個詞最近頻繁出現，但「它在技術上跟一般 LLM 差在哪、是怎麼演進到現在的、還有哪些相關新興技術正在配套發展」，值得讓人探索討論',
+    publishedAt: '2026-05-15',
+    readingTime: '10 分鐘',
+    featured: false,
+    coverImage: llmAgentClinicalResearchWorkflowCover,
+    tableOfContents: [
+      { id: 'preface', title: '一、前言' },
+      { id: 'concept', title: '二、Agent 概念並不新，新的是「LLM 當 agent」這條路' },
+      { id: 'components', title: '三、把 LLM 變成 agent，技術上大致有哪些元件' },
+      { id: 'evolution', title: '四、演進脈絡：從 tool use 到多 agent 協作' },
+      { id: 'related', title: '五、跟 agent AI 一起浮上來的相關新興技術' },
+    ],
+    content: [
+      {
+        type: 'callout',
+        text: '本文引用文獻偏向 arXiv 上的技術原始論文與綜述。ReAct（Yao et al., arXiv:2210.03629，後於 ICLR 2023 發表）與 Toolformer（Schick et al., arXiv:2302.04761，後於 NeurIPS 2023 發表）為 peer-reviewed conference papers；Tran et al., arXiv:2501.06322 與 Ferrag et al., arXiv:2504.19678 仍為 preprint，尚未同儕審查。',
+      },
+      { type: 'h2', id: 'preface', text: '一、前言' },
+      {
+        type: 'p',
+        text: '目前針對agent-ai在技術層面的概念框架、與整個演進脈絡，比較適合先了解清楚整體架構，這樣讀後續的應用論文時才不容易被表面數字帶著走。',
+      },
+      {
+        type: 'p',
+        text: '這個領域目前還在快速演變，半年後不少描述可能需要修正。',
+      },
+      { type: 'h2', id: 'concept', text: '二、Agent 概念並不新，新的是「LLM 當 agent」這條路' },
+      {
+        type: 'p',
+        text: '在 LLM 出現之前，AI 領域早就有 agent 的概念。Agent 大致是指「能感知環境、能對環境採取行動、並且某種程度上是自主的系統」。強化學習裡的 agent、機器人控制裡的 agent，都是這個傳統。',
+      },
+      {
+        type: 'p',
+        text: '那為什麼最近才又被熱烈討論？變化的不是 agent 這個概念本身，而是作為「決策核心」的那個元件從規則系統 / RL policy 變成了 LLM。這個轉變的關鍵時間點大致落在 2022 年，ReAct 那篇論文示範了 LLM 不只能生成「推理 traces」，還能交錯生成「行動指令」並跟外部環境互動（arXiv:2210.03629），這讓 LLM 開始具備扮演 agent 的條件。',
+      },
+      {
+        type: 'p',
+        text: '換句話說，目前社群討論的 agent AI 大致可以理解為：以 LLM 為決策核心、能呼叫外部工具、能執行多步任務的系統，而不是一個全新的範式。它跟古典 agent 的差別主要在「決策核心的彈性」，不在「agent 這個架構本身」。',
+      },
+      { type: 'h2', id: 'components', text: '三、把 LLM 變成 agent，技術上大致有哪些元件' },
+      {
+        type: 'p',
+        text: '社群文獻在描述 agent 系統時，常用一組類似的元件式分類，大致包含「規劃、行動、反思、記憶」四個面向。這個分類在 2024–2025 年多篇綜述裡反覆出現，雖然各家的細節定義略有差異，但骨幹相近（參考 arXiv:2501.06322、arXiv:2504.19678，兩者皆為 preprint）。',
+      },
+      {
+        type: 'p',
+        text: '一、Planning（規劃）：讓 LLM 在執行前先把任務拆解成步驟。常見做法包括 chain-of-thought 與 tree-of-thought。實務上常見的問題是 plan 過於樂觀、執行時卡住，這也是後來「反思」機制被加入的主因。',
+      },
+      {
+        type: 'p',
+        text: '二、Action（行動）：讓 LLM 能對外部世界做事，呼叫 API、執行程式碼、查資料庫、控制瀏覽器或控制機器人。這層的關鍵技術可以追溯到兩條早期主線。其一是 2022 年由 Yao 等人提出的 ReAct（arXiv:2210.03629），把「推理 traces」與「行動指令」交錯生成，讓 LLM 能在過程中跟外部來源（如 Wikipedia API）互動。其二是 2023 年初 Meta 團隊的 Toolformer（arXiv:2302.04761），用 self-supervised 方式讓模型學會「該叫哪個 API、何時叫、傳什麼參數」。這兩篇是後來「tool calling」生態的源頭之一。',
+      },
+      {
+        type: 'p',
+        text: '三、Reflection（反思）：讓 agent 看到行動結果之後，能評估自己做得好不好、需不需要修正。這是相對晚近被認真討論的元件，社群裡常見的設計包括 self-critique、Reflexion 等。Tran 等人 2025 年的 multi-agent 綜述（arXiv:2501.06322, preprint）把「反思 / 自我評估」列為協作機制裡的關鍵維度之一。',
+      },
+      {
+        type: 'p',
+        text: '四、Memory（記憶）：LLM 本身的 context window 有限，agent 要在較長的工作流裡維持一致性，需要某種記憶機制。常見實作包括 vector store、結構化的對話歷史摘要、或是外掛 episodic memory。各家綜述對記憶的具體實作分類略有不同。',
+      },
+      {
+        type: 'callout',
+        text: '需要保留的一個觀察：這四元件不是嚴格分割的工程模組，現實中常常彼此交織。它比較像是分析 agent 系統時的一個 checklist，而不是建造 agent 時非要照著做的藍圖。',
+      },
+      { type: 'h2', id: 'evolution', text: '四、演進脈絡：從 tool use 到多 agent 協作' },
+      {
+        type: 'p',
+        text: '以下時間軸主要整理自 Ferrag 等人 2025 年那份比較完整的 LLM agent comprehensive review（arXiv:2504.19678, preprint），搭配兩篇技術原始論文。各文獻的分期劃法略有差異，這裡採取折衷。',
+      },
+      {
+        type: 'p',
+        text: '～2022：以 LLM 直接回答為主，沒有「執行」這個層次。2022 末–2023：tool use 概念出現，代表性技術論文包括 ReAct（Yao et al., arXiv 2022/10，後於 ICLR 2023）與 Toolformer（Schick et al., arXiv 2023/02，後於 NeurIPS 2023），分別代表 prompting-based 與 fine-tuning-based 兩條設計路線。',
+      },
+      {
+        type: 'p',
+        text: '2023–2024：多 agent 框架湧現，例如讓多個 LLM 扮演不同角色協作。Tran 等人 2025 的綜述把這段時期的 multi-agent 系統依「actors / types / structures / strategies / coordination protocols」整理成五維度的 taxonomy（arXiv:2501.06322, preprint）。',
+      },
+      {
+        type: 'p',
+        text: '2024–2025：planning–action–reflection–memory 的框架式描述開始穩定，agent 系統設計從單一 LLM 包工具，走向多 agent 協作與更明確的角色分工。2025–2026：論文層次開始討論協作協定（MCP、A2A、ACP）的標準化，以及 agent 行為的安全性、評估方法等議題（arXiv:2504.19678, preprint）。',
+      },
+      {
+        type: 'p',
+        text: '這條時間軸大致可以看出一個趨勢：從「讓 LLM 會用工具」走向「讓 agent 系統可被理解、被信任，並且能彼此溝通」。',
+      },
+      { type: 'h2', id: 'related', text: '五、跟 agent AI 一起浮上來的相關新興技術' },
+      {
+        type: 'p',
+        text: 'agent AI 不是孤立的方向。同期還有幾條技術線在演進，彼此互相影響。',
+      },
+      {
+        type: 'p',
+        text: 'Retrieval-Augmented Generation（RAG）：給 LLM 接外部知識庫的標準做法之一。從 agent 的角度看，retrieval 通常被視為 action 元件下的一個特例。',
+      },
+      {
+        type: 'p',
+        text: 'Agent 通訊與工具協定（MCP、A2A、ACP）：當 agent 需要彼此溝通、或大量呼叫外部工具時，「介面要不要標準化」就變成一個問題。Ferrag 等人 2025 的綜述把 Model Context Protocol（MCP）、Agent-to-Agent Protocol（A2A）與 Agent Communication Protocol（ACP）視為這條線上的代表性協定。需要留意的是，這類協定還很新，安全性議題（例如 prompt injection、tool poisoning）仍在被探討中。',
+      },
+      {
+        type: 'p',
+        text: 'Test-time reasoning / 推理模型：近一年來的另一條主線。讓模型在推理階段花更多時間「想」（更長的 chain-of-thought、search、self-verification），與 agent 框架結合後可以增強 planning 與 reflection 能力。這條線的具體文獻分歧較大。',
+      },
+      {
+        type: 'p',
+        text: 'Computer use / browser agent：讓 agent 直接操作圖形介面或瀏覽器。這條線目前仍偏實驗性，外推到醫療場景的速度比較慢。',
+      },
+      {
+        type: 'p',
+        text: 'Multi-modal agent：能處理影像、訊號、結構化資料的 agent，目前的多模態整合多半還是延伸自 vision-language model（VLM）的設計思路。',
+      },
+      {
+        type: 'callout',
+        text: '這些技術之間的關係，比較像是「相互配套」而不是「彼此競爭」。對研究者而言，比較合理的理解或許是：agent 是一個整合框架，這些相關技術則是配料，少了任何一樣，整道菜的層次都會打折。',
+      },
+    ],
+  },
   {
     id: 'samd-ai-taiwan-classification',
     category: 'industry',
@@ -65,11 +187,11 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '幾個常被誤判的例子，指引明確說「不是」醫療器材：醫院行政管理軟體（HIS、電子病歷、實驗室資訊系統）——只是把紙本電子化、不取代醫事人員臨床決策；健康促進軟體（飲食、運動、睡眠、減重 App）——即使宣稱可降低糖尿病風險，只要不是治療或改善「特定疾病或症狀」，不屬於醫療器材；用藥紀錄軟體（內容只是電子化既有藥品仿單、不直接取代醫事人員開立處方）。',
+        text: '幾個常被誤判的例子，指引明確說「不是」醫療器材：醫院行政管理軟體（HIS、電子病歷、實驗室資訊系統），只是把紙本電子化、不取代醫事人員臨床決策；健康促進軟體（飲食、運動、睡眠、減重 App），即使宣稱可降低糖尿病風險，只要不是治療或改善「特定疾病或症狀」，不屬於醫療器材；用藥紀錄軟體（內容只是電子化既有藥品仿單、不直接取代醫事人員開立處方）。',
       },
       {
         type: 'p',
-        text: '再來是大多數 AI 開發者真正關心的部分：分到哪一級。指引第五節把常見品類對應如下。第一等級（低風險）包含醫學影像儲存裝置（P.2010）、醫學影像傳輸裝置（P.2020）——條件是「單純」傳輸、儲存、顯示影像，不做加工或處理。第二等級（中風險）包含 PACS（P.2050）、醫學影像數位器（P.2030）（對影像做加工 / 處理 / 編輯 / 分析）、CADe 電腦輔助偵測軟體、CADx 電腦輔助診斷軟體（只要還是「輔助」醫事人員、由醫事人員做最終決策）、電腦輔助分流軟體、手術導航 / 手術計畫軟體、植牙計畫軟體、病人生理參數監控軟體，以及會「解釋資料或協助診斷 / 治療」的遠距醫療軟體。第三等級（高風險）則是 CADx 軟體宣稱「可取代專業醫事人員決策、直接進行疾病診斷或治療」。',
+        text: '再來是大多數 AI 開發者真正關心的部分：分到哪一級。指引第五節把常見品類對應如下。第一等級（低風險）包含醫學影像儲存裝置（P.2010）、醫學影像傳輸裝置（P.2020），條件是「單純」傳輸、儲存、顯示影像，不做加工或處理。第二等級（中風險）包含 PACS（P.2050）、醫學影像數位器（P.2030）（對影像做加工 / 處理 / 編輯 / 分析）、CADe 電腦輔助偵測軟體、CADx 電腦輔助診斷軟體（只要還是「輔助」醫事人員、由醫事人員做最終決策）、電腦輔助分流軟體、手術導航 / 手術計畫軟體、植牙計畫軟體、病人生理參數監控軟體，以及會「解釋資料或協助診斷 / 治療」的遠距醫療軟體。第三等級（高風險）則是 CADx 軟體宣稱「可取代專業醫事人員決策、直接進行疾病診斷或治療」。',
       },
       {
         type: 'callout',
@@ -82,11 +204,11 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '臨床性能驗證的撰寫架構，TFDA 直接引用 IMDRF 2017 年公告的《Software as a Medical Device: Clinical Evaluation》，三大流程是：證實臨床關聯（Valid Clinical Association）——模型輸出與目標臨床狀況之間有 well-established 的關係；分析性能驗證（Analytical Validation）——模型輸入到輸出的計算正確性；臨床性能驗證（Clinical Validation）——在 intended use population 中，模型輸出真的能達到宣稱的臨床效益。',
+        text: '臨床性能驗證的撰寫架構，TFDA 直接引用 IMDRF 2017 年公告的《Software as a Medical Device: Clinical Evaluation》，三大流程是：證實臨床關聯（Valid Clinical Association），模型輸出與目標臨床狀況之間有 well-established 的關係；分析性能驗證（Analytical Validation），模型輸入到輸出的計算正確性；臨床性能驗證（Clinical Validation），在 intended use population 中，模型輸出真的能達到宣稱的臨床效益。',
       },
       {
         type: 'p',
-        text: '對研究者來說，這三個層次不能合併處理。常見的錯誤是把「在公開資料集上 AUC = 0.9」當成臨床性能驗證——但那其實只完成了 analytical validation 的一部分，連 valid clinical association 都沒寫清楚。',
+        text: '對研究者來說，這三個層次不能合併處理。常見的錯誤是把「在公開資料集上 AUC = 0.9」當成臨床性能驗證，但那其實只完成了 analytical validation 的一部分，連 valid clinical association 都沒寫清楚。',
       },
       { type: 'h2', id: 'eu-distribution', text: '四、歐洲對照：AI 醫材實際長什麼樣' },
       {
@@ -129,7 +251,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '對多數人來說這條路看起來或許繁瑣，但其實指引給的等級對應比想像中清楚。比較難的是「把研究端的 model performance 翻譯成 regulatory grade evidence」這件事——而這正是生醫工程跨領域訓練的價值所在。',
+        text: '對多數人來說這條路看起來或許繁瑣，但其實指引給的等級對應比想像中清楚。比較難的是「把研究端的 model performance 翻譯成 regulatory grade evidence」這件事，而這正是生醫工程跨領域訓練的價值所在。',
       },
       {
         type: 'callout',
@@ -288,7 +410,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '三月，ByteDance 發表 DAPO（arXiv:2503.14476）。DAPO 的目標很明確：不是做一個新的大模型，而是做一個可以被完整復現的 RLVR 訓練系統，解釋清楚大規模 LLM 強化學習為什麼能成功——並且把程式碼、訓練框架（verl）、資料集全部開源。結果：Qwen2.5-32B base model，在 AIME 2024 上跑出 50 分，在當時的開源系統中達到頂尖水準。論文提出四項核心技術，每一項都對應 GRPO 一個已知的失效模式。',
+        text: '三月，ByteDance 發表 DAPO（arXiv:2503.14476）。DAPO 的目標很明確：不是做一個新的大模型，而是做一個可以被完整復現的 RLVR 訓練系統，解釋清楚大規模 LLM 強化學習為什麼能成功，並且把程式碼、訓練框架（verl）、資料集全部開源。結果：Qwen2.5-32B base model，在 AIME 2024 上跑出 50 分，在當時的開源系統中達到頂尖水準。論文提出四項核心技術，每一項都對應 GRPO 一個已知的失效模式。',
       },
       { type: 'h2', id: 'grpo-review', text: '二、GRPO 複習：DAPO 繼承的起點' },
       {
@@ -297,7 +419,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '但 GRPO 在大規模 RLVR 訓練中有幾個已知問題：Entropy 崩潰（訓練到一定程度，輸出機率過於集中，停止探索）；Response length 膨脹（模型學到靠延長輸出增加踩中正確 token 的機率，尤其在錯誤回應上更明顯——Liu 等人 arXiv:2503.20783 用受控實驗量化了這個偏差）；全對 / 全錯 batch 浪費計算資源（群組優勢等於零，這批資料完全沒有梯度訊號）；以及 clip 機制的不對稱問題（下面細講）。DAPO 的四項技術，每一項對應其中一個問題。',
+        text: '但 GRPO 在大規模 RLVR 訓練中有幾個已知問題：Entropy 崩潰（訓練到一定程度，輸出機率過於集中，停止探索）；Response length 膨脹（模型學到靠延長輸出增加踩中正確 token 的機率，尤其在錯誤回應上更明顯，Liu 等人 arXiv:2503.20783 用受控實驗量化了這個偏差）；全對 / 全錯 batch 浪費計算資源（群組優勢等於零，這批資料完全沒有梯度訊號）；以及 clip 機制的不對稱問題（下面細講）。DAPO 的四項技術，每一項對應其中一個問題。',
       },
       { type: 'h2', id: 'clip-higher', text: '三、技術一：Clip-Higher（非對稱 Clip）' },
       {
@@ -306,7 +428,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: 'PPO 的 clipped surrogate objective 把概率比值 r(θ) = π_θ(a) / π_old(a) 限制在 [1 − ε, 1 + ε] 之間（ε 通常設為 0.2）。背後的直覺是防止策略更新步伐過大（trust region 概念）。問題在於這個對稱 clip 同等地限制了「機率增加的上限」和「機率降低的下限」。對高 advantage 的好回應，clip 上限 (1 + ε) 經常被觸及——梯度被截斷，模型想學但被 clip 擋住。',
+        text: 'PPO 的 clipped surrogate objective 把概率比值 r(θ) = π_θ(a) / π_old(a) 限制在 [1 − ε, 1 + ε] 之間（ε 通常設為 0.2）。背後的直覺是防止策略更新步伐過大（trust region 概念）。問題在於這個對稱 clip 同等地限制了「機率增加的上限」和「機率降低的下限」。對高 advantage 的好回應，clip 上限 (1 + ε) 經常被觸及，梯度被截斷，模型想學但被 clip 擋住。',
       },
       {
         type: 'p',
@@ -336,7 +458,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: 'DAPO 改用 Token-Level Policy Gradient Loss：把整個 batch 的 loss 計算從「每條 sequence 歸一化後求和」改成「對所有 token 平等對待」——用 token 數而非 sequence 數作為歸一化分母。這樣不管回應有多長，每個 token 的梯度貢獻量是可比較的，長度偏差被消除。從工程實作角度看，這個修改只需幾行 code，但對訓練穩定性和最終效果的影響是可觀的（arXiv:2503.14476）。',
+        text: 'DAPO 改用 Token-Level Policy Gradient Loss：把整個 batch 的 loss 計算從「每條 sequence 歸一化後求和」改成「對所有 token 平等對待」，用 token 數而非 sequence 數作為歸一化分母。這樣不管回應有多長，每個 token 的梯度貢獻量是可比較的，長度偏差被消除。從工程實作角度看，這個修改只需幾行 code，但對訓練穩定性和最終效果的影響是可觀的（arXiv:2503.14476）。',
       },
       { type: 'h2', id: 'entropy-bonus', text: '六、技術四：Entropy Bonus + Overlong Reward Shaping' },
       {
@@ -345,7 +467,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: 'RLVR 訓練的中後期，常見失效模式是：模型的輸出分佈變得越來越尖銳（entropy 持續下降），最終某些 token 的輸出機率接近 1，模型停止探索其他可能的推理路徑。Xi 等人（BAPO，arXiv:2510.18927）在理論上說明，固定 clip 機制在 off-policy 設置下會系統性地阻止 entropy 上升的更新，把策略推向過度利用（over-exploitation）——這個現象在 on-policy GRPO 訓練中也類似地出現。',
+        text: 'RLVR 訓練的中後期，常見失效模式是：模型的輸出分佈變得越來越尖銳（entropy 持續下降），最終某些 token 的輸出機率接近 1，模型停止探索其他可能的推理路徑。Xi 等人（BAPO，arXiv:2510.18927）在理論上說明，固定 clip 機制在 off-policy 設置下會系統性地阻止 entropy 上升的更新，把策略推向過度利用（over-exploitation），這個現象在 on-policy GRPO 訓練中也類似地出現。',
       },
       {
         type: 'p',
@@ -379,7 +501,7 @@ export const articles = [
         items: [
           'Understanding R1-Zero / Dr. GRPO（arXiv:2503.20783）：用受控實驗量化 GRPO 的長度偏差，提出更無偏的梯度估計方法，以 7B base model 達到 AIME 2024 的 43.3% 準確率。',
           'BAPO（arXiv:2510.18927，HuggingFace Papers 85 upvotes）：針對 off-policy 設置下的 entropy 崩潰問題，理論推導出 Entropy-Clip Rule，提出自適應 clip 邊界。其 32B 模型宣稱超越 o3-mini 和 Gemini-2.5-Flash-Thinking（注意：preprint 結果，待同儕審查確認）。',
-          'GTPO（arXiv:2508.03772）：分析「衝突 token」問題——同一 token 在正確回應和錯誤回應裡都出現，導致梯度方向互相衝突——提出 trajectory-level 的梯度保護機制。',
+          'GTPO（arXiv:2508.03772）：分析「衝突 token」問題，同一 token 在正確回應和錯誤回應裡都出現，導致梯度方向互相衝突，提出 trajectory-level 的梯度保護機制。',
           'DHPO（arXiv:2601.05607）：在 token-level 和 sequence-level importance ratio 之間做動態混合，試圖同時保留兩者的優勢，在 Qwen3 系列 dense 和 MoE 模型上均超越 GRPO。',
         ],
       },
