@@ -18,6 +18,7 @@ import dapoRlvrFourTechniquesCover from '../assets/covers/dapo-rlvr-four-techniq
 import imuOutdoorGazeTrackingCover from '../assets/covers/imu-outdoor-gaze-tracking.svg'
 import samdAiTaiwanClassificationCover from '../assets/covers/samd-ai-taiwan-classification.svg'
 import llmAgentClinicalResearchWorkflowCover from '../assets/covers/llm-agent-clinical-research-workflow.svg'
+import editorReviewerCitationAcceptanceCover from '../assets/covers/editor-reviewer-citation-acceptance.svg'
 
 export const articleCategories = [
   { value: 'method', label: '方法論筆記', color: 'teal' },
@@ -27,6 +28,187 @@ export const articleCategories = [
 ]
 
 export const articles = [
+  {
+    id: 'editor-reviewer-citation-acceptance',
+    category: 'method',
+    title: '引用編輯/審稿人的論文真能提高接受率嗎？三條路徑白話拆解',
+    excerpt:
+      '「投稿前先引用編輯與審稿人的論文」其實混了三種完全不同的做法：初稿討好、修訂時配合、以及靠參考文獻影響誰來審。研究證據顯示，效果差很多，不能混在一起想。',
+    publishedAt: '2026-05-19',
+    readingTime: '10 分鐘',
+    featured: false,
+    coverImage: editorReviewerCitationAcceptanceCover,
+    tableOfContents: [
+      { id: 'why-rethink', title: '一、為什麼不能一句話帶過' },
+      { id: 'two-axes', title: '二、先分清楚：對象是誰 × 什麼時候引' },
+      { id: 'path-a', title: '三、路徑 A：初稿就主動引用（討好型）' },
+      { id: 'path-b', title: '四、路徑 B：修訂時才配合加引用' },
+      { id: 'path-c', title: '五、路徑 C：靠文獻清單影響「誰來審」' },
+      { id: 'evidence-summary', title: '六、三條路一張表看懂' },
+      { id: 'recommendations', title: '七、給研究生的實用建議' },
+      { id: 'why-it-matters', title: '八、為什麼博士生特別容易搞混' },
+    ],
+    content: [
+      {
+        type: 'callout',
+        text: '本篇主要依據兩篇經同儕審查、可在 PubMed 查到的研究：Wilhite & Fong 2012（《Science》，討論「強迫引用」）；Barnett 2025（eLife，分析 37,000 份審稿紀錄）。下文 OR 為 odds ratio（勝算比）：大於 1 表示較容易獲得接受建議，小於 1 表示較不容易；若信賴區間包含 1，代表統計上無法確定有差異。',
+      },
+      { type: 'h2', id: 'why-rethink', text: '一、為什麼不能一句話帶過' },
+      {
+        type: 'p',
+        text: '很多人問：「投稿前先引用編輯、審稿人的論文，會不會比較容易被接受？」直覺會說「會」，但這樣想太簡單了。',
+      },
+      {
+        type: 'p',
+        text: '其實「引用他們」至少混了三種完全不同的做法，研究證據顯示效果差很多。若不分清楚，很容易搞成：「聽說修訂時配合有效，所以初稿就先狂引編輯」。聽起來像同一招，其實根本不是一回事。',
+      },
+      {
+        type: 'p',
+        text: '這篇要做的事：把三條路分開講清楚，用上面兩篇研究逐條對照，最後給你可以直接用的判斷方式。',
+      },
+      { type: 'h2', id: 'two-axes', text: '二、先分清楚：對象是誰 × 什麼時候引' },
+      {
+        type: 'p',
+        text: '拆解這個問題，先看兩個維度。第一，你引用的是誰：編輯（決定收不收）還是審稿人（給修改意見）？第二，你什麼時候引：初稿一投出去就引（論文裡常寫 v1，即 version 1、第一次投稿版），還是收到審稿意見、改稿後才引（revision，修訂階段）？',
+      },
+      {
+        type: 'p',
+        text: '兩個維度交叉，理論上會有四種組合；但實務上能對應到清楚機制與研究證據的，是下面三條路徑 A、B、C。',
+      },
+      { type: 'h2', id: 'path-a', text: '三、路徑 A：初稿就主動引用（討好型）' },
+      {
+        type: 'p',
+        text: '你在做什麼：第一次投稿（v1）前，就刻意把編輯、或該領域可能來審稿的人的工作大量引用進去，希望對方心情好、比較會過。',
+      },
+      {
+        type: 'p',
+        text: '研究怎麼說：常被拿來當例子的 Wilhite & Fong 2012，其實沒有直接測「初稿主動引用編輯 → 接受率變高」；他們討論的是「被編輯要求加引用後，作者配不配合」，那是下面路徑 B 的事。',
+      },
+      {
+        type: 'p',
+        text: '目前最大樣本的直接數字來自 Barnett 2025：在約 37,000 份審稿中，若作者在 v1 初稿就引用到後來那位審稿人，審稿人給「接受」建議的機率與沒引用的相比，OR = 0.84（99.4% 信賴區間 0.69–1.03）。白話說：數字略低於 1，但區間跨過 1，統計上不能說「有幫助」，結論是初稿討好審稿人看不出明顯好處。',
+      },
+      {
+        type: 'callout',
+        text: '注意：Barnett 量的是「審稿人」，不是「編輯」。對編輯這條路，到 2026 年 5 月為止，我沒找到同等規模、可直接對照的量化研究。若你知道相關文獻，歡迎來信補充。',
+      },
+      {
+        type: 'p',
+        text: '實務結論：證據偏弱（對審稿人）／不確定（對編輯）。若你的方法或討論真的需要那篇文獻，引用是正常學術行為；但若動機是「想提高接受率、討好編輯」，這個理由缺乏實證支持。該問自己的是：「這篇引用對我的論述有沒有幫助？」而不是「他會不會比較喜歡我？」',
+      },
+      { type: 'h2', id: 'path-b', text: '四、路徑 B：修訂時才配合加引用' },
+      {
+        type: 'p',
+        text: '你在做什麼：已收到審稿意見，進入 revision（修訂）階段；審稿人寫「請引用某某文章」，你選擇在改稿版補上。',
+      },
+      {
+        type: 'p',
+        text: '研究怎麼說：這條路證據最強。Barnett 2025 有兩個關鍵數字：（1）若在 v1 之後的修訂稿才補上引用審稿人的工作，獲得接受建議的機率約為未引用者的 1.61 倍（OR = 1.61，信賴區間下限大於 1，效果穩健）；（2）若你真的照該審稿人要求的那篇補上引用，該審稿人在下一輪給接受的機率約為原來的 3.5 倍（OR = 3.5），是全研究最強的效果。',
+      },
+      {
+        type: 'p',
+        text: '但這裡要再分兩種情況。B-1 合理要求：要你引的那篇，真的跟你的方法、限制、討論有關，補上能讓論文更完整，配合是正常學術回應。B-2 灌水／強迫引用：要你引的東西跟你的研究關係很弱，主要是幫對方或期刊衝引用數，Wilhite & Fong 2012 稱之為 coercive citation（強迫引用）；COPE 等出版倫理指引也允許作者禮貌拒絕，並向總編輯（Editor-in-Chief）申訴。',
+      },
+      {
+        type: 'p',
+        text: '還有一個令人不安的發現：若審稿人主動要求引用自己的論文（不管作者最後有沒有配合），該審稿人在後續各版都更傾向不給過（OR = 0.15）。把這個數字和前面「配合後 OR = 3.5」放在一起看，Barnett 指出這很像交易式審稿：先給差評，等你配合引用再加回來，審稿從「評論」變成「討價還價」。',
+      },
+      {
+        type: 'callout',
+        text: '怎麼分辨 B-1 和 B-2？問自己：這篇引用加進去，能不能在方法或討論段落寫出實質內容？若只能塞在引言一句「某某曾做相關研究」，多半就是強迫引用的訊號。合理要求可以配合；灌水要求可以拒絕並申訴。',
+      },
+      { type: 'h2', id: 'path-c', text: '五、路徑 C：靠文獻清單影響「誰來審」' },
+      {
+        type: 'p',
+        text: '你在做什麼：不是在討好某個人，而是在 v1 初稿就把該領域的重要文獻（可能包含編輯團隊、常見審稿人的工作）寫完整。影響的往往不是「審稿人怎麼打分」，而是編輯會從你的參考文獻裡，挑誰來當審稿人。',
+      },
+      {
+        type: 'p',
+        text: '邏輯：編輯常從 reference list 找審稿人，這是業界公開的做法。若你的文獻涵蓋某領域幾位重要學者，編輯較可能從這個「池子」裡挑人；被挑到的人較熟悉你建構的學術脈絡，評審時較不會覺得你完全沒讀過該領域。',
+      },
+      {
+        type: 'p',
+        text: '證據：這條因果鏈（文獻清單 → 誰來審 → 接受率）目前沒有直接的大型對照實驗量化。但這條路（1）不違反出版倫理；（2）本來就該做好文獻回顧；（3）機制合理、業界也普遍這樣運作。',
+      },
+      {
+        type: 'quote',
+        text: '我認為「引用編輯／審稿人」真正可能有效的地方在這裡，但不必用「提高接受率」當理由：它就是該做好的學術功課，順便讓審稿人組成比較合理。',
+      },
+      { type: 'h2', id: 'evidence-summary', text: '六、三條路一張表看懂' },
+      {
+        type: 'table',
+        headers: ['路徑', '時機', '研究數據', '證據強度', '倫理風險'],
+        rows: [
+          [
+            'A 初稿主動引用',
+            '初稿 v1',
+            'Barnett OR 0.84；對審稿人無顯著好處；對編輯缺乏直接量化',
+            '弱',
+            '低（若引用實質相關）',
+          ],
+          [
+            'B-1 合理配合引用',
+            '修訂階段',
+            'OR 約 1.61～3.5',
+            '強',
+            '低',
+          ],
+          [
+            'B-2 灌水／強迫引用',
+            '修訂階段',
+            '短期對該審稿人可能有效（OR 3.5），但屬學術倫理爭議',
+            '強（效果）',
+            '高',
+          ],
+          [
+            'C 影響審稿人組成',
+            '初稿 v1',
+            '無直接量化；機制合理',
+            '推論性',
+            '低',
+          ],
+        ],
+      },
+      { type: 'h2', id: 'recommendations', text: '七、給研究生的實用建議' },
+      {
+        type: 'p',
+        text: '第一，不要為了討好而初稿狂引。Barnett 的 OR 0.84 表示：對審稿人看不出明顯幫助；對編輯也沒有同等證據。動機應是論文需要，不是策略討好。',
+      },
+      {
+        type: 'p',
+        text: '第二，該引的領域重要文獻還是要引完整。這不是投機，是基本學術功課。若因此涵蓋了編輯或大老的工作，那是路徑 C 的自然結果，不必道歉，也不必說「我是為了提高接受率」。',
+      },
+      {
+        type: 'p',
+        text: '第三，真正有數據支撐的多半在修訂階段。審稿人提出合理、實質相關的引用要求，可以配合（OR 約 1.61）。若是灌水、強迫引用，即使配合可能短期提高機率（OR 3.5），仍建議禮貌拒絕並向總編輯申訴，這是 COPE 等指引認可的做法。',
+      },
+      {
+        type: 'p',
+        text: '第四，把心思放在「寫好文獻回顧」，而不是「點名討好編輯」。初稿的 reference list 應完整覆蓋該領域關鍵脈絡，而不是針對某幾位編輯名字塞引用。這樣既符合學術誠實，也較不會踩到路徑 A 那種「亂引、反而沒好處」的風險。',
+      },
+      { type: 'h2', id: 'why-it-matters', text: '八、為什麼博士生特別容易搞混' },
+      {
+        type: 'p',
+        text: '發表論文是博士訓練的核心任務之一，第一次投稿的人常會把所有「聽說有用」的招數都試一遍。但若沒人幫你拆開，很容易變成：「聽說修訂時配合有效（路徑 B），所以初稿就先引用編輯（路徑 A）」，兩條路搞在一起，策略就歪了。',
+      },
+      {
+        type: 'p',
+        text: '一句話總結：三條路要分開看，修訂階段、合理配合，才有較強證據（OR 約 1.61～3.5）；初稿討好，看不出好處（OR 0.84）；靠完整文獻影響誰來審，機制合理但沒有直接大實驗。把每種做法放對位置，比把所有引用都當成同一招「必過祕方」，更接近真實的審稿過程。',
+      },
+      {
+        type: 'callout',
+        text: '寫作說明：本篇刻意只引用兩篇同儕審查研究，避免堆疊評論文或部落格。Wilhite & Fong 2012 定義「強迫引用」；Barnett 2025 提供最大量化證據。路徑 C 已標示為「無直接量化」，避免讀者以為三條路都有同樣強度的實驗支撐。',
+      },
+      {
+        type: 'callout',
+        text: 'Wilhite AW, Fong EA. Coercive citation in academic publishing. Science. 2012 Feb 3;335(6068):542-3. https://doi.org/10.1126/science.1212540',
+      },
+      {
+        type: 'callout',
+        text: 'Barnett A. Are peer reviewers influenced by their work being cited? eLife. 2025 Dec 23;14:e108748. https://doi.org/10.7554/eLife.108748',
+      },
+    ],
+  },
   {
     id: 'llm-agent-clinical-research-workflow',
     category: 'community',

@@ -143,6 +143,36 @@ export default function ArticleDetailPage() {
                 </ul>
               )
             }
+            if (
+              block.type === 'table' &&
+              Array.isArray(block.headers) &&
+              Array.isArray(block.rows)
+            ) {
+              return (
+                <div key={idx} className="article-table-wrap">
+                  <table className="article-detail-table">
+                    <thead>
+                      <tr>
+                        {block.headers.map((header, hi) => (
+                          <th key={hi} scope="col">
+                            {header}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {block.rows.map((row, ri) => (
+                        <tr key={ri}>
+                          {row.map((cell, ci) => (
+                            <td key={ci}>{cell}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )
+            }
             if (block.type === 'quote') {
               return (
                 <blockquote key={idx}>

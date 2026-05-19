@@ -20,7 +20,6 @@
 
 ### 產業觀察 (industry)
 - [ ] 台灣醫材新創需要什麼樣的生醫工程人才（2026 版）
-- [ ] 健保資料庫研究申請 2026 新規：研究生怎麼接觸
 - [ ] 從 CES 2026 看穿戴式裝置三個趨勢
 
 ### 社群精選 (community)
@@ -49,6 +48,8 @@
 - [x] 把眼動研究從實驗室搬到馬路上：2024 年最新的 IMU + 眼動 + AI 整合範例 → `published/2026-05-11-imu-outdoor-gaze-tracking.md`（已發布；William 即時指定主題）
 - [x] SaMD 分級認證拆解：AI 醫材在台灣的上市門檻怎麼看（對照歐盟 2025 兩篇新研究） → `published/2026-05-13-samd-ai-taiwan-classification.md`（已發布）
 - [x] Agent AI 技術背景整理：概念演進、四元件框架與相關新興技術（不談特定應用；category: community） → `published/2026-05-15-llm-agent-clinical-research-workflow.md`（已發布）
+- [x] 健保資料庫研究申請 2026 新規：研究生第一次申請該知道的五件事 → `2026-05-19-nhird-application-2026-grad-student.md`（草稿，待 William 審稿）
+- [x] 引用編輯/審稿人的論文真能提高接受率嗎？三條機制路徑的證據強度評估（method）→ `published/2026-05-19-editor-reviewer-citation-acceptance.md`（已發布；William 即時指定主題）
 
 ---
 
