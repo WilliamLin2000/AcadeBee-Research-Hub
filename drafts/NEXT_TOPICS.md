@@ -19,8 +19,8 @@
 - [ ] 做跨領域研究被指導教授打回票的那一年（William 自寫）
 
 ### 產業觀察 (industry)
-- [ ] 台灣醫材新創需要什麼樣的生醫工程人才（2026 版）
-- [ ] 從 CES 2026 看穿戴式裝置三個趨勢
+
+（目前無待寫項目）
 
 ### 社群精選 (community)
 - [ ] 研究生最常問我的 10 個工具問題（整理版）
@@ -50,6 +50,9 @@
 - [x] Agent AI 技術背景整理：概念演進、四元件框架與相關新興技術（不談特定應用；category: community） → `published/2026-05-15-llm-agent-clinical-research-workflow.md`（已發布）
 - [x] 健保資料庫研究申請 2026 新規：研究生第一次申請該知道的五件事 → `2026-05-19-nhird-application-2026-grad-student.md`（草稿，待 William 審稿）
 - [x] 引用編輯/審稿人的論文真能提高接受率嗎？三條機制路徑的證據強度評估（method）→ `published/2026-05-19-editor-reviewer-citation-acceptance.md`（已發布；William 即時指定主題）
+- [x] 台灣醫材新創需要什麼樣的生醫工程人才（2026 版）→ `2026-05-20-taiwan-medtech-talent-2026.md`（草稿，待 William 審稿）
+- [x] 從 CES 2026 看穿戴式裝置三個趨勢：台灣 TFDA 法規節奏對得上嗎 → `2026-05-22-ces-2026-wearable-tfda-three-trends.md`（草稿，待 William 審稿）
+- [x] AI Agent 2026 技術現況：三篇剛上線的論文，分別從記憶、工具、評測切進來（community；William 即時指定主題、跨 arXiv/PubMed/bioRxiv 三平台引用）→ `published/2026-05-22-ai-agent-tech-three-papers-cross-platform.md`（已發布）
 
 ---
 
