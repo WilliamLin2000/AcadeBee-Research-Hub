@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="AI 短影音變現的真相封面">
+  <defs>
+    <linearGradient id="bg-monz" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a0f1f"/>
+      <stop offset="1" stop-color="#2e1a1a"/>
+    </linearGradient>
+    <filter id="glow-monz">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg-monz)"/>
+
+  <g stroke="#ffffff" stroke-opacity="0.04" stroke-width="1">
+    <line x1="0" y1="90" x2="800" y2="90"/>
+    <line x1="0" y1="180" x2="800" y2="180"/>
+    <line x1="0" y1="270" x2="800" y2="270"/>
+    <line x1="0" y1="360" x2="800" y2="360"/>
+    <line x1="200" y1="0" x2="200" y2="450"/>
+    <line x1="400" y1="0" x2="400" y2="450"/>
+    <line x1="600" y1="0" x2="600" y2="450"/>
+  </g>
+
+  <text x="48" y="58" font-family="Arial, sans-serif" font-size="11" fill="#f4a261" letter-spacing="2.5" font-weight="700">CASE · CREATOR ECONOMY</text>
+  <text x="48" y="98" font-family="Arial, sans-serif" font-size="28" fill="#ffffff" font-weight="700">創作工具，不是印鈔機</text>
+  <text x="48" y="125" font-family="Arial, sans-serif" font-size="14" fill="#f4efe6" fill-opacity="0.85">AI 短影音變現的真相</text>
+
+  <g transform="translate(48, 160)">
+    <rect width="225" height="240" rx="10" fill="#5d8bb3" fill-opacity="0.13" stroke="#5d8bb3" stroke-opacity="0.55" stroke-width="1.3"/>
+    <rect x="0" y="0" width="225" height="4" rx="2" fill="#5d8bb3"/>
+    <text x="20" y="32" font-family="Arial, sans-serif" font-size="10" fill="#5d8bb3" font-weight="700" letter-spacing="1.5">01 · RPM REALITY</text>
+    <text x="20" y="56" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.55">YouTube Shorts 實際分潤</text>
+    <text x="20" y="100" font-family="Arial, sans-serif" font-size="38" fill="#ffffff" font-weight="700">$0.01<tspan font-size="22">~</tspan>0.05</text>
+    <text x="20" y="122" font-family="Arial, sans-serif" font-size="12" fill="#f4efe6" fill-opacity="0.85">每千次觀看美元收益</text>
+    <text x="20" y="158" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.7">賺 $100 約需 330 萬觀看</text>
+    <text x="20" y="178" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.7">創作者分到 45% 池子</text>
+    <text x="20" y="198" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.7">財經類 RPM 約娛樂類 10×</text>
+    <text x="20" y="218" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.7">音樂版權再扣一輪</text>
+  </g>
+
+  <g transform="translate(287, 160)">
+    <rect width="225" height="240" rx="10" fill="#f4a261" fill-opacity="0.13" stroke="#f4a261" stroke-opacity="0.55" stroke-width="1.3"/>
+    <rect x="0" y="0" width="225" height="4" rx="2" fill="#f4a261"/>
+    <text x="20" y="32" font-family="Arial, sans-serif" font-size="10" fill="#f4a261" font-weight="700" letter-spacing="1.5">02 · TIKTOK GATE</text>
+    <text x="20" y="56" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.55">Creativity Program 門檻</text>
+    <text x="20" y="100" font-family="Arial, sans-serif" font-size="38" fill="#ffffff" font-weight="700">10K + 100K</text>
+    <text x="20" y="122" font-family="Arial, sans-serif" font-size="12" fill="#f4efe6" fill-opacity="0.85">粉絲 + 30 天有效觀看</text>
+    <text x="20" y="158" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.7">影片必須 ≥ 1 分鐘</text>
+    <text x="20" y="178" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.7">需年滿 18 歲</text>
+    <text x="20" y="198" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.7">內容必須原創或加新觀點</text>
+    <text x="20" y="218" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.7">僅 6 個國家開放</text>
+  </g>
+
+  <g transform="translate(526, 160)">
+    <rect width="225" height="240" rx="10" fill="#a78bfa" fill-opacity="0.13" stroke="#a78bfa" stroke-opacity="0.55" stroke-width="1.3"/>
+    <rect x="0" y="0" width="225" height="4" rx="2" fill="#a78bfa"/>
+    <text x="20" y="32" font-family="Arial, sans-serif" font-size="10" fill="#a78bfa" font-weight="700" letter-spacing="1.5">03 · YT POLICY</text>
+    <text x="20" y="56" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.55">Inauthentic Content 政策</text>
+    <text x="20" y="100" font-family="Arial, sans-serif" font-size="38" fill="#ffffff" font-weight="700">2025/07</text>
+    <text x="20" y="122" font-family="Arial, sans-serif" font-size="12" fill="#f4efe6" fill-opacity="0.85">套模板量產的直接終結</text>
+    <text x="20" y="158" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.7">Bot / TTS / 自動投影片</text>
+    <text x="20" y="178" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.7">跨頻道重複貼相似內容</text>
+    <text x="20" y="198" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.7">無加值的合輯</text>
+    <text x="20" y="218" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" fill-opacity="0.7">違規即整頻道失營利資格</text>
+  </g>
+
+  <text x="48" y="428" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" fill-opacity="0.45" letter-spacing="1.2">Sources: YouTube Help 1311392 / 15447836 · TikTok Creativity Program Beta Terms · Mediacube 2026</text>
+</svg>

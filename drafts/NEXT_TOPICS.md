@@ -53,6 +53,7 @@
 - [x] 台灣醫材新創需要什麼樣的生醫工程人才（2026 版）→ `2026-05-20-taiwan-medtech-talent-2026.md`（草稿，待 William 審稿）
 - [x] 從 CES 2026 看穿戴式裝置三個趨勢：台灣 TFDA 法規節奏對得上嗎 → `2026-05-22-ces-2026-wearable-tfda-three-trends.md`（草稿，待 William 審稿）
 - [x] AI Agent 2026 技術現況：三篇剛上線的論文，分別從記憶、工具、評測切進來（community；William 即時指定主題、跨 arXiv/PubMed/bioRxiv 三平台引用）→ `published/2026-05-22-ai-agent-tech-three-papers-cross-platform.md`（已發布）
+- [x] 生成式 AI 是創作工具，不是自動印鈔機：談短影音變現的真相（case；William 即時指定主題與切角，全球規則為主） → `published/2026-05-22-ai-video-monetization-reality.md`（已發布）
 
 ---
 
