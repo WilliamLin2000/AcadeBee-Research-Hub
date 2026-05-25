@@ -24,7 +24,6 @@
 
 ### 社群精選 (community)
 - [ ] 研究生最常問我的 10 個工具問題（整理版）
-- [ ] 本月社群活動回顧 + 下月預告
 
 ## 中優先（主題方向 OK，需要 William 補充細節）
 
@@ -54,6 +53,8 @@
 - [x] 從 CES 2026 看穿戴式裝置三個趨勢：台灣 TFDA 法規節奏對得上嗎 → `2026-05-22-ces-2026-wearable-tfda-three-trends.md`（草稿，待 William 審稿）
 - [x] AI Agent 2026 技術現況：三篇剛上線的論文，分別從記憶、工具、評測切進來（community；William 即時指定主題、跨 arXiv/PubMed/bioRxiv 三平台引用）→ `published/2026-05-22-ai-agent-tech-three-papers-cross-platform.md`（已發布）
 - [x] 生成式 AI 是創作工具，不是自動印鈔機：談短影音變現的真相（case；William 即時指定主題與切角，全球規則為主） → `published/2026-05-22-ai-video-monetization-reality.md`（已發布）
+- [x] 本月社群精選：兩篇五月剛掛上的 IMU × 深度學習 preprint，剛好回答了不同層次的問題（community；排程自動產出，原主題「本月社群活動回顧 + 下月預告」重新詮釋為「本月社群熱門 preprint 解讀」，跨 arXiv + bioRxiv 雙平台引用）→ `2026-05-25-may-2026-community-imu-dl-preprints.md`（草稿，待 William 審稿）
+- [x] Harness engineering 是什麼：兩篇 2026 上半年 arXiv 的「LLM 外殼工程」拆解，給生醫研究者的借鏡（community；William 即時指定主題，雙 arXiv 引用 OPENDEV + AHE）→ `published/2026-05-25-agent-harness-engineering.md`（已寫入 articles.js，待 William 手動 push）
 
 ---
 
