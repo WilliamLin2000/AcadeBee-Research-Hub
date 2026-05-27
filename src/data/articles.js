@@ -47,7 +47,7 @@ export const articles = [
       { id: 'principle', title: '三、原理：節點圖、資料以 JSON 物件陣列流動' },
       { id: 'tech', title: '四、技術：Node.js 後端、佇列模式、AI agent 節點' },
       { id: 'froav', title: '五、FROAV 為什麼選 n8n：學術界一個具體用例' },
-      { id: 'takeaway', title: '六、給生醫研究者的 takeaway' },
+      { id: 'takeaway', title: '六、給研究者的 takeaway' },
     ],
     content: [
       {
