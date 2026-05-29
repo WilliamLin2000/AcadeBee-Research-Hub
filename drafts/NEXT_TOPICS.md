@@ -29,7 +29,6 @@
 ## 中優先（主題方向 OK，需要 William 補充細節）
 
 - [ ] （case / William 自寫）如何在 PhD 第三年重新找回熱情
-- [ ] （method）用 Claude Code 處理生醫文獻回顧的三種 workflow
 - [ ] （case / William 自寫）台灣生醫新創薪資結構真實揭露（匿名訪談整理）
 
 ## 已寫入草稿（自動更新）
@@ -57,6 +56,8 @@
 - [x] 本月社群精選：兩篇五月剛掛上的 IMU × 深度學習 preprint，剛好回答了不同層次的問題（community；排程自動產出，原主題「本月社群活動回顧 + 下月預告」重新詮釋為「本月社群熱門 preprint 解讀」，跨 arXiv + bioRxiv 雙平台引用）→ `2026-05-25-may-2026-community-imu-dl-preprints.md`（草稿，待 William 審稿）
 - [x] Harness engineering 是什麼：兩篇 2026 上半年 arXiv 的「LLM 外殼工程」拆解，給生醫研究者的借鏡（community；William 即時指定主題，雙 arXiv 引用 OPENDEV + AHE）→ `published/2026-05-25-agent-harness-engineering.md`（已寫入 articles.js，待 William 手動 push）
 - [x] n8n 是什麼：從 2026 arXiv 一篇研究框架（FROAV）切入它的原理與技術（community；William 即時指定主題，原 markerless mocap 草稿經 William 退稿改題、改為以 arXiv 2601.07504 為 Primary 引用、n8n GitHub / 官方文件為 Supplementary 廠商公開資料）→ `published/2026-05-27-n8n-introduction-arxiv-froav.md`（已寫入 articles.js，待 William 手動 push）
+- [x] 用 LLM 跑生醫文獻回顧的三種 workflow：從 2025 兩篇 JAMIA 研究拆解可複製的工程化路徑（method；排程自動產出。高優先區為空，從中優先區挑出此題；以 Scherbakov 2025 + Li 2025 兩篇 JAMIA 為主研究，輔以 López-Pineda 2025 RSM 驗證對照） → `2026-05-29-llm-biomedical-litreview-three-workflows.md`（草稿，待 William 審稿）
+- [x] Markerless motion capture 的兩條技術路線：2025 兩篇 J Biomech 研究的方法與結果（method；William 即時指定主題「介紹 markerless mocap 的技術應用與方法」，並指示「不要批判見解、只描述兩篇研究」；以 Verhoeven 2025 J Biomech（2D DeepLabCut + 訓練資料比例 + toddler/adult 對照）與 Guo 2025 J Biomech（3DGait 單深度攝影機 + TUG）為兩條互補主研究）→ `published/2026-05-29-markerless-mocap-two-tech-routes-2025.md`（已寫入 articles.js，待 William 手動 push）
 
 ---
 
