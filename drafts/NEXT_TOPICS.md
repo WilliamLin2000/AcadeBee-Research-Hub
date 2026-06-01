@@ -58,6 +58,7 @@
 - [x] n8n 是什麼：從 2026 arXiv 一篇研究框架（FROAV）切入它的原理與技術（community；William 即時指定主題，原 markerless mocap 草稿經 William 退稿改題、改為以 arXiv 2601.07504 為 Primary 引用、n8n GitHub / 官方文件為 Supplementary 廠商公開資料）→ `published/2026-05-27-n8n-introduction-arxiv-froav.md`（已寫入 articles.js，待 William 手動 push）
 - [x] 用 LLM 跑生醫文獻回顧的三種 workflow：從 2025 兩篇 JAMIA 研究拆解可複製的工程化路徑（method；排程自動產出。高優先區為空，從中優先區挑出此題；以 Scherbakov 2025 + Li 2025 兩篇 JAMIA 為主研究，輔以 López-Pineda 2025 RSM 驗證對照） → `2026-05-29-llm-biomedical-litreview-three-workflows.md`（草稿，待 William 審稿）
 - [x] Markerless motion capture 的兩條技術路線：2025 兩篇 J Biomech 研究的方法與結果（method；William 即時指定主題「介紹 markerless mocap 的技術應用與方法」，並指示「不要批判見解、只描述兩篇研究」；以 Verhoeven 2025 J Biomech（2D DeepLabCut + 訓練資料比例 + toddler/adult 對照）與 Guo 2025 J Biomech（3DGait 單深度攝影機 + TUG）為兩條互補主研究）→ `published/2026-05-29-markerless-mocap-two-tech-routes-2025.md`（已寫入 articles.js，待 William 手動 push）
+- [x] IMU 估計 GRF 的兩條 2024–2025 路線：架構優化 vs. 自監督學習（method；排程自動產出。高優先三類皆為空、中優先僅剩 case 類，由排程在 William 既有 IMU/GRF 系列基礎上自主挑題；以 Chen 2025 Clin Biomech（CNN-BiGRU-Attention + ACLR 25 人 三任務）與 Tan 2024 IEEE TBME（masked transformer SSL，1–10% 標籤達 100% baseline）為兩條互補主研究，輔以 Carter 2024 PeerJ 消費級 IMU + insole 50 人 treadmill 驗證）→ `published/2026-06-01-imu-grf-estimation-two-routes-2024-2025.md`（已寫入 articles.js，待 William 提供 PAT 後 push）
 
 ---
 
