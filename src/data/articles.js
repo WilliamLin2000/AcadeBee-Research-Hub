@@ -24,6 +24,7 @@ import aiVideoMonetizationRealityCover from '../assets/covers/ai-video-monetizat
 import n8nIntroductionArxivFroavCover from '../assets/covers/n8n-introduction-arxiv-froav.svg'
 import markerlessMocapTwoTechRoutes2025Cover from '../assets/covers/markerless-mocap-two-tech-routes-2025.svg'
 import imuGrfEstimationTwoRoutes20242025Cover from '../assets/covers/imu-grf-estimation-two-routes-2024-2025.svg'
+import rtxSparkAiPcDeepDiveCover from '../assets/covers/rtx-spark-ai-pc-deep-dive.svg'
 
 export const articleCategories = [
   { value: 'method', label: '方法論筆記', color: 'teal' },
@@ -33,6 +34,148 @@ export const articleCategories = [
 ]
 
 export const articles = [
+  {
+    id: 'rtx-spark-ai-pc-deep-dive',
+    category: 'industry',
+    title: 'NVIDIA RTX Spark 技術深入：把資料中心級 AI 算力塞進 Windows AI PC',
+    excerpt:
+      '黃仁勳 2026/6/1 在台北 GTC Taipei 演講宣布 RTX Spark：GB10 Superchip 把 Grace CPU、Blackwell GPU、128 GB 統一記憶體封裝成一顆矽，目標是讓筆電本地跑 120B 模型。本文拆解規格、實測 throughput 與對生醫研究者的三個實務意涵。',
+    publishedAt: '2026-06-03',
+    readingTime: '11 分鐘',
+    featured: false,
+    coverImage: rtxSparkAiPcDeepDiveCover,
+    tableOfContents: [
+      { id: 'positioning', title: '一、RTX Spark 是 NVIDIA 的 AI PC 答卷' },
+      { id: 'gb10-arch', title: '二、硬體架構拆解：GB10 Superchip' },
+      { id: 'ai-capacity', title: '三、AI 算力與模型容量' },
+      { id: 'why-ai-pc', title: '四、為什麼是 AI PC 而不是「再快一點的筆電」' },
+      { id: 'availability', title: '五、上市時程與合作夥伴' },
+      { id: 'throughput', title: '六、實測 throughput：120B 模型在 GB10 上跑多快' },
+      { id: 'biomed-impact', title: '七、對生醫工程 PhD 研究者的三個實務意涵' },
+      { id: 'caveats', title: '八、要留意的限制與保留意見' },
+    ],
+    content: [
+      {
+        type: 'callout',
+        text: '本文資訊來源以 NVIDIA / Microsoft 廠商公開資料（officially announced specs）與第三方科技媒體現場報導為主，GB10 平台 throughput 數據引用 LMSYS、IntuitionLabs、ProXPC、PANews 等社群實測。內容定位為 industry 類技術深入，並非以 TFDA / 健保署為主來源的法規類報導。',
+      },
+      { type: 'h2', id: 'positioning', text: '一、RTX Spark 是 NVIDIA 的 AI PC 答卷' },
+      {
+        type: 'p',
+        text: 'RTX Spark 是 NVIDIA 與 Microsoft 共同推出的 Windows AI PC 平台核心矽，本質上是把過去只在資料中心存在的 superchip 架構（CPU 加 GPU 加高頻寬統一記憶體）縮小封裝後，塞進筆電與小型桌機。',
+      },
+      {
+        type: 'p',
+        text: '之前 Microsoft 推 Copilot+ PC 時主打的是 Qualcomm Snapdragon X 與 Intel Core Ultra 上的 NPU（神經網路處理器）。RTX Spark 是 NVIDIA 直接跳過 NPU 路線，用一顆完整的 Blackwell GPU 來做 AI PC 的核心算力。Windows 在 RTX Spark 上會被重新定位成 agentic AI OS，讓使用者只下達指令、由作業系統把工作交給本地 agent 執行 [ref: NVIDIA Newsroom 2026 RTX Spark 公告; Microsoft Windows Experience Blog 2026/5/31]。',
+      },
+      { type: 'h2', id: 'gb10-arch', text: '二、硬體架構拆解：GB10 Superchip' },
+      {
+        type: 'p',
+        text: '正式內部代號是 GB10 Superchip。CPU 端採 NVIDIA Grace 微架構（Arm 指令集），與 MediaTek 共同開發，20 cores 混合 performance core 與 efficiency core 設計，全面走 Arm 路線取代傳統 x86 [ref: Toms Hardware 2026/5/31 RTX Spark 深入報導]。',
+      },
+      {
+        type: 'p',
+        text: 'GPU 端為 GeForce RTX Blackwell 架構，6,144 顆 CUDA cores，第五代 Tensor cores 原生支援 FP4 精度。圖形能力涵蓋完整 DirectX 12 Ultimate、ray tracing、path tracing、DLSS 4.5（未來支援 DLSS 5），遊戲表現 NVIDIA 官方標稱 1440p 100 FPS [ref: NVIDIA GeForce 官方頁 COMPUTEX 2026 announcements]。',
+      },
+      {
+        type: 'p',
+        text: '記憶體與互連方面，統一記憶體（unified memory）配置 128 GB LPDDR5X，最高 300 GB/s 記憶體頻寬。CPU 與 GPU 之間以 NVLink-C2C（chip-to-chip）互連，不走 PCIe。製程方面採用 TSMC 3 nm EUV 晶圓代工 [ref: TechPowerUp 2026 RTX Spark Supercomputer-grade Processor 報導]。',
+      },
+      {
+        type: 'p',
+        text: '統一記憶體這點對 AI 工作負載特別重要。CPU 與 GPU 共用同一個 128 GB pool，省掉了傳統獨顯架構必須在 PCIe 上來回搬資料的延遲與功耗，這是它能在筆電形態下跑 120B 模型的關鍵設計。',
+      },
+      { type: 'h2', id: 'ai-capacity', text: '三、AI 算力與模型容量' },
+      {
+        type: 'p',
+        text: 'NVIDIA 公布的核心數字：AI 算力 1 petaflop（10^15 FLOPS），可承載 120-billion 參數模型本地推論，context length 可達 100 萬 tokens，支援 agent 多步驟長 context 工作流 [ref: NVIDIA Newsroom 2026 RTX Spark 公告]。',
+      },
+      {
+        type: 'p',
+        text: '對研究端的意義：120B 參數本地跑得動，意味著像 Llama 3 70B、Mixtral 8x22B、甚至更大的醫療專用 fine-tune 模型，都可以離線在一台筆電上推論。1 petaflop 在 2020 年是頂級資料中心節點的等級，現在能塞進筆電是製程、架構、FP4 精度三件事疊加的結果。',
+      },
+      { type: 'h2', id: 'why-ai-pc', text: '四、為什麼是 AI PC 而不是「再快一點的筆電」' },
+      {
+        type: 'p',
+        text: 'RTX Spark 與一般高階遊戲筆電的本質差異在於作業系統介面層的重新定義。NVIDIA 與 Microsoft 把這次合作描述為 Windows for the age of personal AI，三個技術層次的整合：第一，本地 agent 執行，模型不上雲，agent 直接在本機跑，敏感資料不離開裝置；第二，agentic UI，作業系統介面從使用者操作 app 轉向使用者下指令、agent 操作 app；第三，CUDA、TensorRT、DLSS 統一在一顆矽上，30 年的 NVIDIA AI 軟體堆疊第一次完整下放到 PC 端 [ref: Microsoft Windows Experience Blog 2026/5/31; NVIDIA Newsroom 2026 RTX Spark 公告]。',
+      },
+      {
+        type: 'p',
+        text: '這個定位才是 AI PC 與「裝了 NPU 的筆電」的真正分水嶺。前者是運算範式的改變，後者只是多了一個加速器。',
+      },
+      { type: 'h2', id: 'availability', text: '五、上市時程與合作夥伴' },
+      {
+        type: 'p',
+        text: '發貨時程訂在 2026 年 9 到 11 月（全球）。首波 OEM 包括 ASUS、Dell、HP、Lenovo、Microsoft Surface、MSI，第二波則有 Acer 與 GIGABYTE。產品型態以輕薄筆電（all-day battery）與小型桌機（compact desktop）為主 [ref: NVIDIA Newsroom 2026 RTX Spark 公告; ASUS 官方新聞稿; HP Newsroom COMPUTEX 2026]。',
+      },
+      {
+        type: 'p',
+        text: 'ASUS 已宣布 ProArt P16、P14 與一款 Mini PC 採用 RTX Spark，HP 也已發布對應產品線。值得注意的是這些都是「創作加 AI」定位，不是純電競機。',
+      },
+      { type: 'h2', id: 'throughput', text: '六、實測 throughput：120B 模型在 GB10 上跑多快' },
+      {
+        type: 'p',
+        text: 'NVIDIA 官方資料著重「能跑」而非「跑多快」，但社群已有對應 GB10 平台（DGX Spark，同樣的 GB10 Superchip）的實測數字可以參考。重點 benchmark 整理如下：',
+      },
+      {
+        type: 'table',
+        headers: ['模型 / 設定', '量測 throughput', '來源'],
+        rows: [
+          ['GPT-OSS 120B, batch 1', '11.66 tokens/s', 'LMSYS DGX Spark Review 2025-10'],
+          ['120B 級（設定不同）', '38.55 tokens/s', 'IntuitionLabs DGX Spark Review'],
+          ['70B Q4 量化', '約 35 到 45 tokens/s', 'ProXPC DGX Spark vs 5090'],
+          ['Qwen 2.5 72B / Llama 3.2 90B', '4.6 tokens/s', 'Medium (Robert McDermott) DGX Spark overview'],
+          ['對照：3× RTX 3090（936 GB/s）', '124 tokens/s on 120B', 'IntuitionLabs benchmark'],
+        ],
+      },
+      {
+        type: 'p',
+        text: '換算到使用情境的解讀：11 到 12 tps 大約是「人類閱讀速度」的水平，互動體驗可接受但不算流暢。若處理 100 萬 token 級 context，第一個輸出 token 的等待時間可能達數秒，這是記憶體頻寬 300 GB/s 的物理上限決定的，不是軟體最佳化能解決的瓶頸 [ref: PANews 2026 RTX Spark AI PC 評析]。對照組 3 張 RTX 3090（72 GB 總顯存、936 GB/s 頻寬）同樣 120B 模型可達 124 tok/s，約 3 倍速度，但是三卡電腦不可能裝進筆電。',
+      },
+      {
+        type: 'p',
+        text: '結論是：RTX Spark 的設計目標是「在筆電形態下可以本地跑 120B 模型」，不是「比資料中心 GPU 跑得快」。研究者要根據 throughput 預期決定使用情境是 batch 推論還是即時互動。',
+      },
+      { type: 'h2', id: 'biomed-impact', text: '七、對生醫工程 PhD 研究者的三個實務意涵' },
+      {
+        type: 'h3',
+        text: '1. IRB 限制下的本地推論成為可行配置',
+      },
+      {
+        type: 'p',
+        text: '很多臨床研究的 IRB 條件禁止把識別性醫療資料上傳雲端 LLM。在 RTX Spark 之前，這代表只能用較小的本地模型（7B 到 13B），效能與雲端 GPT-4 或 Claude 差距太大。RTX Spark 把 120B 拉到本地，意味著從 2026 Q4 開始，「離線跑接近雲端等級的醫療 LLM」變成預算內可行的選項。一台筆電就能符合 IRB 對「資料不離開裝置」的硬性條款。',
+      },
+      {
+        type: 'h3',
+        text: '2. 邊緣端臨床部署的新基線',
+      },
+      {
+        type: 'p',
+        text: '過去把 AI 模型部署到診間或復健室，常常卡在「臨床端沒有資料中心、又不能用雲」。RTX Spark 的小型桌機形態（compact desktop）意味著一台機器就能在診間本地跑步態分析模型、醫療影像即時 segmentation、語音轉錄加 SOAP 自動草擬等多任務 agent。對 SaMD（軟體即醫材）申請而言，本地推論的稽核軌跡（audit trail）也比雲端更容易說明。',
+      },
+      {
+        type: 'h3',
+        text: '3. PhD 研究的訓練成本曲線會被改寫',
+      },
+      {
+        type: 'p',
+        text: '128 GB 統一記憶體加 1 petaflop FP4 算力，足以在本地做中型模型（10 到 30B）的 LoRA 或 QLoRA fine-tune。對 PhD 學生而言，原本要排隊用實驗室 cluster 或租 H100 才能跑的微調實驗，2026 Q4 之後可能在自己桌上的 RTX Spark mini PC 就能跑完。這會壓縮研究週期，但也代表「會本地調模型」會從進階技能變成標配。',
+      },
+      { type: 'h2', id: 'caveats', text: '八、要留意的限制與保留意見' },
+      {
+        type: 'p',
+        text: '互動性 vs. 容量的取捨：120B 模型「跑得動」與「跑得即時」是兩件事。實測顯示 batch 1 約 11 tps，長 context 場景 throughput 還會降，互動體驗會明顯比雲端 GPT-4 慢。',
+      },
+      {
+        type: 'p',
+        text: 'Arm Windows 軟體生態仍在補齊：RTX Spark 走 Arm 路線，部分 x86-only 的傳統科研軟體（OpenSim、特定 MATLAB toolbox、舊版 LabVIEW 驅動）短期內可能要靠相容層執行，效能與穩定性需要實測驗證。',
+      },
+      {
+        type: 'p',
+        text: '競爭格局未定：Intel 在 COMPUTEX 2026 同期推 Panther Lake，AMD 則加碼台灣百億投資。Windows AI PC 不會是 NVIDIA 一家獨佔，2027 之前生態系仍會有多套標準競合。',
+      },
+    ],
+  },
   {
     id: 'imu-grf-estimation-two-routes-2024-2025',
     category: 'method',
