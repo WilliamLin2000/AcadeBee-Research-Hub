@@ -313,6 +313,26 @@
   margin-bottom: 1.35rem;
 }
 
+.article-figure {
+  margin: 0 0 1.75rem;
+}
+
+.article-figure-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.article-figure-caption {
+  margin-top: 0.65rem;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--color-text-muted, #5a6a7a);
+  text-align: center;
+}
+
 .article-detail-list {
   margin: 0 0 1.35rem;
   padding-left: 1.35rem;

@@ -173,6 +173,21 @@ export default function ArticleDetailPage() {
                 </div>
               )
             }
+            if (block.type === 'image' && block.src) {
+              return (
+                <figure key={idx} className="article-figure">
+                  <img
+                    src={block.src}
+                    alt={block.alt || ''}
+                    className="article-figure-img"
+                    loading="lazy"
+                  />
+                  {block.caption ? (
+                    <figcaption className="article-figure-caption">{block.caption}</figcaption>
+                  ) : null}
+                </figure>
+              )
+            }
             if (block.type === 'quote') {
               return (
                 <blockquote key={idx}>

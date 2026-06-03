@@ -25,6 +25,7 @@ import n8nIntroductionArxivFroavCover from '../assets/covers/n8n-introduction-ar
 import markerlessMocapTwoTechRoutes2025Cover from '../assets/covers/markerless-mocap-two-tech-routes-2025.svg'
 import imuGrfEstimationTwoRoutes20242025Cover from '../assets/covers/imu-grf-estimation-two-routes-2024-2025.svg'
 import rtxSparkAiPcDeepDiveCover from '../assets/covers/rtx-spark-ai-pc-deep-dive.svg'
+import rtxSparkComputexKeynote from '../assets/articles/rtx-spark-computex-2026-keynote.png'
 
 export const articleCategories = [
   { value: 'method', label: '方法論筆記', color: 'teal' },
@@ -86,6 +87,13 @@ export const articles = [
         text: '統一記憶體這點對 AI 工作負載特別重要。CPU 與 GPU 共用同一個 128 GB pool，省掉了傳統獨顯架構必須在 PCIe 上來回搬資料的延遲與功耗，這是它能在筆電形態下跑 120B 模型的關鍵設計。',
       },
       { type: 'h2', id: 'ai-capacity', text: '三、AI 算力與模型容量' },
+      {
+        type: 'image',
+        src: rtxSparkComputexKeynote,
+        alt: '黃仁勳 COMPUTEX 2026 主題演講投影片：Announcing NVIDIA and Microsoft Reinvent PC, Powered by RTX Spark，列出 Blackwell RTX GPU、Grace CPU、128 GB 統一記憶體與 NVIDIA 軟體堆疊',
+        caption:
+          '圖：COMPUTEX 2026 主題演講公布的 RTX Spark 平台規格投影片（Blackwell GPU 1 petaflop FP4、20-core Grace CPU、128 GB 統一記憶體、完整 NVIDIA Stack）。',
+      },
       {
         type: 'p',
         text: 'NVIDIA 公布的核心數字：AI 算力 1 petaflop（10^15 FLOPS），可承載 120-billion 參數模型本地推論，context length 可達 100 萬 tokens，支援 agent 多步驟長 context 工作流 [ref: NVIDIA Newsroom 2026 RTX Spark 公告]。',
