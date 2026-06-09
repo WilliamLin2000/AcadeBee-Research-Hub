@@ -26,6 +26,8 @@ import markerlessMocapTwoTechRoutes2025Cover from '../assets/covers/markerless-m
 import imuGrfEstimationTwoRoutes20242025Cover from '../assets/covers/imu-grf-estimation-two-routes-2024-2025.svg'
 import rtxSparkAiPcDeepDiveCover from '../assets/covers/rtx-spark-ai-pc-deep-dive.svg'
 import rtxSparkComputexKeynote from '../assets/articles/rtx-spark-computex-2026-keynote.png'
+import mermaidDiagramsAsCodeCover from '../assets/covers/mermaid-diagrams-as-code-for-researchers.svg'
+import markdownToMermaidWorkflow from '../assets/articles/markdown-to-mermaid-workflow.svg'
 
 export const articleCategories = [
   { value: 'method', label: '方法論筆記', color: 'teal' },
@@ -2709,6 +2711,90 @@ export const articles = [
       {
         type: 'p',
         text: '在這個情境下，關鍵不再是誰拿到更多答案，而是誰能判斷答案是否可靠、是否適用於特定場景。對一般學習者來說，最重要的升級是建立問題定義能力、評估依據與驗證流程：先定義要解的問題，再用 AI 生成候選方案，最後用資料、實作或專家回饋做迭代。當學習重心從「快讀」轉向「可驗證的理解」，AI 才會成為縮短成長曲線的工具，而不是製造認知幻覺的捷徑。',
+      },
+    ],
+  },
+  {
+    id: 'mermaid-diagrams-as-code-for-researchers',
+    category: 'method',
+    title: '為什麼用 Markdown 跟 AI 說話，它懂得更快、你也省更多力氣',
+    excerpt:
+      '很多人跟 AI 溝通的方式就是把一段話直接丟進去，但其實 AI 有一個特性：它在訓練時吃了大量 Markdown 格式的資料，所以 Markdown 幾乎是它的「母語」。用對格式，不只 AI 理解更準確，你的 token 也少花很多。',
+    publishedAt: '2026-06-09',
+    readingTime: '7 分鐘',
+    coverImage: mermaidDiagramsAsCodeCover,
+    tableOfContents: [
+      { id: 'intro', title: '一、先從一個問題開始' },
+      { id: 'training-data', title: '二、AI 在什麼資料上「長大」？' },
+      { id: 'markdown-saves', title: '三、用 Markdown 給 AI，它省力，你也省 token' },
+      { id: 'resource', title: '四、「省資源」到底省在哪裡？' },
+      { id: 'mermaid-use', title: '五、實際應用：把研究流程表格轉成流程圖' },
+      { id: 'habit', title: '六、一個簡單的使用習慣' },
+    ],
+    content: [
+      { type: 'h2', id: 'intro', text: '一、先從一個問題開始' },
+      {
+        type: 'p',
+        text: '你有沒有試過這個：把一段研究步驟或流程用白話文描述給 AI，結果它理解的方向有點歪？然後你又補充說明，它又改了一次，來來回回搞了好幾輪才對？',
+      },
+      {
+        type: 'p',
+        text: '這不完全是 AI 不夠聰明的問題，有一部分是溝通格式的問題。',
+      },
+      { type: 'h2', id: 'training-data', text: '二、AI 在什麼資料上「長大」？' },
+      {
+        type: 'p',
+        text: '要理解為什麼格式重要，要先知道 AI 語言模型是怎麼來的。ChatGPT、Claude 這類大型語言模型，是靠吃掉大量文字資料訓練出來的，包括網頁文章、論文、書籍、程式碼，還有非常多的 Markdown 格式文字。Markdown 出現在哪裡？GitHub 的說明文件、技術部落格、工程師的筆記、各種文件平台，幾乎所有「給人讀、也給機器讀」的結構化文字都是 Markdown。',
+      },
+      {
+        type: 'p',
+        text: 'AI 看過的 Markdown 資料數量極為龐大，它對 Markdown 的語法結構已經有非常強的辨識能力。什麼是標題、什麼是清單、什麼是表格、什麼是程式碼區塊，它不需要額外花力氣解析，看到就知道。',
+      },
+      { type: 'h2', id: 'markdown-saves', text: '三、用 Markdown 給 AI，它省力，你也省 token' },
+      {
+        type: 'p',
+        text: '很多人以為只要把資訊丟給 AI，格式不重要。但有一個很實際的差異。用白話文描述結構，AI 需要先把你的文字「解讀」成它能理解的結構，這個過程本身就要消耗 token，而且解讀有可能出錯，導致你需要再補充說明。用 Markdown 直接呈現結構，AI 看到就知道這是什麼：這個標題是主題、這個清單是步驟、這個表格是比較。不需要猜，直接開始處理。',
+      },
+      {
+        type: 'p',
+        text: '舉個例子，同樣是告訴 AI「這是我的三個研究步驟」，兩種寫法對 AI 來說差很多。白話文版本「第一個步驟是收集資料，接著要做前處理，最後再用模型分析」，AI 要從這句話裡解析出「有順序的三個步驟」這個結構。Markdown 版本直接用編號清單呈現，AI 看到就知道：這是有順序的三個步驟，不是一句話裡的三個名詞。處理起來更乾淨，出錯的機率更低。',
+      },
+      { type: 'h2', id: 'resource', text: '四、「省資源」到底省在哪裡？' },
+      {
+        type: 'p',
+        text: '這裡要說一個很多人會誤解的地方：Markdown 不是讓 AI 每個字算得更快（每個 token 的計算量其實是固定的），真正省掉的是兩件事。第一是省 token：結構清晰的輸入，讓 AI 用更少的詞就能完整理解你的意圖。第二是省來回次數：當 AI 第一次就理解正確，你就不需要再補充、再修正、再重問。實際用下來，這才是真正大幅減少時間和 token 消耗的地方。',
+      },
+      {
+        type: 'p',
+        text: '如果你是付費用戶，或者在做需要大量 AI 協作的研究工作，這個差異是很實際的。',
+      },
+      { type: 'h2', id: 'mermaid-use', text: '五、實際應用：把研究流程表格轉成流程圖' },
+      {
+        type: 'p',
+        text: '這個概念可以直接用在研究工作上。假設你有一張表格，描述你的研究流程（每一列是一個步驟，有條件、輸入、決策點）。你想要的是一張流程圖，而且希望保留一個之後可以繼續修改的版本，不是一張鎖死的圖片，是可以繼續編輯的。',
+      },
+      {
+        type: 'image',
+        src: markdownToMermaidWorkflow,
+        alt: '三步驟工作流程示意：Markdown 表格貼給 AI，AI 輸出 Mermaid code，最後在 mermaid.live 渲染成視覺化流程圖',
+        caption: '圖：從 Markdown 表格到視覺化流程圖的三步驟流程。整個過程都在 AI 最熟悉的 Markdown 格式裡操作。',
+      },
+      {
+        type: 'p',
+        text: '做法是把表格用 Markdown 格式整理好，然後告訴 AI：「請把這張 Markdown 表格轉換成 Mermaid flowchart code。」AI 會輸出 Mermaid code，這是一種用 Markdown 語法描述流程圖的格式，可以直接貼進 mermaid.live 看到視覺化的結果。這段 code 存成文字檔，之後要改流程，直接改幾行字就好，不需要重新拖拉圖形。',
+      },
+      {
+        type: 'p',
+        text: '這個流程之所以能跑通，背後的原因就是前面說的：輸入是 Markdown（表格）、輸出是 Markdown（Mermaid code），整個過程都在 AI 最熟悉的格式裡操作，準確率自然高、也不容易跑偏。',
+      },
+      { type: 'h2', id: 'habit', text: '六、一個簡單的使用習慣' },
+      {
+        type: 'p',
+        text: '不需要每次都很嚴格地用 Markdown。但有幾個場合，用 Markdown 給 AI 會明顯讓結果更好。你要給 AI 看有結構的資訊（步驟、清單、比較表）時，用 Markdown 格式而不是白話文描述。你要 AI 產出結構化的內容（表格、程式碼、流程圖）時，在 prompt 裡直接說你要什麼格式的輸出，而不是只說「幫我整理一下」。',
+      },
+      {
+        type: 'p',
+        text: '養成這個習慣，你會發現跟 AI 溝通變得更省力。不是因為 AI 變聰明了，而是因為你說的話，它從第一遍就聽懂了。',
       },
     ],
   },

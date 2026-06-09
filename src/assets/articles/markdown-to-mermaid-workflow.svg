@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 200" role="img" aria-label="從 Markdown 表格到 Mermaid 流程圖的三步驟工作流程示意">
+  <defs>
+    <linearGradient id="card-bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0d1f1a"/>
+      <stop offset="1" stop-color="#081410"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="760" height="200" rx="12" fill="#0d1f1a"/>
+
+  <!-- Step 1: Markdown Table -->
+  <rect x="20" y="20" width="185" height="160" rx="8" fill="#0a1a14" stroke="#22c55e" stroke-width="1.2"/>
+  <text x="112" y="44" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" letter-spacing="1.5" font-weight="700">STEP 1</text>
+  <text x="112" y="62" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" opacity="0.9">Markdown 表格</text>
+  <line x1="36" y1="70" x2="188" y2="70" stroke="#22c55e" stroke-width="0.5" opacity="0.4"/>
+  <text x="36" y="88" font-family="monospace" font-size="9" fill="#4ade80" opacity="0.9">| 步驟 | 說明    |</text>
+  <text x="36" y="104" font-family="monospace" font-size="9" fill="#4ade80" opacity="0.75">|------|---------|</text>
+  <text x="36" y="120" font-family="monospace" font-size="9" fill="#4ade80" opacity="0.75">| 1    | 收集資料|</text>
+  <text x="36" y="136" font-family="monospace" font-size="9" fill="#4ade80" opacity="0.75">| 2    | 前處理  |</text>
+  <text x="36" y="152" font-family="monospace" font-size="9" fill="#4ade80" opacity="0.75">| 3    | 分析    |</text>
+  <text x="112" y="174" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.45">貼給 AI + prompt</text>
+
+  <!-- Arrow 1 -->
+  <g stroke="#22c55e" stroke-width="2" fill="none" opacity="0.8">
+    <line x1="214" y1="100" x2="252" y2="100"/>
+    <polyline points="244,93 252,100 244,107"/>
+  </g>
+
+  <!-- Step 2: Mermaid Code -->
+  <rect x="260" y="20" width="220" height="160" rx="8" fill="#0a1a14" stroke="#22c55e" stroke-width="1.2"/>
+  <text x="370" y="44" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" letter-spacing="1.5" font-weight="700">STEP 2</text>
+  <text x="370" y="62" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" opacity="0.9">AI 輸出 Mermaid code</text>
+  <line x1="276" y1="70" x2="464" y2="70" stroke="#22c55e" stroke-width="0.5" opacity="0.4"/>
+  <text x="276" y="88" font-family="monospace" font-size="9" fill="#4ade80" opacity="0.9">flowchart TD</text>
+  <text x="276" y="104" font-family="monospace" font-size="9" fill="#4ade80" opacity="0.75">  A([開始]) --&gt; B[收集資料]</text>
+  <text x="276" y="120" font-family="monospace" font-size="9" fill="#4ade80" opacity="0.75">  B --&gt; C{品質足夠?}</text>
+  <text x="276" y="136" font-family="monospace" font-size="9" fill="#4ade80" opacity="0.75">  C -- 是 --&gt; D[前處理]</text>
+  <text x="276" y="152" font-family="monospace" font-size="9" fill="#4ade80" opacity="0.75">  C -- 否 --&gt; B</text>
+  <text x="370" y="174" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.45">純文字，可版本控制</text>
+
+  <!-- Arrow 2 -->
+  <g stroke="#22c55e" stroke-width="2" fill="none" opacity="0.8">
+    <line x1="490" y1="100" x2="528" y2="100"/>
+    <polyline points="520,93 528,100 520,107"/>
+  </g>
+
+  <!-- Step 3: Visual Flowchart -->
+  <rect x="536" y="20" width="204" height="160" rx="8" fill="#0a1a14" stroke="#22c55e" stroke-width="1.2"/>
+  <text x="638" y="44" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" letter-spacing="1.5" font-weight="700">STEP 3</text>
+  <text x="638" y="62" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" opacity="0.9">視覺化流程圖</text>
+  <line x1="552" y1="70" x2="724" y2="70" stroke="#22c55e" stroke-width="0.5" opacity="0.4"/>
+  <!-- mini flowchart diagram -->
+  <rect x="608" y="76" width="60" height="20" rx="10" fill="none" stroke="#4ade80" stroke-width="1"/>
+  <text x="638" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#4ade80">開始</text>
+  <line x1="638" y1="96" x2="638" y2="106" stroke="#4ade80" stroke-width="1"/>
+  <rect x="604" y="106" width="68" height="18" rx="3" fill="none" stroke="#4ade80" stroke-width="1"/>
+  <text x="638" y="119" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#4ade80">收集資料</text>
+  <line x1="638" y1="124" x2="638" y2="128" stroke="#4ade80" stroke-width="1"/>
+  <polygon points="638,128 616,146 638,164 660,146" fill="none" stroke="#4ade80" stroke-width="1"/>
+  <text x="638" y="149" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="#4ade80">品質OK?</text>
+  <text x="638" y="174" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.45">mermaid.live 渲染</text>
+</svg>

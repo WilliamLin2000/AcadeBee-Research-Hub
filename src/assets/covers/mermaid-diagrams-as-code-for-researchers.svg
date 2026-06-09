@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="為什麼用 Markdown 跟 AI 說話，它懂得更快封面">
+  <defs>
+    <linearGradient id="bg-md" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1f1a"/>
+      <stop offset="1" stop-color="#061410"/>
+    </linearGradient>
+    <linearGradient id="green-md" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22c55e"/>
+      <stop offset="1" stop-color="#4ade80"/>
+    </linearGradient>
+    <radialGradient id="glow-md" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#22c55e" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#22c55e" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg-md)"/>
+  <rect width="800" height="450" fill="url(#glow-md)"/>
+
+  <!-- decorative horizontal lines -->
+  <line x1="0" y1="110" x2="800" y2="110" stroke="#22c55e" stroke-width="0.4" opacity="0.15"/>
+  <line x1="0" y1="340" x2="800" y2="340" stroke="#22c55e" stroke-width="0.4" opacity="0.15"/>
+
+  <!-- label top left -->
+  <text x="42" y="52" font-family="Georgia, serif" font-size="28" font-weight="700" fill="#22c55e" letter-spacing="1">#</text>
+  <text x="64" y="52" font-family="Georgia, serif" font-size="28" font-weight="700" fill="#ffffff" opacity="0.85" letter-spacing="1"> Markdown</text>
+  <text x="44" y="74" font-family="Arial, sans-serif" font-size="11" fill="#ffffff" opacity="0.55" letter-spacing="1.5">WHY FORMAT MATTERS FOR AI</text>
+  <line x1="44" y1="84" x2="360" y2="84" stroke="#22c55e" stroke-width="1" opacity="0.3"/>
+
+  <!-- left panel: unstructured text -->
+  <rect x="44" y="120" width="220" height="200" rx="6" fill="#0a1a14" stroke="#ffffff" stroke-width="0.8" opacity="0.7"/>
+  <text x="56" y="142" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.4" letter-spacing="1.5">PLAIN TEXT</text>
+  <text x="56" y="165" font-family="monospace" font-size="10" fill="#ffffff" opacity="0.45">第一步是收集資料，</text>
+  <text x="56" y="181" font-family="monospace" font-size="10" fill="#ffffff" opacity="0.45">接著要做前處理，</text>
+  <text x="56" y="197" font-family="monospace" font-size="10" fill="#ffffff" opacity="0.45">最後用模型分析。</text>
+  <text x="56" y="220" font-family="monospace" font-size="10" fill="#ffffff" opacity="0.35">第一個決策點是判斷</text>
+  <text x="56" y="236" font-family="monospace" font-size="10" fill="#ffffff" opacity="0.35">資料品質是否足夠，</text>
+  <text x="56" y="252" font-family="monospace" font-size="10" fill="#ffffff" opacity="0.25">如果不夠就回去補充</text>
+  <text x="56" y="268" font-family="monospace" font-size="10" fill="#ffffff" opacity="0.18">收集，否則繼續...</text>
+  <!-- X mark -->
+  <text x="218" y="142" font-family="Arial" font-size="14" fill="#ef4444" opacity="0.9">✗</text>
+
+  <!-- arrow -->
+  <g stroke="#22c55e" stroke-width="2" fill="none" opacity="0.85">
+    <line x1="290" y1="220" x2="340" y2="220"/>
+    <polyline points="330,212 340,220 330,228"/>
+  </g>
+  <text x="299" y="213" font-family="Arial, sans-serif" font-size="8" fill="#22c55e" opacity="0.7">AI 解讀</text>
+
+  <!-- right panel: markdown -->
+  <rect x="356" y="120" width="220" height="200" rx="6" fill="#0a1a14" stroke="#22c55e" stroke-width="1.2" opacity="0.9"/>
+  <text x="368" y="142" font-family="Arial, sans-serif" font-size="9" fill="#22c55e" opacity="0.8" letter-spacing="1.5">MARKDOWN</text>
+  <text x="368" y="165" font-family="monospace" font-size="11" fill="#22c55e" opacity="0.9">## 研究步驟</text>
+  <text x="368" y="184" font-family="monospace" font-size="11" fill="#4ade80" opacity="0.85">1. 收集資料</text>
+  <text x="368" y="201" font-family="monospace" font-size="11" fill="#4ade80" opacity="0.85">2. 資料前處理</text>
+  <text x="368" y="218" font-family="monospace" font-size="11" fill="#4ade80" opacity="0.85">3. 模型分析</text>
+  <text x="368" y="244" font-family="monospace" font-size="11" fill="#22c55e" opacity="0.9">## 決策點</text>
+  <text x="368" y="263" font-family="monospace" font-size="11" fill="#4ade80" opacity="0.75">- 資料品質足夠？</text>
+  <text x="368" y="280" font-family="monospace" font-size="11" fill="#4ade80" opacity="0.75">  - 是 → 繼續</text>
+  <text x="368" y="297" font-family="monospace" font-size="11" fill="#4ade80" opacity="0.75">  - 否 → 補充收集</text>
+  <!-- check mark -->
+  <text x="534" y="142" font-family="Arial" font-size="14" fill="#22c55e" opacity="0.95">✓</text>
+
+  <!-- AI box on right -->
+  <rect x="610" y="150" width="150" height="120" rx="8" fill="#0a1a14" stroke="#22c55e" stroke-width="1" opacity="0.85"/>
+  <text x="685" y="185" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#22c55e" letter-spacing="1">AI</text>
+  <text x="685" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.7">母語讀取</text>
+  <text x="685" y="223" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.55">省 token</text>
+  <text x="685" y="241" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.55">省來回次數</text>
+  <!-- connector -->
+  <g stroke="#22c55e" stroke-width="1.5" fill="none" opacity="0.7">
+    <line x1="576" y1="220" x2="610" y2="210"/>
+    <polyline points="603,204 610,210 603,216"/>
+  </g>
+
+  <!-- bottom bar -->
+  <text x="42" y="390" font-family="Arial, sans-serif" font-size="10" fill="#22c55e" letter-spacing="2.5" font-weight="700">MARKDOWN × AI WORKFLOW</text>
+  <text x="42" y="406" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" opacity="0.35" letter-spacing="1.5">METHOD NOTE · 2026</text>
+</svg>
