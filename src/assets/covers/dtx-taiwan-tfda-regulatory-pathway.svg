@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="數位療法 DTx 在台灣的 TFDA 申請路徑封面">
+  <defs>
+    <linearGradient id="bg-dtx" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1a2e"/>
+      <stop offset="1" stop-color="#06101f"/>
+    </linearGradient>
+    <radialGradient id="halo-dtx" cx="0.72" cy="0.38" r="0.52">
+      <stop offset="0" stop-color="#1e5fa8" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#1e5fa8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#bg-dtx)"/>
+  <rect width="800" height="450" fill="url(#halo-dtx)"/>
+
+  <!-- Background dots -->
+  <g fill="#ffffff" opacity="0.05">
+    <circle cx="80" cy="55" r="1.5"/><circle cx="160" cy="55" r="1.5"/><circle cx="240" cy="55" r="1.5"/>
+    <circle cx="400" cy="55" r="1.5"/><circle cx="560" cy="55" r="1.5"/><circle cx="720" cy="55" r="1.5"/>
+    <circle cx="80" cy="395" r="1.5"/><circle cx="240" cy="395" r="1.5"/><circle cx="400" cy="395" r="1.5"/>
+    <circle cx="560" cy="395" r="1.5"/><circle cx="720" cy="395" r="1.5"/>
+  </g>
+
+  <!-- Title block -->
+  <text x="42" y="56" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#4a9ede" letter-spacing="2">DTx × TFDA</text>
+  <text x="44" y="80" font-family="Arial, sans-serif" font-size="12" fill="#ffffff" opacity="0.72" letter-spacing="1.2">數位療法在台灣的申請路徑</text>
+  <line x1="44" y1="88" x2="220" y2="88" stroke="#4a9ede" stroke-width="1" opacity="0.4"/>
+  <text x="42" y="114" font-family="Arial, sans-serif" font-size="9" fill="#4a9ede" letter-spacing="1.8" font-weight="700" opacity="0.85">SaMD · CLASS II · IMDRF · NHI</text>
+
+  <!-- Top-right -->
+  <text x="758" y="52" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#4a9ede" letter-spacing="2.2" font-weight="700">INDUSTRY OBSERVATION</text>
+  <text x="758" y="68" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.4" letter-spacing="1.2">TAIWAN · 2026</text>
+
+  <!-- Three-step pathway flow (horizontal) -->
+  <!-- Step 1 box -->
+  <rect x="42" y="148" width="190" height="180" rx="6" fill="#1e3a5f" opacity="0.7" stroke="#4a9ede" stroke-width="1.4"/>
+  <text x="52" y="174" font-family="Arial, sans-serif" font-size="9" fill="#4a9ede" font-weight="700" letter-spacing="1.6">STEP 01</text>
+  <text x="52" y="198" font-family="Georgia, serif" font-size="17" fill="#ffffff" font-weight="700">是否列管？</text>
+  <line x1="52" y1="208" x2="220" y2="208" stroke="#4a9ede" stroke-width="0.8" opacity="0.3"/>
+  <text x="52" y="228" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" opacity="0.75">預期用途</text>
+  <text x="52" y="244" font-family="Arial, sans-serif" font-size="10" fill="#ffffff" opacity="0.75">= 診斷 / 治療？</text>
+  <text x="52" y="270" font-family="Arial, sans-serif" font-size="9" fill="#4a9ede" opacity="0.9">✓ 是 → 繼續</text>
+  <text x="52" y="286" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.45">✗ 純健康管理</text>
+  <text x="52" y="300" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.45">  → 可能免申請</text>
+  <text x="52" y="316" font-family="Arial, sans-serif" font-size="8" fill="#ffffff" opacity="0.35">屬性查詢可確認</text>
+
+  <!-- Arrow 1→2 -->
+  <polygon points="242,228 258,238 242,248" fill="#4a9ede" opacity="0.7"/>
+
+  <!-- Step 2 box -->
+  <rect x="268" y="148" width="190" height="180" rx="6" fill="#1e3a5f" opacity="0.7" stroke="#4a9ede" stroke-width="1.4"/>
+  <text x="278" y="174" font-family="Arial, sans-serif" font-size="9" fill="#4a9ede" font-weight="700" letter-spacing="1.6">STEP 02</text>
+  <text x="278" y="198" font-family="Georgia, serif" font-size="17" fill="#ffffff" font-weight="700">分類分級</text>
+  <line x1="278" y1="208" x2="446" y2="208" stroke="#4a9ede" stroke-width="0.8" opacity="0.3"/>
+  <rect x="278" y="218" width="82" height="24" rx="3" fill="#c14a4a" opacity="0.35" stroke="#e07a7a" stroke-width="1"/>
+  <text x="319" y="234" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#f4a8a8" font-weight="700">Class III</text>
+  <rect x="278" y="250" width="82" height="24" rx="3" fill="#d4a537" opacity="0.3" stroke="#d4a537" stroke-width="1"/>
+  <text x="319" y="266" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#ffe08a" font-weight="700">Class II ★</text>
+  <rect x="278" y="282" width="82" height="24" rx="3" fill="#0fa19d" opacity="0.25" stroke="#0fa19d" stroke-width="1"/>
+  <text x="319" y="298" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#7ee8e5" font-weight="700">Class I</text>
+  <text x="372" y="234" font-family="Arial, sans-serif" font-size="8.5" fill="#ffffff" opacity="0.55">高度自主治療</text>
+  <text x="372" y="266" font-family="Arial, sans-serif" font-size="8.5" fill="#ffe08a" opacity="0.85">大多數 DTx</text>
+  <text x="372" y="298" font-family="Arial, sans-serif" font-size="8.5" fill="#ffffff" opacity="0.55">低風險</text>
+  <text x="278" y="316" font-family="Arial, sans-serif" font-size="8" fill="#ffffff" opacity="0.35">須附類似品比對表</text>
+
+  <!-- Arrow 2→3 -->
+  <polygon points="468,228 484,238 468,248" fill="#4a9ede" opacity="0.7"/>
+
+  <!-- Step 3 box -->
+  <rect x="494" y="148" width="264" height="180" rx="6" fill="#1e3a5f" opacity="0.7" stroke="#4a9ede" stroke-width="1.4"/>
+  <text x="504" y="174" font-family="Arial, sans-serif" font-size="9" fill="#4a9ede" font-weight="700" letter-spacing="1.6">STEP 03</text>
+  <text x="504" y="198" font-family="Georgia, serif" font-size="17" fill="#ffffff" font-weight="700">臨床驗證</text>
+  <line x1="504" y1="208" x2="744" y2="208" stroke="#4a9ede" stroke-width="0.8" opacity="0.3"/>
+  <text x="504" y="228" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.6">IMDRF 三層驗證框架</text>
+  <text x="504" y="248" font-family="Arial, sans-serif" font-size="10" fill="#4a9ede">① 臨床關聯</text>
+  <text x="504" y="263" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.55">  有文獻支持療效關聯？</text>
+  <text x="504" y="280" font-family="Arial, sans-serif" font-size="10" fill="#4a9ede">② 分析性能驗證</text>
+  <text x="504" y="295" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.55">  演算法技術上可靠？</text>
+  <text x="504" y="312" font-family="Arial, sans-serif" font-size="10" fill="#4a9ede">③ 臨床性能驗證</text>
+  <text x="504" y="327" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.55">  真實患者身上有效？</text>
+
+  <!-- Bottom strip -->
+  <line x1="42" y1="356" x2="758" y2="356" stroke="#ffffff" stroke-width="0.8" opacity="0.15"/>
+
+  <!-- Status indicators -->
+  <text x="42" y="376" font-family="Arial, sans-serif" font-size="9" fill="#4a9ede" letter-spacing="1.5" font-weight="700" opacity="0.9">醫療器材管理法</text>
+  <text x="42" y="392" font-family="Georgia, serif" font-size="16" fill="#ffffff" font-weight="700">2021 施行</text>
+
+  <text x="210" y="376" font-family="Arial, sans-serif" font-size="9" fill="#4a9ede" letter-spacing="1.5" font-weight="700" opacity="0.9">首張 DTx 許可</text>
+  <text x="210" y="392" font-family="Georgia, serif" font-size="16" fill="#ffffff" font-weight="700">2023 易速胰</text>
+
+  <text x="400" y="376" font-family="Arial, sans-serif" font-size="9" fill="#d4a537" letter-spacing="1.5" font-weight="700" opacity="0.9">健保給付目標</text>
+  <text x="400" y="392" font-family="Georgia, serif" font-size="16" fill="#ffffff" font-weight="700">2026 推進中</text>
+
+  <text x="758" y="392" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#ffffff" opacity="0.4" letter-spacing="0.8">TFDA Official · IMDRF 2017</text>
+</svg>

@@ -33,6 +33,9 @@
 
 ## 已寫入草稿（自動更新）
 
+- [x] 數位療法（DTx）在台灣怎麼送審：從 SaMD 分類到查驗登記的完整路徑（industry；William 指定主題，TFDA 官方文件為 Primary 來源，Health2Sync 易速胰案例與 ICLG 法律分析為 Supplementary）→ `published/2026-06-11-dtx-taiwan-tfda-regulatory-pathway.md`（已發布）
+- [x] IMU 跌倒風險評估的兩條 2025 路線：地形感知雙任務學習 vs. 多模態影像融合（method；排程自動產出。高優先三類皆為空，排程延續 IMU/穿戴式感測系列自主挑題；以 Lin 2025 IEEE JBHI（雙任務 CNN-LSTM，地形感知 + 跌倒風險同時分類，97.7% 準確率，329 ms 提前偵測）與 Zhao 2025 Neural Networks（GAF/Spectrogram/MTF 三種影像編碼 + CNN-RNN-Transformer 融合，F1 0.9708）為兩條互補主研究）→ `2026-06-10-imu-fall-risk-two-routes-2025.md`（草稿，待 William 審稿）
+
 - [x] 為什麼生醫論文審稿人總是問「你的模型可解釋嗎」：從 XAI 文獻回應這個問題 → `2026-04-24-xai-biomechanics-reviewer.md`
 - [x] 眼動訓練對運動員表現提升的證據與方法 → `published/2026-04-27-eye-movement-training-athletes.md`（已發布）
 - [x] 小資料集 + 深度學習：生物力學研究的五個方向（一起聊聊） → `published/2026-04-29-small-dataset-deep-learning-biomechanics.md`（已發布）

@@ -28,6 +28,7 @@ import rtxSparkAiPcDeepDiveCover from '../assets/covers/rtx-spark-ai-pc-deep-div
 import rtxSparkComputexKeynote from '../assets/articles/rtx-spark-computex-2026-keynote.png'
 import mermaidDiagramsAsCodeCover from '../assets/covers/mermaid-diagrams-as-code-for-researchers.svg'
 import markdownToMermaidWorkflow from '../assets/articles/markdown-to-mermaid-workflow.svg'
+import dtxTaiwanTfdaRegulatoryPathwayCover from '../assets/covers/dtx-taiwan-tfda-regulatory-pathway.svg'
 
 export const articleCategories = [
   { value: 'method', label: '方法論筆記', color: 'teal' },
@@ -37,6 +38,97 @@ export const articleCategories = [
 ]
 
 export const articles = [
+  {
+    id: 'dtx-taiwan-tfda-regulatory-pathway',
+    category: 'industry',
+    title: '數位療法（DTx）在台灣怎麼送審：從 SaMD 分類到查驗登記的完整路徑',
+    excerpt:
+      '台灣至今尚無「數位療法」專法，但 2021 年施行的醫療器材管理法已將軟體醫材正式納管。這篇整理 TFDA 現行框架下 DTx 的申請路徑、臨床驗證要求，以及目前最大的卡關點：健保給付。',
+    publishedAt: '2026-06-11',
+    readingTime: '10 分鐘',
+    featured: false,
+    coverImage: dtxTaiwanTfdaRegulatoryPathwayCover,
+    tableOfContents: [
+      { id: 'no-special-law', title: '一、台灣沒有「數位療法專法」' },
+      { id: 'legal-basis', title: '二、法律基礎：2021 年新法改變了一切' },
+      { id: 'three-steps', title: '三、申請三步驟' },
+      { id: 'clinical-validation', title: '四、最難的部分：臨床驗證怎麼做？' },
+      { id: 'current-status', title: '五、目前的現況：進展到哪了？' },
+      { id: 'takeaway', title: '六、給研究者的三件事' },
+    ],
+    content: [
+      { type: 'h2', id: 'no-special-law', text: '一、先搞清楚一件事：台灣沒有「數位療法專法」' },
+      {
+        type: 'p',
+        text: '很多人以為 DTx 有自己的申請窗口，其實沒有。台灣目前沒有「數位療法」的專屬法律，DTx 在台灣走的是「軟體醫材（SaMD）」這條路，也就是把軟體當成醫療器材來申請。用一句話說：你的 App 或演算法，如果能治療或輔助治療疾病，在台灣就是一個「醫療器材」，要去食藥署（TFDA）辦查驗登記。',
+      },
+      {
+        type: 'callout',
+        text: 'DTx 是什麼？以軟體為主體、有臨床證據、能預防或治療疾病的數位介入工具。例如幫糖尿病患調整胰島素劑量的 App，或用認知行為療法設計的失眠治療程式。',
+      },
+      { type: 'h2', id: 'legal-basis', text: '二、法律基礎：一部 2021 年的新法改變了一切' },
+      {
+        type: 'p',
+        text: '過去「軟體」算不算醫療器材在台灣是模糊地帶，直到 2021 年 5 月 1 日，《醫療器材管理法》正式施行，台灣第一部醫材專法明確將「軟體」列入醫療器材定義，SaMD 從此有法可管、有路可走。',
+      },
+      {
+        type: 'p',
+        text: 'TFDA 配套推出三個關鍵指引：2020 年 9 月公告《AI/ML SaMD 查驗登記技術指引》，規範 AI 演算法送審所需技術文件；2020 年 12 月修訂《醫療軟體分類管理指引》，釐清哪些健康 App 不算醫療器材（純記步、睡眠記錄等）；2025 年 8 月更新 CADe/CADx AI 醫材指引，針對影像輔助診斷類產品更新審查標準。',
+      },
+      { type: 'h2', id: 'three-steps', text: '三、申請三步驟：從「我的產品算什麼？」到「我要繳什麼文件？」' },
+      {
+        type: 'p',
+        text: 'TFDA 官方把流程拆成三個判斷點。第一關：我的產品是醫療器材嗎？主要用途是「診斷、治療、預防疾病」的，要申請；只是「健康管理」（記步、睡眠記錄）的，可能不用。不確定時可向 TFDA 提出「醫療器材屬性管理查詢」申請，請主管機關直接幫你判定，比自己猜安全。',
+      },
+      {
+        type: 'p',
+        text: '第二關：是哪個等級？分三級：第一等級（Class I）低風險、第二等級（Class II）中風險、第三等級（Class III）高風險。大多數 DTx 因涉及輔助治療決策，會落在第二等級。幫助醫師調整藥物劑量的決策輔助 App、用 CBT 設計的失眠療程都是 Class II；AI 自動開立處方或直接調整用藥則可能升到 Class III；純記錄數字不提供診斷建議的則可能不列管。送審前須查詢類似品並準備比對表。',
+      },
+      {
+        type: 'p',
+        text: '第三關：怎麼送件？Class II / III 採電子送件、郵寄或親送，需要準備：醫療器材查驗登記申請書、標籤說明書擬稿兩份、醫療器材商許可執照影本、技術文件與測試報告。重要更新：自 2025 年 7 月 1 日起，部分第二、三等級案型已全面強制電子化送件。',
+      },
+      { type: 'h2', id: 'clinical-validation', text: '四、最難的部分：臨床驗證怎麼做？' },
+      {
+        type: 'p',
+        text: '技術文件裡最花時間的就是臨床性能驗證。TFDA 直接採用 IMDRF 2017 年的 SaMD 臨床評估架構，把驗證拆成三個必須依序回答的問題。第一層「臨床關聯」：你宣稱的療效，有文獻支持嗎？先證明「軟體做的事」和「病人改善」之間有理論依據。如果你的 App 說能改善糖尿病患的 HbA1c，需要有文獻說明你的介入方式確實與 HbA1c 改善有關聯，不能只說演算法很厲害。',
+      },
+      {
+        type: 'p',
+        text: '第二層「分析性能驗證」：你的軟體技術上可靠嗎？演算法在不同手機、不同 OS 版本、不同使用情境下，輸出是否穩定一致？這是偏技術面的驗證。第三層「臨床性能驗證」：在真實患者身上有效嗎？最後要跑真實臨床資料或臨床試驗，驗證軟體在實際醫療環境中的效能，研究設計需要包含研究目標、患者族群定義、醫事人員資格、統計方法、結果報告。',
+      },
+      {
+        type: 'callout',
+        text: '簡單比喻：就像一款新藥要上市，你需要先說明「這個成分為什麼應該有效」（臨床關聯）、「製造過程品質穩定」（分析驗證）、「臨床試驗證明真的有效」（臨床性能驗證）。DTx 走的是同樣的邏輯，只是主角從藥換成了軟體。',
+      },
+      { type: 'h2', id: 'current-status', text: '五、目前的現況：進展到哪了？' },
+      {
+        type: 'p',
+        text: '好消息是台灣已有第一個 DTx 成功案例。2023 年 10 月，Health2Sync（慧康）旗下的「易速胰」，一款幫糖尿病患進行胰島素劑量調整的軟體，拿到台灣第一張 DTx 的 Class II SaMD 許可證。這代表這條路走得通，也給了後進者一個具體的參照標準。',
+      },
+      {
+        type: 'p',
+        text: '但卡關點在：拿到許可證之後，誰要付錢？台灣 99% 以上的人口都有健保，如果 DTx 無法進健保給付，患者就得全部自費，實際普及率非常有限。目前 Health2Sync 正和賽諾菲（Sanofi）一起推動易速胰的健保給付申請，目標是 2026 年完成，這是全台 DTx 最接近真正商業化的案例，也是整個產業最值得追蹤的指標。',
+      },
+      {
+        type: 'p',
+        text: '對比來看，德國 2020 年推出 DiGA 制度，DTx 一旦通過快速審查，可以直接進入法定健保給付，整個週期可壓縮在一年內。這是台灣業者和政策討論者常引用的對標模型，但台灣目前還沒有類似機制。',
+      },
+      { type: 'h2', id: 'takeaway', text: '六、給研究者的三件事' },
+      {
+        type: 'p',
+        text: '第一，申請路徑現在清楚了。DTx 走 SaMD，大多數落 Class II，照 TFDA 官方三步驟走就對了。不確定的先去申請「醫療器材屬性管理查詢」，讓 TFDA 幫你定性，比自己猜更安全。',
+      },
+      {
+        type: 'p',
+        text: '第二，臨床驗證要從研發初期開始設計。IMDRF 三層框架不只是申請文件，它應該從你的研究設計階段就納入。第一層「臨床關聯」沒有紮實文獻，後面兩層根本撐不起來。',
+      },
+      {
+        type: 'p',
+        text: '第三，健保給付才是真正的市場門檻。監管路徑有了，但商業化的關鍵仍是健保。這個缺口目前還沒被填上，是整個 DTx 產業在台灣的最大不確定性，也是最值得持續關注的政策動向。',
+      },
+    ],
+  },
   {
     id: 'rtx-spark-ai-pc-deep-dive',
     category: 'industry',
