@@ -29,6 +29,7 @@ import rtxSparkComputexKeynote from '../assets/articles/rtx-spark-computex-2026-
 import mermaidDiagramsAsCodeCover from '../assets/covers/mermaid-diagrams-as-code-for-researchers.svg'
 import markdownToMermaidWorkflow from '../assets/articles/markdown-to-mermaid-workflow.svg'
 import dtxTaiwanTfdaRegulatoryPathwayCover from '../assets/covers/dtx-taiwan-tfda-regulatory-pathway.svg'
+import imuJointKineticsPhysicsVsMl2025Cover from '../assets/covers/imu-joint-kinetics-physics-vs-ml-2025.svg'
 
 export const articleCategories = [
   { value: 'method', label: '方法論筆記', color: 'teal' },
@@ -38,6 +39,104 @@ export const articleCategories = [
 ]
 
 export const articles = [
+  {
+    id: 'imu-joint-kinetics-physics-vs-ml-2025',
+    category: 'method',
+    title: 'IMU 脫離力板的兩條 2025 路線：物理逆動力學估算跑步骨骼負荷 vs. PCA-BP 預測中風者三維關節力矩',
+    excerpt:
+      '沒有力板、不用光學捕捉，只靠 IMU 就能估算關節動力學嗎？2025 年兩篇研究分別從「物理模型」和「機器學習」切入，一個用 2 顆 IMU 推算跑者脛骨骨骼負荷，一個用 8 顆 IMU 預測中風患者髖膝踝三維扭矩，兩條路線都做到了，但限制截然不同。',
+    publishedAt: '2026-06-22',
+    readingTime: '9 分鐘',
+    featured: false,
+    coverImage: imuJointKineticsPhysicsVsMl2025Cover,
+    tableOfContents: [
+      { id: 'why-matters', title: '一、為什麼關節動力學那麼難「帶出實驗室」' },
+      { id: 'van-middelaar-2025', title: '二、路線一：物理逆動力學（van Middelaar 2025, J Biomechanics）' },
+      { id: 'meng-2025', title: '三、路線二：資料驅動 PCA-BP（Meng 2025, J Neuroeng Rehabil）' },
+      { id: 'comparison', title: '四、兩條路線的對照' },
+      { id: 'takeaway', title: '五、給研究者的 Takeaway' },
+    ],
+    content: [
+      {
+        type: 'callout',
+        text: '本文以兩篇 2025 同儕審查論文為核心：van Middelaar & Reenalda 2025（Journal of Biomechanics，DOI 10.1016/j.jbiomech.2025.112839）與 Meng et al. 2025（Journal of Neuroengineering and Rehabilitation，DOI 10.1186/s12984-025-01734-5）。所有量化數字均來自上述兩篇，已附 DOI。',
+      },
+      { type: 'h2', id: 'why-matters', text: '一、為什麼關節動力學那麼難「帶出實驗室」' },
+      {
+        type: 'p',
+        text: '在生物力學研究裡，關節力矩（joint moment）和骨骼受力是評估運動傷害風險、制定復健計畫的核心指標。但要量到這些數字，傳統上你需要：三維光學動作捕捉（Vicon、Qualisys 等），加上力板（force plate），再跑一輪逆動力學（inverse dynamics）計算。設備昂貴、只能在實驗室用、標記點貼錯就可能讓整批資料報廢，這些限制讓「在診間、在跑道、在社區」取得動力學資料幾乎不可能。',
+      },
+      {
+        type: 'p',
+        text: 'IMU（慣性測量單元）感測器的出現讓人看到轉機。但 IMU 能直接量到的是加速度和角速度，不是力或力矩。要從 IMU 推算動力學資訊，有兩條根本不同的路：一是靠物理模型推算，不需要訓練資料；二是靠機器學習從資料裡找映射關係。2025 年各有一篇代表性研究。',
+      },
+      { type: 'h2', id: 'van-middelaar-2025', text: '二、路線一：物理逆動力學——2 顆 IMU 估算跑步脛骨負荷' },
+      {
+        type: 'p',
+        text: 'van Middelaar 與 Reenalda（University of Twente）在 2025 年 6 月於 Journal of Biomechanics 發表了一個最小硬體設計的物理推算框架 [ref: van Middelaar & Reenalda 2025, DOI 10.1016/j.jbiomech.2025.112839]。逆動力學的「由下往上（bottom-up）」計算需要地面反作用力（GRF）的壓力中心（Centre of Pressure, CoP）作為輸入，而這正是 IMU-only 設置的缺口。這篇研究的突破在於：用貼在脛骨的 IMU 方位角直接估算 CoP，進而補完整條逆動力學計算鏈，完全不需要力板或壓力鞋墊。',
+      },
+      {
+        type: 'p',
+        text: '設置極其精簡：只用 2 顆 IMU，分別貼在脛骨與胸骨（sternum）。跑步速度涵蓋 2.5、3.1、3.6 m/s 三個速段，受試者為後足著地（rearfoot striker）跑者。結果顯示，CoP 估算與力板參考值的相關係數 ≥ 0.90；矢狀面踝關節力矩 rRMSE ≤ 12.9%；脛骨骨骼負荷（Tibial Bone Load, TBL）rRMSE ≤ 10.2%；最大踝關節蹠屈力矩（max plantar flexion moment）與 TBL 的峰值在各速段均無顯著差異於參考值 [ref: van Middelaar & Reenalda 2025, DOI 10.1016/j.jbiomech.2025.112839]。',
+      },
+      {
+        type: 'p',
+        text: '脛骨壓力骨折是長跑運動員最常見的傷害之一，TBL 是目前公認的骨骼疲勞累積代理指標。過去要監測 TBL 必須在實驗室跑步；這篇研究顯示，2 顆低成本 IMU 貼在脛骨與胸骨，就能在接近真實訓練條件下提供可信的 TBL 估算值。主要限制：目前只驗證矢狀面；僅適用於後足著地跑者；作者也指出上半身運動學對頂層力矩估算影響很大，仍是下一步需要解決的問題 [ref: van Middelaar & Reenalda 2025, DOI 10.1016/j.jbiomech.2025.112839]。',
+      },
+      { type: 'h2', id: 'meng-2025', text: '三、路線二：資料驅動 PCA-BP——8 顆 IMU 預測中風患者三維關節扭矩' },
+      {
+        type: 'p',
+        text: 'Meng 等人（天津體育學院）在 2025 年 9 月於 Journal of Neuroengineering and Rehabilitation 發表了針對中風患者的 PCA-BP 預測模型 [ref: Meng et al. 2025, DOI 10.1186/s12984-025-01734-5]。研究對象為 30 名偏癱中風患者（Brunnstrom stage IV，平均年齡 61.5 ± 3.5 歲），執行平地步行、上下樓梯三種動作模式。',
+      },
+      {
+        type: 'p',
+        text: '模型採兩層設計。第一層：8 顆 IMU（足底、大腿、小腿、骨盆、腰椎）採集三軸加速度與角速度，得到 24 維運動學特徵向量；透過 PCA 設定累積貢獻率 99%，壓縮為 15 個主成分（principal components），消除共線性並降低網路輸入維度。第二層：以 15 個主成分作為輸入，用 BP 神經網路預測患側髖、膝、踝三個關節在矢狀面、額狀面、橫切面共 9 個力矩分量。訓練集 20 人（1200 步），測試集 10 人（600 步）[ref: Meng et al. 2025, DOI 10.1186/s12984-025-01734-5]。',
+      },
+      {
+        type: 'p',
+        text: '測試集量化結果：NRMSE 4.14–5.26%；RMSE 0.132–0.194 Nm/kg；MAPE 1.6–2.9%；R² ≥ 0.999；Pearson 相關係數 ≥ 0.94。相較同組前期研究（僅含平地步行），資料量擴大六倍後 NRMSE 改善 19.5%、RMSE 改善 16.8%、MAPE 改善 27.5%、MAE 改善 24.5% [ref: Meng et al. 2025, DOI 10.1186/s12984-025-01734-5]。',
+      },
+      {
+        type: 'p',
+        text: '需要注意一個方法論細節：這篇研究的「參考值」並非直接來自力板量測，而是將 IMU 運動學資料輸入 OpenSim，再用 ID 工具計算出來的關節力矩。模型是在預測「同一批 IMU 資料跑 OpenSim 的輸出」，而非與力板直接對標。這解釋了 R² = 0.999 的高數值，但也意味著精度上界受 OpenSim 逆動力學本身的誤差所限制。作者明確承認尚未與光學捕捉 + 力板的黃金標準直接比較，這是下一步驗證的首要任務 [ref: Meng et al. 2025, DOI 10.1186/s12984-025-01734-5]。',
+      },
+      { type: 'h2', id: 'comparison', text: '四、兩條路線的對照' },
+      {
+        type: 'table',
+        headers: ['維度', '路線一（物理模型）', '路線二（資料驅動）'],
+        rows: [
+          ['核心方法', 'CoP 估算 + 逆動力學', 'PCA 降維 + BP 神經網路'],
+          ['IMU 數量', '2 顆', '8 顆'],
+          ['是否需要訓練資料', '否', '是（1800 步）'],
+          ['輸出', '矢狀面踝關節力矩 + 脛骨骨骼負荷', '髖膝踝三維（9 個分量）力矩'],
+          ['目標族群', '後足著地健康跑者', '中風偏癱患者'],
+          ['應用場景', '運動訓練監控、傷害風險評估', '臨床復健評估'],
+          ['主要限制', '僅矢狀面、後足著地', '參考值非直接力板量測、樣本小'],
+        ],
+      },
+      {
+        type: 'p',
+        text: '物理模型路線的優勢在於「可遷移性」：不需要針對新族群重新收集訓練資料，只要受試者符合假設（後足著地），模型就能直接用。資料驅動路線的優勢在於「完整性」：可以預測多個平面的力矩分量，特別是對臨床族群（步態偏差大、代償動作明顯）而言，「資料說話」的方式比物理假設更有彈性。',
+      },
+      { type: 'h2', id: 'takeaway', text: '五、給研究者的 Takeaway' },
+      {
+        type: 'p',
+        text: '感測器數量不等於精度上限。路線一用 2 顆 IMU 達到脛骨負荷 rRMSE ≤ 10.2%，路線二用 8 顆達到 NRMSE 4–5%。最小硬體設計在特定應用場景（跑步傷害監控）已夠用，不必預設「IMU 愈多愈好」。',
+      },
+      {
+        type: 'p',
+        text: '目標輸出決定方法選擇。如果你只需要矢狀面的特定力矩或骨骼負荷指標，物理模型路線避免了資料收集和訓練的開銷；如果你需要完整的三維關節力矩（例如評估中風患者的髖關節額狀面控制），資料驅動路線目前更可行 [ref: van Middelaar & Reenalda 2025, DOI 10.1016/j.jbiomech.2025.112839; Meng et al. 2025, DOI 10.1186/s12984-025-01734-5]。',
+      },
+      {
+        type: 'p',
+        text: '驗證設計的透明度至關重要。路線二的 R² = 0.999 看起來很完美，但這是「模型預測 OpenSim 輸出」的精度，而非「IMU 直接取代力板」的精度。設計自己的研究時，明確說明參考值的來源與其本身的誤差邊界，是讓審稿人信任結果的關鍵。',
+      },
+      {
+        type: 'p',
+        text: '臨床族群資料收集的困難是真實限制。路線二 30 位中風患者的樣本量在深度學習標準下偏小，但這是臨床試驗的現實。PCA 降維正是在小樣本下控制過擬合的實用工程選擇，這也是為什麼 PCA-BP 而非 CNN 或 Transformer 是這篇研究的架構選擇。如果你正在收集類似的臨床小資料集，這個降維 + 淺層網路的設計思路值得參考 [ref: Meng et al. 2025, DOI 10.1186/s12984-025-01734-5]。',
+      },
+    ],
+  },
   {
     id: 'dtx-taiwan-tfda-regulatory-pathway',
     category: 'industry',
@@ -383,7 +482,7 @@ export const articles = [
     category: 'method',
     title: 'Markerless motion capture 的兩條技術路線：2025 兩篇 J Biomech 研究的方法與結果',
     excerpt:
-      '2025 年 Journal of Biomechanics 連刊兩篇 markerless 驗證研究——一篇用 2D + DeepLabCut 比較不同訓練資料比例在學步兒與成人身上的效度；另一篇用單一消費級深度攝影機開發 3DGait 系統並以 TUG 測試驗證。本文整理兩篇研究的方法細節與量化結果。',
+      '2025 年 Journal of Biomechanics 連刊兩篇 markerless 驗證研究，一篇用 2D + DeepLabCut 比較不同訓練資料比例在學步兒與成人身上的效度；另一篇用單一消費級深度攝影機開發 3DGait 系統並以 TUG 測試驗證。本文整理兩篇研究的方法細節與量化結果。',
     publishedAt: '2026-05-29',
     readingTime: '12 分鐘',
     featured: false,
@@ -420,7 +519,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '近十年隨著深度學習人體姿態估測（pose estimation）的快速進展，markerless motion capture 成為一條積極發展的替代路徑——僅需 RGB 影片或消費級深度攝影機，透過 OpenPose、DeepLabCut、Theia3D、OpenCap 等工具進行關鍵點偵測，再轉換為關節角度與運動學參數。Markerless 路線的核心承諾有三：取消標記點貼附流程、降低硬體成本、把步態分析從實驗室搬到更生態（ecological）的場域。',
+        text: '近十年隨著深度學習人體姿態估測（pose estimation）的快速進展，markerless motion capture 成為一條積極發展的替代路徑，僅需 RGB 影片或消費級深度攝影機，透過 OpenPose、DeepLabCut、Theia3D、OpenCap 等工具進行關鍵點偵測，再轉換為關節角度與運動學參數。Markerless 路線的核心承諾有三：取消標記點貼附流程、降低硬體成本、把步態分析從實驗室搬到更生態（ecological）的場域。',
       },
       {
         type: 'p',
@@ -433,7 +532,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '受試者分兩個族群：15 名學步兒（toddlers，正在進行人生中第一批獨立行走的兒童）與 16 名健康成人。兩種行走條件均以自選舒適速度進行——地面行走（overground）與跑步機行走（treadmill）。每位受試者皆同步使用 3D marker-based 系統（Vicon）作為 ground truth 進行對照量測 [ref: Verhoeven et al. 2025, DOI 10.1016/j.jbiomech.2025.112708]。',
+        text: '受試者分兩個族群：15 名學步兒（toddlers，正在進行人生中第一批獨立行走的兒童）與 16 名健康成人。兩種行走條件均以自選舒適速度進行，地面行走（overground）與跑步機行走（treadmill）。每位受試者皆同步使用 3D marker-based 系統（Vicon）作為 ground truth 進行對照量測 [ref: Verhoeven et al. 2025, DOI 10.1016/j.jbiomech.2025.112708]。',
       },
       {
         type: 'p',
@@ -597,7 +696,7 @@ export const articles = [
       },
       {
         type: 'p',
-        text: '第二，讓 agent pipeline 視覺化、可重現：RAG 系統的痛點之一是「黑盒」——哪個 chunk 被取回、用了什麼 prompt、最後送進哪個 LLM，常常難以從程式碼還原。把 pipeline 拉成節點圖、把每個節點的輸入輸出存進 PostgreSQL，等於把整條 agent 的決策過程做成可觀察、可重跑的紀錄，這正是 FROAV 標題裡「Observation and Verification」想處理的問題 [ref: arXiv:2601.07504]。',
+        text: '第二，讓 agent pipeline 視覺化、可重現：RAG 系統的痛點之一是「黑盒」。哪個 chunk 被取回、用了什麼 prompt、最後送進哪個 LLM，常常難以從程式碼還原。把 pipeline 拉成節點圖、把每個節點的輸入輸出存進 PostgreSQL，等於把整條 agent 的決策過程做成可觀察、可重跑的紀錄，這正是 FROAV 標題裡「Observation and Verification」想處理的問題 [ref: arXiv:2601.07504]。',
       },
       {
         type: 'p',
