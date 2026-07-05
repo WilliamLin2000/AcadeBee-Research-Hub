@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Loop Engineering — 兩篇 arXiv 的互補視角">
+  <defs>
+    <linearGradient id="loop-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1a1020"/>
+      <stop offset="1" stop-color="#0e1322"/>
+    </linearGradient>
+    <radialGradient id="loop-glow" cx="50%" cy="42%" r="55%">
+      <stop offset="0" stop-color="#e85d4f" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#e85d4f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#loop-bg)"/>
+  <rect width="800" height="450" fill="url(#loop-glow)"/>
+
+  <!-- title block -->
+  <text x="48" y="46" font-family="Arial, sans-serif" font-size="13" fill="#f4a261" letter-spacing="3" font-weight="700">COMMUNITY · AGENT AI</text>
+  <text x="48" y="90" font-family="Arial, sans-serif" font-size="36" fill="#ffffff" font-weight="700">Loop Engineering</text>
+  <text x="48" y="118" font-family="Arial, sans-serif" font-size="16" fill="#f4efe6" fill-opacity="0.85">從 agent 迴圈的設計問題出發，兩篇 arXiv 互補視角</text>
+  <line x1="48" y1="134" x2="752" y2="134" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1.2"/>
+
+  <!-- panel divider -->
+  <line x1="400" y1="156" x2="400" y2="388" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1.2"/>
+  <circle cx="400" cy="272" r="22" fill="#0e1322" stroke="#f4a261" stroke-width="1.6"/>
+  <text x="400" y="277" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#f4a261" font-weight="700">VS</text>
+
+  <!-- LEFT PANEL: chaotic agent loop -->
+  <text x="210" y="176" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#e85d4f" font-weight="700" letter-spacing="1.5">未經工程化的 AGENT LOOP</text>
+
+  <g transform="translate(210, 244)">
+    <circle r="46" fill="none" stroke="#e85d4f" stroke-width="2.4" stroke-opacity="0.85" stroke-dasharray="10 6"/>
+    <circle r="30" fill="#1c2541" stroke="#e85d4f" stroke-width="2"/>
+    <text y="6" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" fill="#ffffff" font-weight="700">LLM</text>
+    <!-- broken link mark -->
+    <g transform="translate(46,-2)">
+      <circle r="11" fill="#e85d4f"/>
+      <text y="4" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" fill="#1a1020" font-weight="700">×</text>
+    </g>
+  </g>
+
+  <g font-family="Arial, sans-serif" font-size="13.5" fill="#ffffff" fill-opacity="0.9">
+    <text x="76" y="330">· 步驟依賴看不見</text>
+    <text x="76" y="352">· 失敗重試沒有上限</text>
+    <text x="76" y="374">· 執行紀錄會被覆寫</text>
+  </g>
+  <text x="210" y="400" text-anchor="middle" font-family="Arial, sans-serif" font-size="12.5" fill="#e85d4f" fill-opacity="0.95" font-weight="700">Hu Wei · arXiv:2604.11378</text>
+
+  <!-- RIGHT PANEL: structured graph (SGH) -->
+  <text x="600" y="176" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" fill="#7dd3c0" font-weight="700" letter-spacing="1.5">結構化圖引擎 SGH / LoopScript</text>
+
+  <g font-family="Arial, sans-serif" font-size="12.5" font-weight="700">
+    <rect x="466" y="222" width="76" height="34" rx="8" fill="#1c2541" stroke="#7dd3c0" stroke-width="2"/>
+    <text x="504" y="243" text-anchor="middle" fill="#7dd3c0">plan</text>
+
+    <rect x="566" y="222" width="76" height="34" rx="8" fill="#1c2541" stroke="#a78bfa" stroke-width="2"/>
+    <text x="604" y="243" text-anchor="middle" fill="#a78bfa">execute</text>
+
+    <rect x="666" y="222" width="76" height="34" rx="8" fill="#1c2541" stroke="#5eaaff" stroke-width="2"/>
+    <text x="704" y="243" text-anchor="middle" fill="#5eaaff">verify</text>
+  </g>
+  <g stroke="#ffffff" stroke-opacity="0.5" stroke-width="2" fill="none">
+    <line x1="542" y1="239" x2="564" y2="239"/>
+    <line x1="642" y1="239" x2="664" y2="239"/>
+  </g>
+  <g fill="#ffffff" fill-opacity="0.6">
+    <polygon points="558,235 566,239 558,243"/>
+    <polygon points="658,235 666,239 658,243"/>
+  </g>
+
+  <g font-family="Arial, sans-serif" font-size="13.5" fill="#ffffff" fill-opacity="0.9">
+    <text x="466" y="330">· 步驟依賴顯式定義</text>
+    <text x="466" y="352">· 失敗處理提前寫好</text>
+    <text x="466" y="374">· 執行過程可重現</text>
+  </g>
+  <text x="600" y="400" text-anchor="middle" font-family="Arial, sans-serif" font-size="12.5" fill="#7dd3c0" fill-opacity="0.95" font-weight="700">Hassan et al. · arXiv:2509.06216</text>
+
+  <!-- bottom bar -->
+  <g transform="translate(48, 412)">
+    <rect width="704" height="30" rx="6" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.1"/>
+    <text x="16" y="20" font-family="Arial, sans-serif" font-size="12.5" fill="#ffffff" fill-opacity="0.85" font-weight="700">PROMPT → HARNESS → LOOP：從即興指令到工程化迴圈</text>
+  </g>
+</svg>

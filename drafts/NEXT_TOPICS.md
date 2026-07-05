@@ -33,6 +33,16 @@
 
 ## 已寫入草稿（自動更新）
 
+- [x] 台灣核准了多少個 AI/ML 醫材？拆解 TFDA 官方清單看五年版圖（industry；排程自動產出。高優先三類皆為空，排程自主檢視 TFDA 官方公告區與 AI/ML 醫材專區，發現 TFDA 於 2025-02-12 公開「本署核准應用AI/ML技術之醫療器材清單」（2026-03-05 維護），逐筆核對 PDF 得出：109–114 年共 218 張許可證，國產 70 張／輸入 148 張；國產清單中長佳智能單一公司占 17 張（24%）、加計長庚醫院自行申請共占 31%；輸入清單中 GE/Philips/Samsung/Siemens/Canon 前五大品牌占 49%，多為既有影像設備搭載 AI 功能而非獨立診斷軟體。以此 TFDA 官方清單 PDF 與 TFDA AI/ML SaMD 送件常見問答集為兩份 Primary 來源，所有數字均為排程自行逐筆核對 PDF 原始清單所得，無外部引用）→ `2026-07-03-tfda-aiml-device-approvals-2025.md`（草稿，待 William 審稿）
+
+- [x] 穿戴式感測器量化中風後上肢功能的兩條 2025 路線：相位特異性肌骨建模 + XAI vs. 細粒度計分縮減評估負擔（method；排程自動產出。高優先三類皆為空，排程延續穿戴式感測/上肢功能評估系列自主挑題；以 Li et al. 2025 Front Neurosci（IMU + sEMG + 肌骨建模 + SHAP，65 中風患者，相位特異性生物標記，R²=0.932 內部/0.881 獨立測試）與 Zhou et al. 2025 Arch Phys Med Rehabil（穿戴式動作擷取 + 細粒度計分，33→8 項目，R²=0.950，Spearman=0.972，80 患者）為兩條互補主研究）→ `2026-07-01-imu-upper-limb-stroke-fma-two-routes-2025.md`（草稿，待 William 審稿）
+
+- [x] Loop Engineering 是什麼：從 Agent Loop 的三個結構性弱點到 Structured Graph Harness（community；William 指定主題；以 Hassan et al. 2025 arXiv:2509.06216（SASE 框架，ALE 定義，LoopScript 語言）與 Hu Wei 2026 arXiv:2604.11378（Agent Loop 三結構弱點 + SGH 圖結構解法，70 系統分析）為兩條互補主研究；兩篇均為 preprint）→ `published/2026-06-30-loop-engineering-arxiv-two-perspectives-2026.md`（已寫入 articles.js，待 William 提供 PAT 後 push）
+
+- [x] 穿戴式感測器監測帕金森氏步態的兩條 2025 路線：UPDRS 自動評分 vs. 凍僵步態即時偵測（method；排程自動產出。高優先三類皆為空，排程延續穿戴式感測/神經退化疾病系列自主挑題；以 Liu et al. 2025 Bioengineering Basel（三分支 EMG+IMU 深度學習，UPDRS 0-2 分類準確率 92.8%）與 Yi & Hwang 2025 Comput Biol Med（CNN-GRU-ECA + 剪枝 + 動態量化，FoG 偵測 F1=0.994，44 KB 模型）為兩條互補主研究）→ `published/2026-06-26-imu-parkinsons-gait-updrs-fog-2025.md`（已寫入 articles.js，待 William 提供 PAT 後 push）
+
+- [x] IMU 延伸感測的兩條 2025 路線：足底壓力分佈估算 vs. 虛擬標記預測橋接光學動捕（method；排程自動產出。高優先三類皆為空，排程延續 IMU/生物力學系列自主挑題；以 Qian et al. 2025 Acta Bioeng Biomech（CNN-BiLSTM + 注意力 + 體重整合，IMU→足底壓力分佈，MSE 0.98，SSIM 0.89）與 Shah & Dixon 2025 Sensors（Autoencoder + Biomech loss，7 IMU→16 虛擬標記→關節角度，標記 RMSE 2–4 cm，矢狀面關節角 RMSE 2–4° DTW 後）為兩條互補主研究）→ `2026-06-24-imu-extended-sensing-plantar-pressure-virtual-markers-2025.md`（草稿，待 William 審稿）
+
 - [x] IMU 脫離力板的兩條 2025 路線：物理逆動力學估算跑步骨骼負荷 vs. PCA-BP 預測中風者三維關節力矩（method；排程自動產出。高優先三類皆為空，排程延續 IMU/生物力學系列自主挑題；以 van Middelaar & Reenalda 2025 J Biomechanics（CoP 物理推算，2 IMU，後足著地跑者，TBL rRMSE ≤10.2%，踝關節力矩 rRMSE ≤12.9%）與 Meng et al. 2025 J Neuroeng Rehabil（PCA-BP，8 IMU，30 中風患者，NRMSE 4.14–5.26%，R²≥0.999，步行+上下樓梯）為兩條互補主研究）→ `published/2026-06-22-imu-joint-kinetics-physics-vs-ml-2025.md`（已寫入 articles.js，待 William 提供 PAT 後 push）
 
 - [x] sEMG 驅動下肢力學分析的兩條 2025 路線：關節力矩回歸 vs. 步態相位辨識（method；排程自動產出。高優先三類皆為空，排程延續 sEMG/下肢力學系列自主挑題；以 Xie 2025 Frontiers in Bioengineering（CNN-GRU-Attention + NMS 混合 + 遷移學習，跨受試者 RMSE ≤ 0.14 Nm/kg）與 Mobarak 2025 IEEE TNSRE（PI-BF 後處理器，步態相位辨識，40 受試者，real-time 準確率約 90%）為兩條互補主研究）→ `2026-06-17-semg-lower-limb-two-routes-2025.md`（草稿，待 William 審稿）
